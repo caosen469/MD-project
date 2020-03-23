@@ -24,7 +24,7 @@ pair_coeff * * Si.sw Si
 timestep 0.01
  
 #Print
-thermo          1
+thermo          100
 thermo_style custom step temp pe etotal press vol density
 
 # minimize
