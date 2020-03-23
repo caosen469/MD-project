@@ -58,11 +58,13 @@ compute 1 all pressure test
 
 #variable      sigmazz equal c_ID[i]
 #variable      sigmazz equal c_ID[3]
-variable        sigmazz equal c_1[1]
+variable        sigmazz equal c_1[3]
 variable        st equal step
 variable        index loop 50
 
 timestep 0.1
+
+dump 103 all xyz 10 nvt.xyz
 
 #loop starts
 label loop
@@ -77,7 +79,7 @@ change_box all z delta 0 0.1 boundary p p s remap units box
 
 
 thermo 10
-thermo_style custom step temp pe etotal press vol density c_1[1] c_1[2] c_1[3] c_1[4] c_1[5] c_1[6]
+thermo_style custom step temp pe etotal press vol density c_1[3]
 # NVT relaxation
 fix 1 all nvt temp 300 300 1 
 

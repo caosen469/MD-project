@@ -92,9 +92,9 @@ Step Temp PotEng TotEng Press Volume Density
     3400            0   -830.71009   -830.71009    42393.038    3695.7757    2.4228517 
     3500            0    -832.2676    -832.2676    17831.226     3779.136    2.3694084 
     3571            0   -832.62478   -832.62478    1431.7956    3839.0765    2.3324142 
-Loop time of 11.7754 on 1 procs for 3571 steps with 192 atoms
+Loop time of 11.6877 on 1 procs for 3571 steps with 192 atoms
 
-96.7% CPU use with 1 MPI tasks x 1 OpenMP threads
+97.9% CPU use with 1 MPI tasks x 1 OpenMP threads
 
 Minimization stats:
   Stopping criterion = energy tolerance
@@ -108,12 +108,12 @@ Minimization stats:
 MPI task timing breakdown:
 Section |  min time  |  avg time  |  max time  |%varavg| %total
 ---------------------------------------------------------------
-Pair    | 11.287     | 11.287     | 11.287     |   0.0 | 95.85
-Neigh   | 0.0019939  | 0.0019939  | 0.0019939  |   0.0 |  0.02
-Comm    | 0.018949   | 0.018949   | 0.018949   |   0.0 |  0.16
-Output  | 0.2735     | 0.2735     | 0.2735     |   0.0 |  2.32
+Pair    | 11.197     | 11.197     | 11.197     |   0.0 | 95.80
+Neigh   | 0.004986   | 0.004986   | 0.004986   |   0.0 |  0.04
+Comm    | 0.019948   | 0.019948   | 0.019948   |   0.0 |  0.17
+Output  | 0.25068    | 0.25068    | 0.25068    |   0.0 |  2.14
 Modify  | 0          | 0          | 0          |   0.0 |  0.00
-Other   |            | 0.1937     |            |       |  1.65
+Other   |            | 0.2155     |            |       |  1.84
 
 Nlocal:    192 ave 192 max 192 min
 Histogram: 1 0 0 0 0 0 0 0 0 0
@@ -148,19 +148,19 @@ Step Temp PotEng TotEng Press Volume Density
       30 3.1681566e-21   -832.62651   -832.62651    767.06471    3841.5855    2.3308909 
       40 4.2134521e-21   -832.62484   -832.62484    -1410.543    3849.8502     2.325887 
       50 9.3742484e-21   -832.62489   -832.62489     1399.842     3839.197     2.332341 
-Loop time of 0.028923 on 1 procs for 50 steps with 192 atoms
+Loop time of 0.0249331 on 1 procs for 50 steps with 192 atoms
 
-Performance: 1493.619 ns/day, 0.016 hours/ns, 1728.726 timesteps/s
-54.0% CPU use with 1 MPI tasks x 1 OpenMP threads
+Performance: 1732.637 ns/day, 0.014 hours/ns, 2005.366 timesteps/s
+0.0% CPU use with 1 MPI tasks x 1 OpenMP threads
 
 MPI task timing breakdown:
 Section |  min time  |  avg time  |  max time  |%varavg| %total
 ---------------------------------------------------------------
-Pair    | 0.0069799  | 0.0069799  | 0.0069799  |   0.0 | 24.13
+Pair    | 0.0069792  | 0.0069792  | 0.0069792  |   0.0 | 27.99
 Neigh   | 0          | 0          | 0          |   0.0 |  0.00
 Comm    | 0          | 0          | 0          |   0.0 |  0.00
-Output  | 0.019947   | 0.019947   | 0.019947   |   0.0 | 68.97
-Modify  | 0.0019958  | 0.0019958  | 0.0019958  |   0.0 |  6.90
+Output  | 0.016957   | 0.016957   | 0.016957   |   0.0 | 68.01
+Modify  | 0.00099707 | 0.00099707 | 0.00099707 |   0.0 |  4.00
 Other   |            | 0          |            |       |  0.00
 
 Nlocal:    192 ave 192 max 192 min
@@ -191,11 +191,13 @@ compute 1 all pressure test
 
 #variable      sigmazz equal c_ID[i]
 #variable      sigmazz equal c_ID[3]
-variable        sigmazz equal c_1[1]
+variable        sigmazz equal c_1[3]
 variable        st equal step
 variable        index loop 50
 
 timestep 0.1
+
+dump 103 all xyz 10 nvt.xyz
 
 #loop starts
 label loop
@@ -211,7 +213,7 @@ change_box all z delta 0 0.1 boundary p p s remap units box
 
 
 thermo 10
-thermo_style custom step temp pe etotal press vol density c_1[1] c_1[2] c_1[3] c_1[4] c_1[5] c_1[6]
+thermo_style custom step temp pe etotal press vol density c_1[3]
 # NVT relaxation
 fix 1 all nvt temp 300 300 1
 
@@ -221,26 +223,26 @@ fix 2 all print 100 "${st} ${sigmazz}" append thermo.out screen no title "# step
 #dump 103 all xyz 100 si_min_relaxation.xyz
 
 run 50
-Per MPI rank memory allocation (min/avg/max) = 3.097 | 3.097 | 3.097 Mbytes
-Step Temp PotEng TotEng Press Volume Density c_1[1] c_1[2] c_1[3] c_1[4] c_1[5] c_1[6] 
-       0 9.3742484e-21   -797.92418   -797.92418     -1911.33    3692.0349    2.4253066    -1104.645    -1104.645   -3524.6999    -59.38875 3.2634009e-08 3.3071108e-08 
-      10 9.3742484e-21   -797.92418   -797.92418     -1911.33    3692.0349    2.4253066    -1104.645    -1104.645   -3524.6999    -59.38875 3.2634009e-08 3.3071108e-08 
-      20 9.3742484e-21   -797.92418   -797.92418     -1911.33    3692.0349    2.4253066    -1104.645    -1104.645   -3524.6999    -59.38875 3.2634009e-08 3.3071108e-08 
-      30 9.3742484e-21   -797.92418   -797.92418     -1911.33    3692.0349    2.4253066    -1104.645    -1104.645   -3524.6999    -59.38875 3.2634009e-08 3.3071108e-08 
-      40 9.3742484e-21   -797.92418   -797.92418     -1911.33    3692.0349    2.4253066    -1104.645    -1104.645   -3524.6999    -59.38875 3.2634009e-08 3.3071108e-08 
-      50 9.3742484e-21   -797.92418   -797.92418     -1911.33    3692.0349    2.4253066    -1104.645    -1104.645   -3524.6999    -59.38875 3.2634009e-08 3.3071108e-08 
-Loop time of 0.0408909 on 1 procs for 50 steps with 192 atoms
+Per MPI rank memory allocation (min/avg/max) = 4.114 | 4.114 | 4.114 Mbytes
+Step Temp PotEng TotEng Press Volume Density c_1[3] 
+       0 9.3742484e-21   -797.92418   -797.92418     -1911.33    3692.0349    2.4253066   -3524.6999 
+      10 9.3742484e-21   -797.92418   -797.92418     -1911.33    3692.0349    2.4253066   -3524.6999 
+      20 9.3742484e-21   -797.92418   -797.92418     -1911.33    3692.0349    2.4253066   -3524.6999 
+      30 9.3742484e-21   -797.92418   -797.92418     -1911.33    3692.0349    2.4253066   -3524.6999 
+      40 9.3742484e-21   -797.92418   -797.92418     -1911.33    3692.0349    2.4253066   -3524.6999 
+      50 9.3742484e-21   -797.92418   -797.92418     -1911.33    3692.0349    2.4253066   -3524.6999 
+Loop time of 0.0209441 on 1 procs for 50 steps with 192 atoms
 
-Performance: 10564.689 ns/day, 0.002 hours/ns, 1222.765 timesteps/s
-0.0% CPU use with 1 MPI tasks x 1 OpenMP threads
+Performance: 20626.316 ns/day, 0.001 hours/ns, 2387.305 timesteps/s
+74.6% CPU use with 1 MPI tasks x 1 OpenMP threads
 
 MPI task timing breakdown:
 Section |  min time  |  avg time  |  max time  |%varavg| %total
 ---------------------------------------------------------------
-Pair    | 0.0059879  | 0.0059879  | 0.0059879  |   0.0 | 14.64
+Pair    | 0.0059826  | 0.0059826  | 0.0059826  |   0.0 | 28.56
 Neigh   | 0          | 0          | 0          |   0.0 |  0.00
 Comm    | 0          | 0          | 0          |   0.0 |  0.00
-Output  | 0.034903   | 0.034903   | 0.034903   |   0.0 | 85.36
+Output  | 0.014961   | 0.014961   | 0.014961   |   0.0 | 71.44
 Modify  | 0          | 0          | 0          |   0.0 |  0.00
 Other   |            | 0          |            |       |  0.00
 
@@ -271,7 +273,7 @@ change_box all z delta 0 0.1 boundary p p s remap units box
 
 
 thermo 10
-thermo_style custom step temp pe etotal press vol density c_1[1] c_1[2] c_1[3] c_1[4] c_1[5] c_1[6]
+thermo_style custom step temp pe etotal press vol density c_1[3]
 # NVT relaxation
 fix 1 all nvt temp 300 300 1
 
@@ -281,27 +283,27 @@ fix 2 all print 100 "${st} ${sigmazz}" append thermo.out screen no title "# step
 #dump 103 all xyz 100 si_min_relaxation.xyz
 
 run 50
-Per MPI rank memory allocation (min/avg/max) = 3.097 | 3.097 | 3.097 Mbytes
-Step Temp PotEng TotEng Press Volume Density c_1[1] c_1[2] c_1[3] c_1[4] c_1[5] c_1[6] 
-      50 9.3742484e-21   -797.87265   -797.87265     -5517.01    3705.2717    2.4166424   -3819.5573   -3819.5573   -8911.9155   -189.90522 3.2341519e-08 3.2779837e-08 
-      60 9.3742484e-21   -797.87265   -797.87265     -5517.01    3705.2717    2.4166424   -3819.5573   -3819.5573   -8911.9155   -189.90522 3.2341519e-08 3.2779837e-08 
-      70 9.3742484e-21   -797.87265   -797.87265     -5517.01    3705.2717    2.4166424   -3819.5573   -3819.5573   -8911.9155   -189.90522 3.2341519e-08 3.2779837e-08 
-      80 9.3742484e-21   -797.87265   -797.87265     -5517.01    3705.2717    2.4166424   -3819.5573   -3819.5573   -8911.9155   -189.90522 3.2341519e-08 3.2779837e-08 
-      90 9.3742484e-21   -797.87265   -797.87265     -5517.01    3705.2717    2.4166424   -3819.5573   -3819.5573   -8911.9155   -189.90522 3.2341519e-08 3.2779837e-08 
-     100 9.3742484e-21   -797.87265   -797.87265     -5517.01    3705.2717    2.4166424   -3819.5573   -3819.5573   -8911.9155   -189.90522 3.2341519e-08 3.2779837e-08 
-Loop time of 0.0359039 on 1 procs for 50 steps with 192 atoms
+Per MPI rank memory allocation (min/avg/max) = 4.114 | 4.114 | 4.114 Mbytes
+Step Temp PotEng TotEng Press Volume Density c_1[3] 
+      50 9.3742484e-21   -797.87265   -797.87265     -5517.01    3705.2717    2.4166424   -8911.9155 
+      60 9.3742484e-21   -797.87265   -797.87265     -5517.01    3705.2717    2.4166424   -8911.9155 
+      70 9.3742484e-21   -797.87265   -797.87265     -5517.01    3705.2717    2.4166424   -8911.9155 
+      80 9.3742484e-21   -797.87265   -797.87265     -5517.01    3705.2717    2.4166424   -8911.9155 
+      90 9.3742484e-21   -797.87265   -797.87265     -5517.01    3705.2717    2.4166424   -8911.9155 
+     100 9.3742484e-21   -797.87265   -797.87265     -5517.01    3705.2717    2.4166424   -8911.9155 
+Loop time of 0.022938 on 1 procs for 50 steps with 192 atoms
 
-Performance: 12032.109 ns/day, 0.002 hours/ns, 1392.605 timesteps/s
-43.5% CPU use with 1 MPI tasks x 1 OpenMP threads
+Performance: 18833.366 ns/day, 0.001 hours/ns, 2179.788 timesteps/s
+68.1% CPU use with 1 MPI tasks x 1 OpenMP threads
 
 MPI task timing breakdown:
 Section |  min time  |  avg time  |  max time  |%varavg| %total
 ---------------------------------------------------------------
-Pair    | 0.0059845  | 0.0059845  | 0.0059845  |   0.0 | 16.67
+Pair    | 0.0059843  | 0.0059843  | 0.0059843  |   0.0 | 26.09
 Neigh   | 0          | 0          | 0          |   0.0 |  0.00
 Comm    | 0          | 0          | 0          |   0.0 |  0.00
-Output  | 0.029919   | 0.029919   | 0.029919   |   0.0 | 83.33
-Modify  | 0          | 0          | 0          |   0.0 |  0.00
+Output  | 0.015955   | 0.015955   | 0.015955   |   0.0 | 69.56
+Modify  | 0.00099897 | 0.00099897 | 0.00099897 |   0.0 |  4.36
 Other   |            | 0          |            |       |  0.00
 
 Nlocal:    192 ave 192 max 192 min
@@ -331,7 +333,7 @@ change_box all z delta 0 0.1 boundary p p s remap units box
 
 
 thermo 10
-thermo_style custom step temp pe etotal press vol density c_1[1] c_1[2] c_1[3] c_1[4] c_1[5] c_1[6]
+thermo_style custom step temp pe etotal press vol density c_1[3]
 # NVT relaxation
 fix 1 all nvt temp 300 300 1
 
@@ -341,26 +343,26 @@ fix 2 all print 100 "${st} ${sigmazz}" append thermo.out screen no title "# step
 #dump 103 all xyz 100 si_min_relaxation.xyz
 
 run 50
-Per MPI rank memory allocation (min/avg/max) = 3.097 | 3.097 | 3.097 Mbytes
-Step Temp PotEng TotEng Press Volume Density c_1[1] c_1[2] c_1[3] c_1[4] c_1[5] c_1[6] 
-     100 9.3742484e-21   -797.77664   -797.77664   -9078.3299     3718.546    2.4080156   -6488.5155   -6488.5155   -14257.959   -318.37505 3.2046473e-08 3.247589e-08 
-     110 9.3742484e-21   -797.77664   -797.77664   -9078.3299     3718.546    2.4080156   -6488.5155   -6488.5155   -14257.959   -318.37505 3.2046473e-08 3.247589e-08 
-     120 9.3742484e-21   -797.77664   -797.77664   -9078.3299     3718.546    2.4080156   -6488.5155   -6488.5155   -14257.959   -318.37505 3.2046473e-08 3.247589e-08 
-     130 9.3742484e-21   -797.77664   -797.77664   -9078.3299     3718.546    2.4080156   -6488.5155   -6488.5155   -14257.959   -318.37505 3.2046473e-08 3.247589e-08 
-     140 9.3742484e-21   -797.77664   -797.77664   -9078.3299     3718.546    2.4080156   -6488.5155   -6488.5155   -14257.959   -318.37505 3.2046473e-08 3.247589e-08 
-     150 9.3742484e-21   -797.77664   -797.77664   -9078.3299     3718.546    2.4080156   -6488.5155   -6488.5155   -14257.959   -318.37505 3.2046473e-08 3.247589e-08 
-Loop time of 0.0398951 on 1 procs for 50 steps with 192 atoms
+Per MPI rank memory allocation (min/avg/max) = 4.114 | 4.114 | 4.114 Mbytes
+Step Temp PotEng TotEng Press Volume Density c_1[3] 
+     100 9.3742484e-21   -797.77664   -797.77664   -9078.3299     3718.546    2.4080156   -14257.959 
+     110 9.3742484e-21   -797.77664   -797.77664   -9078.3299     3718.546    2.4080156   -14257.959 
+     120 9.3742484e-21   -797.77664   -797.77664   -9078.3299     3718.546    2.4080156   -14257.959 
+     130 9.3742484e-21   -797.77664   -797.77664   -9078.3299     3718.546    2.4080156   -14257.959 
+     140 9.3742484e-21   -797.77664   -797.77664   -9078.3299     3718.546    2.4080156   -14257.959 
+     150 9.3742484e-21   -797.77664   -797.77664   -9078.3299     3718.546    2.4080156   -14257.959 
+Loop time of 0.0231268 on 1 procs for 50 steps with 192 atoms
 
-Performance: 10828.409 ns/day, 0.002 hours/ns, 1253.288 timesteps/s
+Performance: 18679.594 ns/day, 0.001 hours/ns, 2161.990 timesteps/s
 0.0% CPU use with 1 MPI tasks x 1 OpenMP threads
 
 MPI task timing breakdown:
 Section |  min time  |  avg time  |  max time  |%varavg| %total
 ---------------------------------------------------------------
-Pair    | 0.0049877  | 0.0049877  | 0.0049877  |   0.0 | 12.50
+Pair    | 0.0059848  | 0.0059848  | 0.0059848  |   0.0 | 25.88
 Neigh   | 0          | 0          | 0          |   0.0 |  0.00
 Comm    | 0          | 0          | 0          |   0.0 |  0.00
-Output  | 0.034907   | 0.034907   | 0.034907   |   0.0 | 87.50
+Output  | 0.017142   | 0.017142   | 0.017142   |   0.0 | 74.12
 Modify  | 0          | 0          | 0          |   0.0 |  0.00
 Other   |            | 0          |            |       |  0.00
 
@@ -391,7 +393,7 @@ change_box all z delta 0 0.1 boundary p p s remap units box
 
 
 thermo 10
-thermo_style custom step temp pe etotal press vol density c_1[1] c_1[2] c_1[3] c_1[4] c_1[5] c_1[6]
+thermo_style custom step temp pe etotal press vol density c_1[3]
 # NVT relaxation
 fix 1 all nvt temp 300 300 1
 
@@ -401,26 +403,26 @@ fix 2 all print 100 "${st} ${sigmazz}" append thermo.out screen no title "# step
 #dump 103 all xyz 100 si_min_relaxation.xyz
 
 run 50
-Per MPI rank memory allocation (min/avg/max) = 3.097 | 3.097 | 3.097 Mbytes
-Step Temp PotEng TotEng Press Volume Density c_1[1] c_1[2] c_1[3] c_1[4] c_1[5] c_1[6] 
-     150 9.3742484e-21   -797.63645   -797.63645   -12595.784    3731.8255    2.3994468   -9112.3376   -9112.3376   -19562.676   -444.82952 3.1743255e-08 3.2184834e-08 
-     160 9.3742484e-21   -797.63645   -797.63645   -12595.784    3731.8255    2.3994468   -9112.3376   -9112.3376   -19562.676   -444.82952 3.1743255e-08 3.2184834e-08 
-     170 9.3742484e-21   -797.63645   -797.63645   -12595.784    3731.8255    2.3994468   -9112.3376   -9112.3376   -19562.676   -444.82952 3.1743255e-08 3.2184834e-08 
-     180 9.3742484e-21   -797.63645   -797.63645   -12595.784    3731.8255    2.3994468   -9112.3376   -9112.3376   -19562.676   -444.82952 3.1743255e-08 3.2184834e-08 
-     190 9.3742484e-21   -797.63645   -797.63645   -12595.784    3731.8255    2.3994468   -9112.3376   -9112.3376   -19562.676   -444.82952 3.1743255e-08 3.2184834e-08 
-     200 9.3742484e-21   -797.63645   -797.63645   -12595.784    3731.8255    2.3994468   -9112.3376   -9112.3376   -19562.676   -444.82952 3.1743255e-08 3.2184834e-08 
-Loop time of 0.042886 on 1 procs for 50 steps with 192 atoms
+Per MPI rank memory allocation (min/avg/max) = 4.114 | 4.114 | 4.114 Mbytes
+Step Temp PotEng TotEng Press Volume Density c_1[3] 
+     150 9.3742484e-21   -797.63645   -797.63645   -12595.784    3731.8255    2.3994468   -19562.676 
+     160 9.3742484e-21   -797.63645   -797.63645   -12595.784    3731.8255    2.3994468   -19562.676 
+     170 9.3742484e-21   -797.63645   -797.63645   -12595.784    3731.8255    2.3994468   -19562.676 
+     180 9.3742484e-21   -797.63645   -797.63645   -12595.784    3731.8255    2.3994468   -19562.676 
+     190 9.3742484e-21   -797.63645   -797.63645   -12595.784    3731.8255    2.3994468   -19562.676 
+     200 9.3742484e-21   -797.63645   -797.63645   -12595.784    3731.8255    2.3994468   -19562.676 
+Loop time of 0.0259311 on 1 procs for 50 steps with 192 atoms
 
-Performance: 10073.213 ns/day, 0.002 hours/ns, 1165.881 timesteps/s
-36.4% CPU use with 1 MPI tasks x 1 OpenMP threads
+Performance: 16659.520 ns/day, 0.001 hours/ns, 1928.185 timesteps/s
+60.3% CPU use with 1 MPI tasks x 1 OpenMP threads
 
 MPI task timing breakdown:
 Section |  min time  |  avg time  |  max time  |%varavg| %total
 ---------------------------------------------------------------
-Pair    | 0.006983   | 0.006983   | 0.006983   |   0.0 | 16.28
+Pair    | 0.0069892  | 0.0069892  | 0.0069892  |   0.0 | 26.95
 Neigh   | 0          | 0          | 0          |   0.0 |  0.00
 Comm    | 0          | 0          | 0          |   0.0 |  0.00
-Output  | 0.035903   | 0.035903   | 0.035903   |   0.0 | 83.72
+Output  | 0.018942   | 0.018942   | 0.018942   |   0.0 | 73.05
 Modify  | 0          | 0          | 0          |   0.0 |  0.00
 Other   |            | 0          |            |       |  0.00
 
@@ -451,7 +453,7 @@ change_box all z delta 0 0.1 boundary p p s remap units box
 
 
 thermo 10
-thermo_style custom step temp pe etotal press vol density c_1[1] c_1[2] c_1[3] c_1[4] c_1[5] c_1[6]
+thermo_style custom step temp pe etotal press vol density c_1[3]
 # NVT relaxation
 fix 1 all nvt temp 300 300 1
 
@@ -461,26 +463,26 @@ fix 2 all print 100 "${st} ${sigmazz}" append thermo.out screen no title "# step
 #dump 103 all xyz 100 si_min_relaxation.xyz
 
 run 50
-Per MPI rank memory allocation (min/avg/max) = 3.097 | 3.097 | 3.097 Mbytes
-Step Temp PotEng TotEng Press Volume Density c_1[1] c_1[2] c_1[3] c_1[4] c_1[5] c_1[6] 
-     200 9.3742484e-21   -797.45239   -797.45239   -16069.873    3745.1103    2.3909353   -11691.841   -11691.841   -24825.939   -569.29992 3.1450115e-08 3.1882863e-08 
-     210 9.3742484e-21   -797.45239   -797.45239   -16069.873    3745.1103    2.3909353   -11691.841   -11691.841   -24825.939   -569.29992 3.1450115e-08 3.1882863e-08 
-     220 9.3742484e-21   -797.45239   -797.45239   -16069.873    3745.1103    2.3909353   -11691.841   -11691.841   -24825.939   -569.29992 3.1450115e-08 3.1882863e-08 
-     230 9.3742484e-21   -797.45239   -797.45239   -16069.873    3745.1103    2.3909353   -11691.841   -11691.841   -24825.939   -569.29992 3.1450115e-08 3.1882863e-08 
-     240 9.3742484e-21   -797.45239   -797.45239   -16069.873    3745.1103    2.3909353   -11691.841   -11691.841   -24825.939   -569.29992 3.1450115e-08 3.1882863e-08 
-     250 9.3742484e-21   -797.45239   -797.45239   -16069.873    3745.1103    2.3909353   -11691.841   -11691.841   -24825.939   -569.29992 3.1450115e-08 3.1882863e-08 
-Loop time of 0.0404599 on 1 procs for 50 steps with 192 atoms
+Per MPI rank memory allocation (min/avg/max) = 4.114 | 4.114 | 4.114 Mbytes
+Step Temp PotEng TotEng Press Volume Density c_1[3] 
+     200 9.3742484e-21   -797.45239   -797.45239   -16069.873    3745.1103    2.3909353   -24825.939 
+     210 9.3742484e-21   -797.45239   -797.45239   -16069.873    3745.1103    2.3909353   -24825.939 
+     220 9.3742484e-21   -797.45239   -797.45239   -16069.873    3745.1103    2.3909353   -24825.939 
+     230 9.3742484e-21   -797.45239   -797.45239   -16069.873    3745.1103    2.3909353   -24825.939 
+     240 9.3742484e-21   -797.45239   -797.45239   -16069.873    3745.1103    2.3909353   -24825.939 
+     250 9.3742484e-21   -797.45239   -797.45239   -16069.873    3745.1103    2.3909353   -24825.939 
+Loop time of 0.0209439 on 1 procs for 50 steps with 192 atoms
 
-Performance: 10677.246 ns/day, 0.002 hours/ns, 1235.792 timesteps/s
-38.6% CPU use with 1 MPI tasks x 1 OpenMP threads
+Performance: 20626.550 ns/day, 0.001 hours/ns, 2387.332 timesteps/s
+0.0% CPU use with 1 MPI tasks x 1 OpenMP threads
 
 MPI task timing breakdown:
 Section |  min time  |  avg time  |  max time  |%varavg| %total
 ---------------------------------------------------------------
-Pair    | 0.0069821  | 0.0069821  | 0.0069821  |   0.0 | 17.26
+Pair    | 0.0059838  | 0.0059838  | 0.0059838  |   0.0 | 28.57
 Neigh   | 0          | 0          | 0          |   0.0 |  0.00
-Comm    | 0          | 0          | 0          |   0.0 |  0.00
-Output  | 0.033478   | 0.033478   | 0.033478   |   0.0 | 82.74
+Comm    | 0.00099802 | 0.00099802 | 0.00099802 |   0.0 |  4.77
+Output  | 0.013962   | 0.013962   | 0.013962   |   0.0 | 66.66
 Modify  | 0          | 0          | 0          |   0.0 |  0.00
 Other   |            | 0          |            |       |  0.00
 
@@ -511,7 +513,7 @@ change_box all z delta 0 0.1 boundary p p s remap units box
 
 
 thermo 10
-thermo_style custom step temp pe etotal press vol density c_1[1] c_1[2] c_1[3] c_1[4] c_1[5] c_1[6]
+thermo_style custom step temp pe etotal press vol density c_1[3]
 # NVT relaxation
 fix 1 all nvt temp 300 300 1
 
@@ -521,26 +523,26 @@ fix 2 all print 100 "${st} ${sigmazz}" append thermo.out screen no title "# step
 #dump 103 all xyz 100 si_min_relaxation.xyz
 
 run 50
-Per MPI rank memory allocation (min/avg/max) = 3.097 | 3.097 | 3.097 Mbytes
-Step Temp PotEng TotEng Press Volume Density c_1[1] c_1[2] c_1[3] c_1[4] c_1[5] c_1[6] 
-     250 9.3742484e-21   -797.22477   -797.22477   -19501.096    3758.4005    2.3824807   -14227.829   -14227.829   -30047.629   -691.81714 3.1179795e-08 3.1593773e-08 
-     260 9.3742484e-21   -797.22477   -797.22477   -19501.096    3758.4005    2.3824807   -14227.829   -14227.829   -30047.629   -691.81714 3.1179795e-08 3.1593773e-08 
-     270 9.3742484e-21   -797.22477   -797.22477   -19501.096    3758.4005    2.3824807   -14227.829   -14227.829   -30047.629   -691.81714 3.1179795e-08 3.1593773e-08 
-     280 9.3742484e-21   -797.22477   -797.22477   -19501.096    3758.4005    2.3824807   -14227.829   -14227.829   -30047.629   -691.81714 3.1179795e-08 3.1593773e-08 
-     290 9.3742484e-21   -797.22477   -797.22477   -19501.096    3758.4005    2.3824807   -14227.829   -14227.829   -30047.629   -691.81714 3.1179795e-08 3.1593773e-08 
-     300 9.3742484e-21   -797.22477   -797.22477   -19501.096    3758.4005    2.3824807   -14227.829   -14227.829   -30047.629   -691.81714 3.1179795e-08 3.1593773e-08 
-Loop time of 0.0438831 on 1 procs for 50 steps with 192 atoms
+Per MPI rank memory allocation (min/avg/max) = 4.114 | 4.114 | 4.114 Mbytes
+Step Temp PotEng TotEng Press Volume Density c_1[3] 
+     250 9.3742484e-21   -797.22477   -797.22477   -19501.096    3758.4005    2.3824807   -30047.629 
+     260 9.3742484e-21   -797.22477   -797.22477   -19501.096    3758.4005    2.3824807   -30047.629 
+     270 9.3742484e-21   -797.22477   -797.22477   -19501.096    3758.4005    2.3824807   -30047.629 
+     280 9.3742484e-21   -797.22477   -797.22477   -19501.096    3758.4005    2.3824807   -30047.629 
+     290 9.3742484e-21   -797.22477   -797.22477   -19501.096    3758.4005    2.3824807   -30047.629 
+     300 9.3742484e-21   -797.22477   -797.22477   -19501.096    3758.4005    2.3824807   -30047.629 
+Loop time of 0.0224981 on 1 procs for 50 steps with 192 atoms
 
-Performance: 9844.340 ns/day, 0.002 hours/ns, 1139.391 timesteps/s
-35.6% CPU use with 1 MPI tasks x 1 OpenMP threads
+Performance: 19201.595 ns/day, 0.001 hours/ns, 2222.407 timesteps/s
+69.5% CPU use with 1 MPI tasks x 1 OpenMP threads
 
 MPI task timing breakdown:
 Section |  min time  |  avg time  |  max time  |%varavg| %total
 ---------------------------------------------------------------
-Pair    | 0.0069809  | 0.0069809  | 0.0069809  |   0.0 | 15.91
+Pair    | 0.0065486  | 0.0065486  | 0.0065486  |   0.0 | 29.11
 Neigh   | 0          | 0          | 0          |   0.0 |  0.00
 Comm    | 0          | 0          | 0          |   0.0 |  0.00
-Output  | 0.036902   | 0.036902   | 0.036902   |   0.0 | 84.09
+Output  | 0.015949   | 0.015949   | 0.015949   |   0.0 | 70.89
 Modify  | 0          | 0          | 0          |   0.0 |  0.00
 Other   |            | 0          |            |       |  0.00
 
@@ -571,7 +573,7 @@ change_box all z delta 0 0.1 boundary p p s remap units box
 
 
 thermo 10
-thermo_style custom step temp pe etotal press vol density c_1[1] c_1[2] c_1[3] c_1[4] c_1[5] c_1[6]
+thermo_style custom step temp pe etotal press vol density c_1[3]
 # NVT relaxation
 fix 1 all nvt temp 300 300 1
 
@@ -581,28 +583,28 @@ fix 2 all print 100 "${st} ${sigmazz}" append thermo.out screen no title "# step
 #dump 103 all xyz 100 si_min_relaxation.xyz
 
 run 50
-Per MPI rank memory allocation (min/avg/max) = 3.097 | 3.097 | 3.097 Mbytes
-Step Temp PotEng TotEng Press Volume Density c_1[1] c_1[2] c_1[3] c_1[4] c_1[5] c_1[6] 
-     300 9.3742484e-21    -796.9539    -796.9539   -22889.944     3771.696    2.3740823   -16721.094   -16721.094   -35227.643    -812.4116 3.0872819e-08 3.1304287e-08 
-     310 9.3742484e-21    -796.9539    -796.9539   -22889.944     3771.696    2.3740823   -16721.094   -16721.094   -35227.643    -812.4116 3.0872819e-08 3.1304287e-08 
-     320 9.3742484e-21    -796.9539    -796.9539   -22889.944     3771.696    2.3740823   -16721.094   -16721.094   -35227.643    -812.4116 3.0872819e-08 3.1304287e-08 
-     330 9.3742484e-21    -796.9539    -796.9539   -22889.944     3771.696    2.3740823   -16721.094   -16721.094   -35227.643    -812.4116 3.0872819e-08 3.1304287e-08 
-     340 9.3742484e-21    -796.9539    -796.9539   -22889.944     3771.696    2.3740823   -16721.094   -16721.094   -35227.643    -812.4116 3.0872819e-08 3.1304287e-08 
-     350 9.3742484e-21    -796.9539    -796.9539   -22889.944     3771.696    2.3740823   -16721.094   -16721.094   -35227.643    -812.4116 3.0872819e-08 3.1304287e-08 
-Loop time of 0.0398939 on 1 procs for 50 steps with 192 atoms
+Per MPI rank memory allocation (min/avg/max) = 4.114 | 4.114 | 4.114 Mbytes
+Step Temp PotEng TotEng Press Volume Density c_1[3] 
+     300 9.3742484e-21    -796.9539    -796.9539   -22889.944     3771.696    2.3740823   -35227.643 
+     310 9.3742484e-21    -796.9539    -796.9539   -22889.944     3771.696    2.3740823   -35227.643 
+     320 9.3742484e-21    -796.9539    -796.9539   -22889.944     3771.696    2.3740823   -35227.643 
+     330 9.3742484e-21    -796.9539    -796.9539   -22889.944     3771.696    2.3740823   -35227.643 
+     340 9.3742484e-21    -796.9539    -796.9539   -22889.944     3771.696    2.3740823   -35227.643 
+     350 9.3742484e-21    -796.9539    -796.9539   -22889.944     3771.696    2.3740823   -35227.643 
+Loop time of 0.0269279 on 1 procs for 50 steps with 192 atoms
 
-Performance: 10828.733 ns/day, 0.002 hours/ns, 1253.326 timesteps/s
-78.3% CPU use with 1 MPI tasks x 1 OpenMP threads
+Performance: 16042.812 ns/day, 0.001 hours/ns, 1856.807 timesteps/s
+0.0% CPU use with 1 MPI tasks x 1 OpenMP threads
 
 MPI task timing breakdown:
 Section |  min time  |  avg time  |  max time  |%varavg| %total
 ---------------------------------------------------------------
-Pair    | 0.0059857  | 0.0059857  | 0.0059857  |   0.0 | 15.00
+Pair    | 0.0079763  | 0.0079763  | 0.0079763  |   0.0 | 29.62
 Neigh   | 0          | 0          | 0          |   0.0 |  0.00
 Comm    | 0          | 0          | 0          |   0.0 |  0.00
-Output  | 0.033908   | 0.033908   | 0.033908   |   0.0 | 85.00
+Output  | 0.017954   | 0.017954   | 0.017954   |   0.0 | 66.67
 Modify  | 0          | 0          | 0          |   0.0 |  0.00
-Other   |            | 0          |            |       |  0.00
+Other   |            | 0.000998   |            |       |  3.71
 
 Nlocal:    192 ave 192 max 192 min
 Histogram: 1 0 0 0 0 0 0 0 0 0
@@ -631,7 +633,7 @@ change_box all z delta 0 0.1 boundary p p s remap units box
 
 
 thermo 10
-thermo_style custom step temp pe etotal press vol density c_1[1] c_1[2] c_1[3] c_1[4] c_1[5] c_1[6]
+thermo_style custom step temp pe etotal press vol density c_1[3]
 # NVT relaxation
 fix 1 all nvt temp 300 300 1
 
@@ -641,28 +643,28 @@ fix 2 all print 100 "${st} ${sigmazz}" append thermo.out screen no title "# step
 #dump 103 all xyz 100 si_min_relaxation.xyz
 
 run 50
-Per MPI rank memory allocation (min/avg/max) = 3.097 | 3.097 | 3.097 Mbytes
-Step Temp PotEng TotEng Press Volume Density c_1[1] c_1[2] c_1[3] c_1[4] c_1[5] c_1[6] 
-     350 9.3742484e-21   -796.64009   -796.64009   -26236.907    3784.9968    2.3657396   -19172.417   -19172.417   -40365.888   -931.11327 3.0584616e-08 3.1022337e-08 
-     360 9.3742484e-21   -796.64009   -796.64009   -26236.907    3784.9968    2.3657396   -19172.417   -19172.417   -40365.888   -931.11327 3.0584616e-08 3.1022337e-08 
-     370 9.3742484e-21   -796.64009   -796.64009   -26236.907    3784.9968    2.3657396   -19172.417   -19172.417   -40365.888   -931.11327 3.0584616e-08 3.1022337e-08 
-     380 9.3742484e-21   -796.64009   -796.64009   -26236.907    3784.9968    2.3657396   -19172.417   -19172.417   -40365.888   -931.11327 3.0584616e-08 3.1022337e-08 
-     390 9.3742484e-21   -796.64009   -796.64009   -26236.907    3784.9968    2.3657396   -19172.417   -19172.417   -40365.888   -931.11327 3.0584616e-08 3.1022337e-08 
-     400 9.3742484e-21   -796.64009   -796.64009   -26236.907    3784.9968    2.3657396   -19172.417   -19172.417   -40365.888   -931.11327 3.0584616e-08 3.1022337e-08 
-Loop time of 0.046875 on 1 procs for 50 steps with 192 atoms
+Per MPI rank memory allocation (min/avg/max) = 4.114 | 4.114 | 4.114 Mbytes
+Step Temp PotEng TotEng Press Volume Density c_1[3] 
+     350 9.3742484e-21   -796.64009   -796.64009   -26236.907    3784.9968    2.3657396   -40365.888 
+     360 9.3742484e-21   -796.64009   -796.64009   -26236.907    3784.9968    2.3657396   -40365.888 
+     370 9.3742484e-21   -796.64009   -796.64009   -26236.907    3784.9968    2.3657396   -40365.888 
+     380 9.3742484e-21   -796.64009   -796.64009   -26236.907    3784.9968    2.3657396   -40365.888 
+     390 9.3742484e-21   -796.64009   -796.64009   -26236.907    3784.9968    2.3657396   -40365.888 
+     400 9.3742484e-21   -796.64009   -796.64009   -26236.907    3784.9968    2.3657396   -40365.888 
+Loop time of 0.0219409 on 1 procs for 50 steps with 192 atoms
 
-Performance: 9216.000 ns/day, 0.003 hours/ns, 1066.667 timesteps/s
-0.0% CPU use with 1 MPI tasks x 1 OpenMP threads
+Performance: 19689.214 ns/day, 0.001 hours/ns, 2278.844 timesteps/s
+71.2% CPU use with 1 MPI tasks x 1 OpenMP threads
 
 MPI task timing breakdown:
 Section |  min time  |  avg time  |  max time  |%varavg| %total
 ---------------------------------------------------------------
-Pair    | 0.0069809  | 0.0069809  | 0.0069809  |   0.0 | 14.89
+Pair    | 0.0059845  | 0.0059845  | 0.0059845  |   0.0 | 27.28
 Neigh   | 0          | 0          | 0          |   0.0 |  0.00
-Comm    | 0.00099802 | 0.00099802 | 0.00099802 |   0.0 |  2.13
-Output  | 0.038896   | 0.038896   | 0.038896   |   0.0 | 82.98
+Comm    | 0          | 0          | 0          |   0.0 |  0.00
+Output  | 0.01496    | 0.01496    | 0.01496    |   0.0 | 68.18
 Modify  | 0          | 0          | 0          |   0.0 |  0.00
-Other   |            | 0          |            |       |  0.00
+Other   |            | 0.0009968  |            |       |  4.54
 
 Nlocal:    192 ave 192 max 192 min
 Histogram: 1 0 0 0 0 0 0 0 0 0
@@ -691,7 +693,7 @@ change_box all z delta 0 0.1 boundary p p s remap units box
 
 
 thermo 10
-thermo_style custom step temp pe etotal press vol density c_1[1] c_1[2] c_1[3] c_1[4] c_1[5] c_1[6]
+thermo_style custom step temp pe etotal press vol density c_1[3]
 # NVT relaxation
 fix 1 all nvt temp 300 300 1
 
@@ -701,26 +703,26 @@ fix 2 all print 100 "${st} ${sigmazz}" append thermo.out screen no title "# step
 #dump 103 all xyz 100 si_min_relaxation.xyz
 
 run 50
-Per MPI rank memory allocation (min/avg/max) = 3.097 | 3.097 | 3.097 Mbytes
-Step Temp PotEng TotEng Press Volume Density c_1[1] c_1[2] c_1[3] c_1[4] c_1[5] c_1[6] 
-     400 9.3742484e-21   -796.28366   -796.28366    -29542.47    3798.3029     2.357452   -21582.563   -21582.563   -45462.284   -1047.9517 3.0320455e-08 3.0726779e-08 
-     410 9.3742484e-21   -796.28366   -796.28366    -29542.47    3798.3029     2.357452   -21582.563   -21582.563   -45462.284   -1047.9517 3.0320455e-08 3.0726779e-08 
-     420 9.3742484e-21   -796.28366   -796.28366    -29542.47    3798.3029     2.357452   -21582.563   -21582.563   -45462.284   -1047.9517 3.0320455e-08 3.0726779e-08 
-     430 9.3742484e-21   -796.28366   -796.28366    -29542.47    3798.3029     2.357452   -21582.563   -21582.563   -45462.284   -1047.9517 3.0320455e-08 3.0726779e-08 
-     440 9.3742484e-21   -796.28366   -796.28366    -29542.47    3798.3029     2.357452   -21582.563   -21582.563   -45462.284   -1047.9517 3.0320455e-08 3.0726779e-08 
-     450 9.3742484e-21   -796.28366   -796.28366    -29542.47    3798.3029     2.357452   -21582.563   -21582.563   -45462.284   -1047.9517 3.0320455e-08 3.0726779e-08 
-Loop time of 0.0398929 on 1 procs for 50 steps with 192 atoms
+Per MPI rank memory allocation (min/avg/max) = 4.114 | 4.114 | 4.114 Mbytes
+Step Temp PotEng TotEng Press Volume Density c_1[3] 
+     400 9.3742484e-21   -796.28366   -796.28366    -29542.47    3798.3029     2.357452   -45462.284 
+     410 9.3742484e-21   -796.28366   -796.28366    -29542.47    3798.3029     2.357452   -45462.284 
+     420 9.3742484e-21   -796.28366   -796.28366    -29542.47    3798.3029     2.357452   -45462.284 
+     430 9.3742484e-21   -796.28366   -796.28366    -29542.47    3798.3029     2.357452   -45462.284 
+     440 9.3742484e-21   -796.28366   -796.28366    -29542.47    3798.3029     2.357452   -45462.284 
+     450 9.3742484e-21   -796.28366   -796.28366    -29542.47    3798.3029     2.357452   -45462.284 
+Loop time of 0.023936 on 1 procs for 50 steps with 192 atoms
 
-Performance: 10828.991 ns/day, 0.002 hours/ns, 1253.355 timesteps/s
-0.0% CPU use with 1 MPI tasks x 1 OpenMP threads
+Performance: 18048.103 ns/day, 0.001 hours/ns, 2088.901 timesteps/s
+65.3% CPU use with 1 MPI tasks x 1 OpenMP threads
 
 MPI task timing breakdown:
 Section |  min time  |  avg time  |  max time  |%varavg| %total
 ---------------------------------------------------------------
-Pair    | 0.007978   | 0.007978   | 0.007978   |   0.0 | 20.00
+Pair    | 0.0069795  | 0.0069795  | 0.0069795  |   0.0 | 29.16
 Neigh   | 0          | 0          | 0          |   0.0 |  0.00
-Comm    | 0.00099802 | 0.00099802 | 0.00099802 |   0.0 |  2.50
-Output  | 0.030917   | 0.030917   | 0.030917   |   0.0 | 77.50
+Comm    | 0          | 0          | 0          |   0.0 |  0.00
+Output  | 0.016957   | 0.016957   | 0.016957   |   0.0 | 70.84
 Modify  | 0          | 0          | 0          |   0.0 |  0.00
 Other   |            | 0          |            |       |  0.00
 
@@ -751,7 +753,7 @@ change_box all z delta 0 0.1 boundary p p s remap units box
 
 
 thermo 10
-thermo_style custom step temp pe etotal press vol density c_1[1] c_1[2] c_1[3] c_1[4] c_1[5] c_1[6]
+thermo_style custom step temp pe etotal press vol density c_1[3]
 # NVT relaxation
 fix 1 all nvt temp 300 300 1
 
@@ -761,26 +763,26 @@ fix 2 all print 100 "${st} ${sigmazz}" append thermo.out screen no title "# step
 #dump 103 all xyz 100 si_min_relaxation.xyz
 
 run 50
-Per MPI rank memory allocation (min/avg/max) = 3.097 | 3.097 | 3.097 Mbytes
-Step Temp PotEng TotEng Press Volume Density c_1[1] c_1[2] c_1[3] c_1[4] c_1[5] c_1[6] 
-     450 9.3742484e-21   -795.88491   -795.88491   -32807.114    3811.6144    2.3492189    -23952.29    -23952.29   -50516.762    -1162.956 3.003824e-08 3.0427231e-08 
-     460 9.3742484e-21   -795.88491   -795.88491   -32807.114    3811.6144    2.3492189    -23952.29    -23952.29   -50516.762    -1162.956 3.003824e-08 3.0427231e-08 
-     470 9.3742484e-21   -795.88491   -795.88491   -32807.114    3811.6144    2.3492189    -23952.29    -23952.29   -50516.762    -1162.956 3.003824e-08 3.0427231e-08 
-     480 9.3742484e-21   -795.88491   -795.88491   -32807.114    3811.6144    2.3492189    -23952.29    -23952.29   -50516.762    -1162.956 3.003824e-08 3.0427231e-08 
-     490 9.3742484e-21   -795.88491   -795.88491   -32807.114    3811.6144    2.3492189    -23952.29    -23952.29   -50516.762    -1162.956 3.003824e-08 3.0427231e-08 
-     500 9.3742484e-21   -795.88491   -795.88491   -32807.114    3811.6144    2.3492189    -23952.29    -23952.29   -50516.762    -1162.956 3.003824e-08 3.0427231e-08 
-Loop time of 0.042886 on 1 procs for 50 steps with 192 atoms
+Per MPI rank memory allocation (min/avg/max) = 4.114 | 4.114 | 4.114 Mbytes
+Step Temp PotEng TotEng Press Volume Density c_1[3] 
+     450 9.3742484e-21   -795.88491   -795.88491   -32807.114    3811.6144    2.3492189   -50516.762 
+     460 9.3742484e-21   -795.88491   -795.88491   -32807.114    3811.6144    2.3492189   -50516.762 
+     470 9.3742484e-21   -795.88491   -795.88491   -32807.114    3811.6144    2.3492189   -50516.762 
+     480 9.3742484e-21   -795.88491   -795.88491   -32807.114    3811.6144    2.3492189   -50516.762 
+     490 9.3742484e-21   -795.88491   -795.88491   -32807.114    3811.6144    2.3492189   -50516.762 
+     500 9.3742484e-21   -795.88491   -795.88491   -32807.114    3811.6144    2.3492189   -50516.762 
+Loop time of 0.0219421 on 1 procs for 50 steps with 192 atoms
 
-Performance: 10073.213 ns/day, 0.002 hours/ns, 1165.881 timesteps/s
-36.4% CPU use with 1 MPI tasks x 1 OpenMP threads
+Performance: 19688.145 ns/day, 0.001 hours/ns, 2278.720 timesteps/s
+71.2% CPU use with 1 MPI tasks x 1 OpenMP threads
 
 MPI task timing breakdown:
 Section |  min time  |  avg time  |  max time  |%varavg| %total
 ---------------------------------------------------------------
-Pair    | 0.0059831  | 0.0059831  | 0.0059831  |   0.0 | 13.95
+Pair    | 0.0059826  | 0.0059826  | 0.0059826  |   0.0 | 27.27
 Neigh   | 0          | 0          | 0          |   0.0 |  0.00
 Comm    | 0          | 0          | 0          |   0.0 |  0.00
-Output  | 0.036903   | 0.036903   | 0.036903   |   0.0 | 86.05
+Output  | 0.01596    | 0.01596    | 0.01596    |   0.0 | 72.73
 Modify  | 0          | 0          | 0          |   0.0 |  0.00
 Other   |            | 0          |            |       |  0.00
 
@@ -811,7 +813,7 @@ change_box all z delta 0 0.1 boundary p p s remap units box
 
 
 thermo 10
-thermo_style custom step temp pe etotal press vol density c_1[1] c_1[2] c_1[3] c_1[4] c_1[5] c_1[6]
+thermo_style custom step temp pe etotal press vol density c_1[3]
 # NVT relaxation
 fix 1 all nvt temp 300 300 1
 
@@ -821,26 +823,26 @@ fix 2 all print 100 "${st} ${sigmazz}" append thermo.out screen no title "# step
 #dump 103 all xyz 100 si_min_relaxation.xyz
 
 run 50
-Per MPI rank memory allocation (min/avg/max) = 3.097 | 3.097 | 3.097 Mbytes
-Step Temp PotEng TotEng Press Volume Density c_1[1] c_1[2] c_1[3] c_1[4] c_1[5] c_1[6] 
-     500 9.3742484e-21   -795.44417   -795.44417   -36031.315    3824.9311      2.34104    -26282.34    -26282.34   -55529.266   -1276.1549 2.9760938e-08 3.0201288e-08 
-     510 9.3742484e-21   -795.44417   -795.44417   -36031.315    3824.9311      2.34104    -26282.34    -26282.34   -55529.266   -1276.1549 2.9760938e-08 3.0201288e-08 
-     520 9.3742484e-21   -795.44417   -795.44417   -36031.315    3824.9311      2.34104    -26282.34    -26282.34   -55529.266   -1276.1549 2.9760938e-08 3.0201288e-08 
-     530 9.3742484e-21   -795.44417   -795.44417   -36031.315    3824.9311      2.34104    -26282.34    -26282.34   -55529.266   -1276.1549 2.9760938e-08 3.0201288e-08 
-     540 9.3742484e-21   -795.44417   -795.44417   -36031.315    3824.9311      2.34104    -26282.34    -26282.34   -55529.266   -1276.1549 2.9760938e-08 3.0201288e-08 
-     550 9.3742484e-21   -795.44417   -795.44417   -36031.315    3824.9311      2.34104    -26282.34    -26282.34   -55529.266   -1276.1549 2.9760938e-08 3.0201288e-08 
-Loop time of 0.042886 on 1 procs for 50 steps with 192 atoms
+Per MPI rank memory allocation (min/avg/max) = 4.114 | 4.114 | 4.114 Mbytes
+Step Temp PotEng TotEng Press Volume Density c_1[3] 
+     500 9.3742484e-21   -795.44417   -795.44417   -36031.315    3824.9311      2.34104   -55529.266 
+     510 9.3742484e-21   -795.44417   -795.44417   -36031.315    3824.9311      2.34104   -55529.266 
+     520 9.3742484e-21   -795.44417   -795.44417   -36031.315    3824.9311      2.34104   -55529.266 
+     530 9.3742484e-21   -795.44417   -795.44417   -36031.315    3824.9311      2.34104   -55529.266 
+     540 9.3742484e-21   -795.44417   -795.44417   -36031.315    3824.9311      2.34104   -55529.266 
+     550 9.3742484e-21   -795.44417   -795.44417   -36031.315    3824.9311      2.34104   -55529.266 
+Loop time of 0.0219409 on 1 procs for 50 steps with 192 atoms
 
-Performance: 10073.213 ns/day, 0.002 hours/ns, 1165.881 timesteps/s
-36.4% CPU use with 1 MPI tasks x 1 OpenMP threads
+Performance: 19689.214 ns/day, 0.001 hours/ns, 2278.844 timesteps/s
+0.0% CPU use with 1 MPI tasks x 1 OpenMP threads
 
 MPI task timing breakdown:
 Section |  min time  |  avg time  |  max time  |%varavg| %total
 ---------------------------------------------------------------
-Pair    | 0.0059829  | 0.0059829  | 0.0059829  |   0.0 | 13.95
+Pair    | 0.0069842  | 0.0069842  | 0.0069842  |   0.0 | 31.83
 Neigh   | 0          | 0          | 0          |   0.0 |  0.00
-Comm    | 0.00099802 | 0.00099802 | 0.00099802 |   0.0 |  2.33
-Output  | 0.035905   | 0.035905   | 0.035905   |   0.0 | 83.72
+Comm    | 0          | 0          | 0          |   0.0 |  0.00
+Output  | 0.014957   | 0.014957   | 0.014957   |   0.0 | 68.17
 Modify  | 0          | 0          | 0          |   0.0 |  0.00
 Other   |            | 0          |            |       |  0.00
 
@@ -871,7 +873,7 @@ change_box all z delta 0 0.1 boundary p p s remap units box
 
 
 thermo 10
-thermo_style custom step temp pe etotal press vol density c_1[1] c_1[2] c_1[3] c_1[4] c_1[5] c_1[6]
+thermo_style custom step temp pe etotal press vol density c_1[3]
 # NVT relaxation
 fix 1 all nvt temp 300 300 1
 
@@ -881,26 +883,26 @@ fix 2 all print 100 "${st} ${sigmazz}" append thermo.out screen no title "# step
 #dump 103 all xyz 100 si_min_relaxation.xyz
 
 run 50
-Per MPI rank memory allocation (min/avg/max) = 3.097 | 3.097 | 3.097 Mbytes
-Step Temp PotEng TotEng Press Volume Density c_1[1] c_1[2] c_1[3] c_1[4] c_1[5] c_1[6] 
-     550 9.3742484e-21   -794.96175   -794.96175   -39215.547    3838.2532    2.3329145   -28573.445   -28573.445   -60499.751   -1387.5767 2.9468871e-08 2.9890018e-08 
-     560 9.3742484e-21   -794.96175   -794.96175   -39215.547    3838.2532    2.3329145   -28573.445   -28573.445   -60499.751   -1387.5767 2.9468871e-08 2.9890018e-08 
-     570 9.3742484e-21   -794.96175   -794.96175   -39215.547    3838.2532    2.3329145   -28573.445   -28573.445   -60499.751   -1387.5767 2.9468871e-08 2.9890018e-08 
-     580 9.3742484e-21   -794.96175   -794.96175   -39215.547    3838.2532    2.3329145   -28573.445   -28573.445   -60499.751   -1387.5767 2.9468871e-08 2.9890018e-08 
-     590 9.3742484e-21   -794.96175   -794.96175   -39215.547    3838.2532    2.3329145   -28573.445   -28573.445   -60499.751   -1387.5767 2.9468871e-08 2.9890018e-08 
-     600 9.3742484e-21   -794.96175   -794.96175   -39215.547    3838.2532    2.3329145   -28573.445   -28573.445   -60499.751   -1387.5767 2.9468871e-08 2.9890018e-08 
-Loop time of 0.041888 on 1 procs for 50 steps with 192 atoms
+Per MPI rank memory allocation (min/avg/max) = 4.114 | 4.114 | 4.114 Mbytes
+Step Temp PotEng TotEng Press Volume Density c_1[3] 
+     550 9.3742484e-21   -794.96175   -794.96175   -39215.547    3838.2532    2.3329145   -60499.751 
+     560 9.3742484e-21   -794.96175   -794.96175   -39215.547    3838.2532    2.3329145   -60499.751 
+     570 9.3742484e-21   -794.96175   -794.96175   -39215.547    3838.2532    2.3329145   -60499.751 
+     580 9.3742484e-21   -794.96175   -794.96175   -39215.547    3838.2532    2.3329145   -60499.751 
+     590 9.3742484e-21   -794.96175   -794.96175   -39215.547    3838.2532    2.3329145   -60499.751 
+     600 9.3742484e-21   -794.96175   -794.96175   -39215.547    3838.2532    2.3329145   -60499.751 
+Loop time of 0.020942 on 1 procs for 50 steps with 192 atoms
 
-Performance: 10313.217 ns/day, 0.002 hours/ns, 1193.659 timesteps/s
+Performance: 20628.429 ns/day, 0.001 hours/ns, 2387.550 timesteps/s
 0.0% CPU use with 1 MPI tasks x 1 OpenMP threads
 
 MPI task timing breakdown:
 Section |  min time  |  avg time  |  max time  |%varavg| %total
 ---------------------------------------------------------------
-Pair    | 0.005985   | 0.005985   | 0.005985   |   0.0 | 14.29
+Pair    | 0.0049872  | 0.0049872  | 0.0049872  |   0.0 | 23.81
 Neigh   | 0          | 0          | 0          |   0.0 |  0.00
-Comm    | 0          | 0          | 0          |   0.0 |  0.00
-Output  | 0.035903   | 0.035903   | 0.035903   |   0.0 | 85.71
+Comm    | 0.00099707 | 0.00099707 | 0.00099707 |   0.0 |  4.76
+Output  | 0.014958   | 0.014958   | 0.014958   |   0.0 | 71.42
 Modify  | 0          | 0          | 0          |   0.0 |  0.00
 Other   |            | 0          |            |       |  0.00
 
@@ -931,7 +933,7 @@ change_box all z delta 0 0.1 boundary p p s remap units box
 
 
 thermo 10
-thermo_style custom step temp pe etotal press vol density c_1[1] c_1[2] c_1[3] c_1[4] c_1[5] c_1[6]
+thermo_style custom step temp pe etotal press vol density c_1[3]
 # NVT relaxation
 fix 1 all nvt temp 300 300 1
 
@@ -941,26 +943,26 @@ fix 2 all print 100 "${st} ${sigmazz}" append thermo.out screen no title "# step
 #dump 103 all xyz 100 si_min_relaxation.xyz
 
 run 50
-Per MPI rank memory allocation (min/avg/max) = 3.097 | 3.097 | 3.097 Mbytes
-Step Temp PotEng TotEng Press Volume Density c_1[1] c_1[2] c_1[3] c_1[4] c_1[5] c_1[6] 
-     600 9.3742484e-21   -794.43797   -794.43797   -42360.277    3851.5807     2.324842   -30826.324   -30826.324   -65428.184   -1497.2491 2.9204447e-08 2.9617905e-08 
-     610 9.3742484e-21   -794.43797   -794.43797   -42360.277    3851.5807     2.324842   -30826.324   -30826.324   -65428.184   -1497.2491 2.9204447e-08 2.9617905e-08 
-     620 9.3742484e-21   -794.43797   -794.43797   -42360.277    3851.5807     2.324842   -30826.324   -30826.324   -65428.184   -1497.2491 2.9204447e-08 2.9617905e-08 
-     630 9.3742484e-21   -794.43797   -794.43797   -42360.277    3851.5807     2.324842   -30826.324   -30826.324   -65428.184   -1497.2491 2.9204447e-08 2.9617905e-08 
-     640 9.3742484e-21   -794.43797   -794.43797   -42360.277    3851.5807     2.324842   -30826.324   -30826.324   -65428.184   -1497.2491 2.9204447e-08 2.9617905e-08 
-     650 9.3742484e-21   -794.43797   -794.43797   -42360.277    3851.5807     2.324842   -30826.324   -30826.324   -65428.184   -1497.2491 2.9204447e-08 2.9617905e-08 
-Loop time of 0.0418909 on 1 procs for 50 steps with 192 atoms
+Per MPI rank memory allocation (min/avg/max) = 4.114 | 4.114 | 4.114 Mbytes
+Step Temp PotEng TotEng Press Volume Density c_1[3] 
+     600 9.3742484e-21   -794.43797   -794.43797   -42360.277    3851.5807     2.324842   -65428.184 
+     610 9.3742484e-21   -794.43797   -794.43797   -42360.277    3851.5807     2.324842   -65428.184 
+     620 9.3742484e-21   -794.43797   -794.43797   -42360.277    3851.5807     2.324842   -65428.184 
+     630 9.3742484e-21   -794.43797   -794.43797   -42360.277    3851.5807     2.324842   -65428.184 
+     640 9.3742484e-21   -794.43797   -794.43797   -42360.277    3851.5807     2.324842   -65428.184 
+     650 9.3742484e-21   -794.43797   -794.43797   -42360.277    3851.5807     2.324842   -65428.184 
+Loop time of 0.0219431 on 1 procs for 50 steps with 192 atoms
 
-Performance: 10312.512 ns/day, 0.002 hours/ns, 1193.578 timesteps/s
-37.3% CPU use with 1 MPI tasks x 1 OpenMP threads
+Performance: 19687.289 ns/day, 0.001 hours/ns, 2278.621 timesteps/s
+71.2% CPU use with 1 MPI tasks x 1 OpenMP threads
 
 MPI task timing breakdown:
 Section |  min time  |  avg time  |  max time  |%varavg| %total
 ---------------------------------------------------------------
-Pair    | 0.0079772  | 0.0079772  | 0.0079772  |   0.0 | 19.04
+Pair    | 0.0069897  | 0.0069897  | 0.0069897  |   0.0 | 31.85
 Neigh   | 0          | 0          | 0          |   0.0 |  0.00
 Comm    | 0          | 0          | 0          |   0.0 |  0.00
-Output  | 0.033914   | 0.033914   | 0.033914   |   0.0 | 80.96
+Output  | 0.014953   | 0.014953   | 0.014953   |   0.0 | 68.15
 Modify  | 0          | 0          | 0          |   0.0 |  0.00
 Other   |            | 0          |            |       |  0.00
 
@@ -991,7 +993,7 @@ change_box all z delta 0 0.1 boundary p p s remap units box
 
 
 thermo 10
-thermo_style custom step temp pe etotal press vol density c_1[1] c_1[2] c_1[3] c_1[4] c_1[5] c_1[6]
+thermo_style custom step temp pe etotal press vol density c_1[3]
 # NVT relaxation
 fix 1 all nvt temp 300 300 1
 
@@ -1001,26 +1003,26 @@ fix 2 all print 100 "${st} ${sigmazz}" append thermo.out screen no title "# step
 #dump 103 all xyz 100 si_min_relaxation.xyz
 
 run 50
-Per MPI rank memory allocation (min/avg/max) = 3.097 | 3.097 | 3.097 Mbytes
-Step Temp PotEng TotEng Press Volume Density c_1[1] c_1[2] c_1[3] c_1[4] c_1[5] c_1[6] 
-     650 9.3742484e-21   -793.87313   -793.87313   -45465.972    3864.9134    2.3168221   -33041.687   -33041.687   -70314.542   -1605.1996 2.8959514e-08 2.9342609e-08 
-     660 9.3742484e-21   -793.87313   -793.87313   -45465.972    3864.9134    2.3168221   -33041.687   -33041.687   -70314.542   -1605.1996 2.8959514e-08 2.9342609e-08 
-     670 9.3742484e-21   -793.87313   -793.87313   -45465.972    3864.9134    2.3168221   -33041.687   -33041.687   -70314.542   -1605.1996 2.8959514e-08 2.9342609e-08 
-     680 9.3742484e-21   -793.87313   -793.87313   -45465.972    3864.9134    2.3168221   -33041.687   -33041.687   -70314.542   -1605.1996 2.8959514e-08 2.9342609e-08 
-     690 9.3742484e-21   -793.87313   -793.87313   -45465.972    3864.9134    2.3168221   -33041.687   -33041.687   -70314.542   -1605.1996 2.8959514e-08 2.9342609e-08 
-     700 9.3742484e-21   -793.87313   -793.87313   -45465.972    3864.9134    2.3168221   -33041.687   -33041.687   -70314.542   -1605.1996 2.8959514e-08 2.9342609e-08 
-Loop time of 0.0398932 on 1 procs for 50 steps with 192 atoms
+Per MPI rank memory allocation (min/avg/max) = 4.114 | 4.114 | 4.114 Mbytes
+Step Temp PotEng TotEng Press Volume Density c_1[3] 
+     650 9.3742484e-21   -793.87313   -793.87313   -45465.972    3864.9134    2.3168221   -70314.542 
+     660 9.3742484e-21   -793.87313   -793.87313   -45465.972    3864.9134    2.3168221   -70314.542 
+     670 9.3742484e-21   -793.87313   -793.87313   -45465.972    3864.9134    2.3168221   -70314.542 
+     680 9.3742484e-21   -793.87313   -793.87313   -45465.972    3864.9134    2.3168221   -70314.542 
+     690 9.3742484e-21   -793.87313   -793.87313   -45465.972    3864.9134    2.3168221   -70314.542 
+     700 9.3742484e-21   -793.87313   -793.87313   -45465.972    3864.9134    2.3168221   -70314.542 
+Loop time of 0.0219409 on 1 procs for 50 steps with 192 atoms
 
-Performance: 10828.927 ns/day, 0.002 hours/ns, 1253.348 timesteps/s
-39.2% CPU use with 1 MPI tasks x 1 OpenMP threads
+Performance: 19689.214 ns/day, 0.001 hours/ns, 2278.844 timesteps/s
+0.0% CPU use with 1 MPI tasks x 1 OpenMP threads
 
 MPI task timing breakdown:
 Section |  min time  |  avg time  |  max time  |%varavg| %total
 ---------------------------------------------------------------
-Pair    | 0.0059843  | 0.0059843  | 0.0059843  |   0.0 | 15.00
+Pair    | 0.0049851  | 0.0049851  | 0.0049851  |   0.0 | 22.72
 Neigh   | 0          | 0          | 0          |   0.0 |  0.00
 Comm    | 0          | 0          | 0          |   0.0 |  0.00
-Output  | 0.033909   | 0.033909   | 0.033909   |   0.0 | 85.00
+Output  | 0.016956   | 0.016956   | 0.016956   |   0.0 | 77.28
 Modify  | 0          | 0          | 0          |   0.0 |  0.00
 Other   |            | 0          |            |       |  0.00
 
@@ -1051,7 +1053,7 @@ change_box all z delta 0 0.1 boundary p p s remap units box
 
 
 thermo 10
-thermo_style custom step temp pe etotal press vol density c_1[1] c_1[2] c_1[3] c_1[4] c_1[5] c_1[6]
+thermo_style custom step temp pe etotal press vol density c_1[3]
 # NVT relaxation
 fix 1 all nvt temp 300 300 1
 
@@ -1061,26 +1063,26 @@ fix 2 all print 100 "${st} ${sigmazz}" append thermo.out screen no title "# step
 #dump 103 all xyz 100 si_min_relaxation.xyz
 
 run 50
-Per MPI rank memory allocation (min/avg/max) = 3.097 | 3.097 | 3.097 Mbytes
-Step Temp PotEng TotEng Press Volume Density c_1[1] c_1[2] c_1[3] c_1[4] c_1[5] c_1[6] 
-     700 9.3742484e-21   -793.26757   -793.26757   -48533.091    3878.2515     2.308854   -35220.229   -35220.229   -75158.815   -1711.4553 2.8666738e-08 2.9082725e-08 
-     710 9.3742484e-21   -793.26757   -793.26757   -48533.091    3878.2515     2.308854   -35220.229   -35220.229   -75158.815   -1711.4553 2.8666738e-08 2.9082725e-08 
-     720 9.3742484e-21   -793.26757   -793.26757   -48533.091    3878.2515     2.308854   -35220.229   -35220.229   -75158.815   -1711.4553 2.8666738e-08 2.9082725e-08 
-     730 9.3742484e-21   -793.26757   -793.26757   -48533.091    3878.2515     2.308854   -35220.229   -35220.229   -75158.815   -1711.4553 2.8666738e-08 2.9082725e-08 
-     740 9.3742484e-21   -793.26757   -793.26757   -48533.091    3878.2515     2.308854   -35220.229   -35220.229   -75158.815   -1711.4553 2.8666738e-08 2.9082725e-08 
-     750 9.3742484e-21   -793.26757   -793.26757   -48533.091    3878.2515     2.308854   -35220.229   -35220.229   -75158.815   -1711.4553 2.8666738e-08 2.9082725e-08 
-Loop time of 0.041888 on 1 procs for 50 steps with 192 atoms
+Per MPI rank memory allocation (min/avg/max) = 4.114 | 4.114 | 4.114 Mbytes
+Step Temp PotEng TotEng Press Volume Density c_1[3] 
+     700 9.3742484e-21   -793.26757   -793.26757   -48533.091    3878.2515     2.308854   -75158.815 
+     710 9.3742484e-21   -793.26757   -793.26757   -48533.091    3878.2515     2.308854   -75158.815 
+     720 9.3742484e-21   -793.26757   -793.26757   -48533.091    3878.2515     2.308854   -75158.815 
+     730 9.3742484e-21   -793.26757   -793.26757   -48533.091    3878.2515     2.308854   -75158.815 
+     740 9.3742484e-21   -793.26757   -793.26757   -48533.091    3878.2515     2.308854   -75158.815 
+     750 9.3742484e-21   -793.26757   -793.26757   -48533.091    3878.2515     2.308854   -75158.815 
+Loop time of 0.0219409 on 1 procs for 50 steps with 192 atoms
 
-Performance: 10313.217 ns/day, 0.002 hours/ns, 1193.659 timesteps/s
-0.0% CPU use with 1 MPI tasks x 1 OpenMP threads
+Performance: 19689.214 ns/day, 0.001 hours/ns, 2278.844 timesteps/s
+71.2% CPU use with 1 MPI tasks x 1 OpenMP threads
 
 MPI task timing breakdown:
 Section |  min time  |  avg time  |  max time  |%varavg| %total
 ---------------------------------------------------------------
-Pair    | 0.0059812  | 0.0059812  | 0.0059812  |   0.0 | 14.28
+Pair    | 0.0049865  | 0.0049865  | 0.0049865  |   0.0 | 22.73
 Neigh   | 0          | 0          | 0          |   0.0 |  0.00
 Comm    | 0          | 0          | 0          |   0.0 |  0.00
-Output  | 0.035907   | 0.035907   | 0.035907   |   0.0 | 85.72
+Output  | 0.016954   | 0.016954   | 0.016954   |   0.0 | 77.27
 Modify  | 0          | 0          | 0          |   0.0 |  0.00
 Other   |            | 0          |            |       |  0.00
 
@@ -1111,7 +1113,7 @@ change_box all z delta 0 0.1 boundary p p s remap units box
 
 
 thermo 10
-thermo_style custom step temp pe etotal press vol density c_1[1] c_1[2] c_1[3] c_1[4] c_1[5] c_1[6]
+thermo_style custom step temp pe etotal press vol density c_1[3]
 # NVT relaxation
 fix 1 all nvt temp 300 300 1
 
@@ -1121,27 +1123,27 @@ fix 2 all print 100 "${st} ${sigmazz}" append thermo.out screen no title "# step
 #dump 103 all xyz 100 si_min_relaxation.xyz
 
 run 50
-Per MPI rank memory allocation (min/avg/max) = 3.097 | 3.097 | 3.097 Mbytes
-Step Temp PotEng TotEng Press Volume Density c_1[1] c_1[2] c_1[3] c_1[4] c_1[5] c_1[6] 
-     750 9.3742484e-21    -792.6216    -792.6216   -51562.092    3891.5949    2.3009375   -37362.637   -37362.637   -79961.004   -1816.0427 2.8414992e-08 2.8766219e-08 
-     760 9.3742484e-21    -792.6216    -792.6216   -51562.092    3891.5949    2.3009375   -37362.637   -37362.637   -79961.004   -1816.0427 2.8414992e-08 2.8766219e-08 
-     770 9.3742484e-21    -792.6216    -792.6216   -51562.092    3891.5949    2.3009375   -37362.637   -37362.637   -79961.004   -1816.0427 2.8414992e-08 2.8766219e-08 
-     780 9.3742484e-21    -792.6216    -792.6216   -51562.092    3891.5949    2.3009375   -37362.637   -37362.637   -79961.004   -1816.0427 2.8414992e-08 2.8766219e-08 
-     790 9.3742484e-21    -792.6216    -792.6216   -51562.092    3891.5949    2.3009375   -37362.637   -37362.637   -79961.004   -1816.0427 2.8414992e-08 2.8766219e-08 
-     800 9.3742484e-21    -792.6216    -792.6216   -51562.092    3891.5949    2.3009375   -37362.637   -37362.637   -79961.004   -1816.0427 2.8414992e-08 2.8766219e-08 
-Loop time of 0.0408919 on 1 procs for 50 steps with 192 atoms
+Per MPI rank memory allocation (min/avg/max) = 4.114 | 4.114 | 4.114 Mbytes
+Step Temp PotEng TotEng Press Volume Density c_1[3] 
+     750 9.3742484e-21    -792.6216    -792.6216   -51562.092    3891.5949    2.3009375   -79961.004 
+     760 9.3742484e-21    -792.6216    -792.6216   -51562.092    3891.5949    2.3009375   -79961.004 
+     770 9.3742484e-21    -792.6216    -792.6216   -51562.092    3891.5949    2.3009375   -79961.004 
+     780 9.3742484e-21    -792.6216    -792.6216   -51562.092    3891.5949    2.3009375   -79961.004 
+     790 9.3742484e-21    -792.6216    -792.6216   -51562.092    3891.5949    2.3009375   -79961.004 
+     800 9.3742484e-21    -792.6216    -792.6216   -51562.092    3891.5949    2.3009375   -79961.004 
+Loop time of 0.023936 on 1 procs for 50 steps with 192 atoms
 
-Performance: 10564.443 ns/day, 0.002 hours/ns, 1222.736 timesteps/s
-0.0% CPU use with 1 MPI tasks x 1 OpenMP threads
+Performance: 18048.103 ns/day, 0.001 hours/ns, 2088.901 timesteps/s
+130.6% CPU use with 1 MPI tasks x 1 OpenMP threads
 
 MPI task timing breakdown:
 Section |  min time  |  avg time  |  max time  |%varavg| %total
 ---------------------------------------------------------------
-Pair    | 0.0059798  | 0.0059798  | 0.0059798  |   0.0 | 14.62
+Pair    | 0.0069864  | 0.0069864  | 0.0069864  |   0.0 | 29.19
 Neigh   | 0          | 0          | 0          |   0.0 |  0.00
-Comm    | 0.00099683 | 0.00099683 | 0.00099683 |   0.0 |  2.44
-Output  | 0.033915   | 0.033915   | 0.033915   |   0.0 | 82.94
-Modify  | 0          | 0          | 0          |   0.0 |  0.00
+Comm    | 0          | 0          | 0          |   0.0 |  0.00
+Output  | 0.015953   | 0.015953   | 0.015953   |   0.0 | 66.65
+Modify  | 0.00099707 | 0.00099707 | 0.00099707 |   0.0 |  4.17
 Other   |            | 0          |            |       |  0.00
 
 Nlocal:    192 ave 192 max 192 min
@@ -1171,7 +1173,7 @@ change_box all z delta 0 0.1 boundary p p s remap units box
 
 
 thermo 10
-thermo_style custom step temp pe etotal press vol density c_1[1] c_1[2] c_1[3] c_1[4] c_1[5] c_1[6]
+thermo_style custom step temp pe etotal press vol density c_1[3]
 # NVT relaxation
 fix 1 all nvt temp 300 300 1
 
@@ -1181,26 +1183,26 @@ fix 2 all print 100 "${st} ${sigmazz}" append thermo.out screen no title "# step
 #dump 103 all xyz 100 si_min_relaxation.xyz
 
 run 50
-Per MPI rank memory allocation (min/avg/max) = 3.097 | 3.097 | 3.097 Mbytes
-Step Temp PotEng TotEng Press Volume Density c_1[1] c_1[2] c_1[3] c_1[4] c_1[5] c_1[6] 
-     800 9.3742484e-21   -791.93553   -791.93553   -54553.429    3904.9437    2.2930719   -39469.584   -39469.584   -84721.119    -1918.988 2.8126329e-08 2.849691e-08 
-     810 9.3742484e-21   -791.93553   -791.93553   -54553.429    3904.9437    2.2930719   -39469.584   -39469.584   -84721.119    -1918.988 2.8126329e-08 2.849691e-08 
-     820 9.3742484e-21   -791.93553   -791.93553   -54553.429    3904.9437    2.2930719   -39469.584   -39469.584   -84721.119    -1918.988 2.8126329e-08 2.849691e-08 
-     830 9.3742484e-21   -791.93553   -791.93553   -54553.429    3904.9437    2.2930719   -39469.584   -39469.584   -84721.119    -1918.988 2.8126329e-08 2.849691e-08 
-     840 9.3742484e-21   -791.93553   -791.93553   -54553.429    3904.9437    2.2930719   -39469.584   -39469.584   -84721.119    -1918.988 2.8126329e-08 2.849691e-08 
-     850 9.3742484e-21   -791.93553   -791.93553   -54553.429    3904.9437    2.2930719   -39469.584   -39469.584   -84721.119    -1918.988 2.8126329e-08 2.849691e-08 
-Loop time of 0.04089 on 1 procs for 50 steps with 192 atoms
+Per MPI rank memory allocation (min/avg/max) = 4.114 | 4.114 | 4.114 Mbytes
+Step Temp PotEng TotEng Press Volume Density c_1[3] 
+     800 9.3742484e-21   -791.93553   -791.93553   -54553.429    3904.9437    2.2930719   -84721.119 
+     810 9.3742484e-21   -791.93553   -791.93553   -54553.429    3904.9437    2.2930719   -84721.119 
+     820 9.3742484e-21   -791.93553   -791.93553   -54553.429    3904.9437    2.2930719   -84721.119 
+     830 9.3742484e-21   -791.93553   -791.93553   -54553.429    3904.9437    2.2930719   -84721.119 
+     840 9.3742484e-21   -791.93553   -791.93553   -54553.429    3904.9437    2.2930719   -84721.119 
+     850 9.3742484e-21   -791.93553   -791.93553   -54553.429    3904.9437    2.2930719   -84721.119 
+Loop time of 0.0219409 on 1 procs for 50 steps with 192 atoms
 
-Performance: 10564.936 ns/day, 0.002 hours/ns, 1222.794 timesteps/s
-38.2% CPU use with 1 MPI tasks x 1 OpenMP threads
+Performance: 19689.214 ns/day, 0.001 hours/ns, 2278.844 timesteps/s
+0.0% CPU use with 1 MPI tasks x 1 OpenMP threads
 
 MPI task timing breakdown:
 Section |  min time  |  avg time  |  max time  |%varavg| %total
 ---------------------------------------------------------------
-Pair    | 0.0059876  | 0.0059876  | 0.0059876  |   0.0 | 14.64
+Pair    | 0.0069797  | 0.0069797  | 0.0069797  |   0.0 | 31.81
 Neigh   | 0          | 0          | 0          |   0.0 |  0.00
 Comm    | 0          | 0          | 0          |   0.0 |  0.00
-Output  | 0.034902   | 0.034902   | 0.034902   |   0.0 | 85.36
+Output  | 0.014961   | 0.014961   | 0.014961   |   0.0 | 68.19
 Modify  | 0          | 0          | 0          |   0.0 |  0.00
 Other   |            | 0          |            |       |  0.00
 
@@ -1231,7 +1233,7 @@ change_box all z delta 0 0.1 boundary p p s remap units box
 
 
 thermo 10
-thermo_style custom step temp pe etotal press vol density c_1[1] c_1[2] c_1[3] c_1[4] c_1[5] c_1[6]
+thermo_style custom step temp pe etotal press vol density c_1[3]
 # NVT relaxation
 fix 1 all nvt temp 300 300 1
 
@@ -1241,26 +1243,26 @@ fix 2 all print 100 "${st} ${sigmazz}" append thermo.out screen no title "# step
 #dump 103 all xyz 100 si_min_relaxation.xyz
 
 run 50
-Per MPI rank memory allocation (min/avg/max) = 3.097 | 3.097 | 3.097 Mbytes
-Step Temp PotEng TotEng Press Volume Density c_1[1] c_1[2] c_1[3] c_1[4] c_1[5] c_1[6] 
-     850 9.3742484e-21   -791.20969   -791.20969   -57507.549    3918.2978    2.2852568   -41541.732   -41541.732   -89439.183   -2020.3171 2.7863485e-08 2.8260921e-08 
-     860 9.3742484e-21   -791.20969   -791.20969   -57507.549    3918.2978    2.2852568   -41541.732   -41541.732   -89439.183   -2020.3171 2.7863485e-08 2.8260921e-08 
-     870 9.3742484e-21   -791.20969   -791.20969   -57507.549    3918.2978    2.2852568   -41541.732   -41541.732   -89439.183   -2020.3171 2.7863485e-08 2.8260921e-08 
-     880 9.3742484e-21   -791.20969   -791.20969   -57507.549    3918.2978    2.2852568   -41541.732   -41541.732   -89439.183   -2020.3171 2.7863485e-08 2.8260921e-08 
-     890 9.3742484e-21   -791.20969   -791.20969   -57507.549    3918.2978    2.2852568   -41541.732   -41541.732   -89439.183   -2020.3171 2.7863485e-08 2.8260921e-08 
-     900 9.3742484e-21   -791.20969   -791.20969   -57507.549    3918.2978    2.2852568   -41541.732   -41541.732   -89439.183   -2020.3171 2.7863485e-08 2.8260921e-08 
-Loop time of 0.0398951 on 1 procs for 50 steps with 192 atoms
+Per MPI rank memory allocation (min/avg/max) = 4.114 | 4.114 | 4.114 Mbytes
+Step Temp PotEng TotEng Press Volume Density c_1[3] 
+     850 9.3742484e-21   -791.20969   -791.20969   -57507.549    3918.2978    2.2852568   -89439.183 
+     860 9.3742484e-21   -791.20969   -791.20969   -57507.549    3918.2978    2.2852568   -89439.183 
+     870 9.3742484e-21   -791.20969   -791.20969   -57507.549    3918.2978    2.2852568   -89439.183 
+     880 9.3742484e-21   -791.20969   -791.20969   -57507.549    3918.2978    2.2852568   -89439.183 
+     890 9.3742484e-21   -791.20969   -791.20969   -57507.549    3918.2978    2.2852568   -89439.183 
+     900 9.3742484e-21   -791.20969   -791.20969   -57507.549    3918.2978    2.2852568   -89439.183 
+Loop time of 0.0249341 on 1 procs for 50 steps with 192 atoms
 
-Performance: 10828.409 ns/day, 0.002 hours/ns, 1253.288 timesteps/s
-39.2% CPU use with 1 MPI tasks x 1 OpenMP threads
+Performance: 17325.703 ns/day, 0.001 hours/ns, 2005.290 timesteps/s
+62.7% CPU use with 1 MPI tasks x 1 OpenMP threads
 
 MPI task timing breakdown:
 Section |  min time  |  avg time  |  max time  |%varavg| %total
 ---------------------------------------------------------------
-Pair    | 0.0059872  | 0.0059872  | 0.0059872  |   0.0 | 15.01
+Pair    | 0.0059869  | 0.0059869  | 0.0059869  |   0.0 | 24.01
 Neigh   | 0          | 0          | 0          |   0.0 |  0.00
 Comm    | 0          | 0          | 0          |   0.0 |  0.00
-Output  | 0.033908   | 0.033908   | 0.033908   |   0.0 | 84.99
+Output  | 0.018947   | 0.018947   | 0.018947   |   0.0 | 75.99
 Modify  | 0          | 0          | 0          |   0.0 |  0.00
 Other   |            | 0          |            |       |  0.00
 
@@ -1291,7 +1293,7 @@ change_box all z delta 0 0.1 boundary p p s remap units box
 
 
 thermo 10
-thermo_style custom step temp pe etotal press vol density c_1[1] c_1[2] c_1[3] c_1[4] c_1[5] c_1[6]
+thermo_style custom step temp pe etotal press vol density c_1[3]
 # NVT relaxation
 fix 1 all nvt temp 300 300 1
 
@@ -1301,26 +1303,26 @@ fix 2 all print 100 "${st} ${sigmazz}" append thermo.out screen no title "# step
 #dump 103 all xyz 100 si_min_relaxation.xyz
 
 run 50
-Per MPI rank memory allocation (min/avg/max) = 3.097 | 3.097 | 3.097 Mbytes
-Step Temp PotEng TotEng Press Volume Density c_1[1] c_1[2] c_1[3] c_1[4] c_1[5] c_1[6] 
-     900 9.3742484e-21   -790.44439   -790.44439     -60424.9    3931.6573    2.2774917   -43579.735   -43579.735   -94115.229   -2120.0554 2.7614848e-08 2.800405e-08 
-     910 9.3742484e-21   -790.44439   -790.44439     -60424.9    3931.6573    2.2774917   -43579.735   -43579.735   -94115.229   -2120.0554 2.7614848e-08 2.800405e-08 
-     920 9.3742484e-21   -790.44439   -790.44439     -60424.9    3931.6573    2.2774917   -43579.735   -43579.735   -94115.229   -2120.0554 2.7614848e-08 2.800405e-08 
-     930 9.3742484e-21   -790.44439   -790.44439     -60424.9    3931.6573    2.2774917   -43579.735   -43579.735   -94115.229   -2120.0554 2.7614848e-08 2.800405e-08 
-     940 9.3742484e-21   -790.44439   -790.44439     -60424.9    3931.6573    2.2774917   -43579.735   -43579.735   -94115.229   -2120.0554 2.7614848e-08 2.800405e-08 
-     950 9.3742484e-21   -790.44439   -790.44439     -60424.9    3931.6573    2.2774917   -43579.735   -43579.735   -94115.229   -2120.0554 2.7614848e-08 2.800405e-08 
-Loop time of 0.0388961 on 1 procs for 50 steps with 192 atoms
+Per MPI rank memory allocation (min/avg/max) = 4.114 | 4.114 | 4.114 Mbytes
+Step Temp PotEng TotEng Press Volume Density c_1[3] 
+     900 9.3742484e-21   -790.44439   -790.44439     -60424.9    3931.6573    2.2774917   -94115.229 
+     910 9.3742484e-21   -790.44439   -790.44439     -60424.9    3931.6573    2.2774917   -94115.229 
+     920 9.3742484e-21   -790.44439   -790.44439     -60424.9    3931.6573    2.2774917   -94115.229 
+     930 9.3742484e-21   -790.44439   -790.44439     -60424.9    3931.6573    2.2774917   -94115.229 
+     940 9.3742484e-21   -790.44439   -790.44439     -60424.9    3931.6573    2.2774917   -94115.229 
+     950 9.3742484e-21   -790.44439   -790.44439     -60424.9    3931.6573    2.2774917   -94115.229 
+Loop time of 0.0249331 on 1 procs for 50 steps with 192 atoms
 
-Performance: 11106.517 ns/day, 0.002 hours/ns, 1285.476 timesteps/s
-80.3% CPU use with 1 MPI tasks x 1 OpenMP threads
+Performance: 17326.366 ns/day, 0.001 hours/ns, 2005.366 timesteps/s
+62.7% CPU use with 1 MPI tasks x 1 OpenMP threads
 
 MPI task timing breakdown:
 Section |  min time  |  avg time  |  max time  |%varavg| %total
 ---------------------------------------------------------------
-Pair    | 0.006983   | 0.006983   | 0.006983   |   0.0 | 17.95
+Pair    | 0.0089762  | 0.0089762  | 0.0089762  |   0.0 | 36.00
 Neigh   | 0          | 0          | 0          |   0.0 |  0.00
 Comm    | 0          | 0          | 0          |   0.0 |  0.00
-Output  | 0.031913   | 0.031913   | 0.031913   |   0.0 | 82.05
+Output  | 0.015957   | 0.015957   | 0.015957   |   0.0 | 64.00
 Modify  | 0          | 0          | 0          |   0.0 |  0.00
 Other   |            | 0          |            |       |  0.00
 
@@ -1351,7 +1353,7 @@ change_box all z delta 0 0.1 boundary p p s remap units box
 
 
 thermo 10
-thermo_style custom step temp pe etotal press vol density c_1[1] c_1[2] c_1[3] c_1[4] c_1[5] c_1[6]
+thermo_style custom step temp pe etotal press vol density c_1[3]
 # NVT relaxation
 fix 1 all nvt temp 300 300 1
 
@@ -1361,27 +1363,27 @@ fix 2 all print 100 "${st} ${sigmazz}" append thermo.out screen no title "# step
 #dump 103 all xyz 100 si_min_relaxation.xyz
 
 run 50
-Per MPI rank memory allocation (min/avg/max) = 3.097 | 3.097 | 3.097 Mbytes
-Step Temp PotEng TotEng Press Volume Density c_1[1] c_1[2] c_1[3] c_1[4] c_1[5] c_1[6] 
-     950 9.3742484e-21   -789.63996   -789.63996   -63305.921    3945.0221    2.2697761   -45584.232   -45584.232     -98749.3   -2218.2278 2.7355221e-08 2.7721457e-08 
-     960 9.3742484e-21   -789.63996   -789.63996   -63305.921    3945.0221    2.2697761   -45584.232   -45584.232     -98749.3   -2218.2278 2.7355221e-08 2.7721457e-08 
-     970 9.3742484e-21   -789.63996   -789.63996   -63305.921    3945.0221    2.2697761   -45584.232   -45584.232     -98749.3   -2218.2278 2.7355221e-08 2.7721457e-08 
-     980 9.3742484e-21   -789.63996   -789.63996   -63305.921    3945.0221    2.2697761   -45584.232   -45584.232     -98749.3   -2218.2278 2.7355221e-08 2.7721457e-08 
-     990 9.3742484e-21   -789.63996   -789.63996   -63305.921    3945.0221    2.2697761   -45584.232   -45584.232     -98749.3   -2218.2278 2.7355221e-08 2.7721457e-08 
-    1000 9.3742484e-21   -789.63996   -789.63996   -63305.921    3945.0221    2.2697761   -45584.232   -45584.232     -98749.3   -2218.2278 2.7355221e-08 2.7721457e-08 
-Loop time of 0.0309169 on 1 procs for 50 steps with 192 atoms
+Per MPI rank memory allocation (min/avg/max) = 4.114 | 4.114 | 4.114 Mbytes
+Step Temp PotEng TotEng Press Volume Density c_1[3] 
+     950 9.3742484e-21   -789.63996   -789.63996   -63305.921    3945.0221    2.2697761     -98749.3 
+     960 9.3742484e-21   -789.63996   -789.63996   -63305.921    3945.0221    2.2697761     -98749.3 
+     970 9.3742484e-21   -789.63996   -789.63996   -63305.921    3945.0221    2.2697761     -98749.3 
+     980 9.3742484e-21   -789.63996   -789.63996   -63305.921    3945.0221    2.2697761     -98749.3 
+     990 9.3742484e-21   -789.63996   -789.63996   -63305.921    3945.0221    2.2697761     -98749.3 
+    1000 9.3742484e-21   -789.63996   -789.63996   -63305.921    3945.0221    2.2697761     -98749.3 
+Loop time of 0.022449 on 1 procs for 50 steps with 192 atoms
 
-Performance: 13972.927 ns/day, 0.002 hours/ns, 1617.237 timesteps/s
-50.5% CPU use with 1 MPI tasks x 1 OpenMP threads
+Performance: 19243.605 ns/day, 0.001 hours/ns, 2227.269 timesteps/s
+0.0% CPU use with 1 MPI tasks x 1 OpenMP threads
 
 MPI task timing breakdown:
 Section |  min time  |  avg time  |  max time  |%varavg| %total
 ---------------------------------------------------------------
-Pair    | 0.0059888  | 0.0059888  | 0.0059888  |   0.0 | 19.37
+Pair    | 0.0049846  | 0.0049846  | 0.0049846  |   0.0 | 22.20
 Neigh   | 0          | 0          | 0          |   0.0 |  0.00
-Comm    | 0          | 0          | 0          |   0.0 |  0.00
-Output  | 0.024928   | 0.024928   | 0.024928   |   0.0 | 80.63
-Modify  | 0          | 0          | 0          |   0.0 |  0.00
+Comm    | 0.00099707 | 0.00099707 | 0.00099707 |   0.0 |  4.44
+Output  | 0.01547    | 0.01547    | 0.01547    |   0.0 | 68.91
+Modify  | 0.00099707 | 0.00099707 | 0.00099707 |   0.0 |  4.44
 Other   |            | 0          |            |       |  0.00
 
 Nlocal:    192 ave 192 max 192 min
@@ -1411,7 +1413,7 @@ change_box all z delta 0 0.1 boundary p p s remap units box
 
 
 thermo 10
-thermo_style custom step temp pe etotal press vol density c_1[1] c_1[2] c_1[3] c_1[4] c_1[5] c_1[6]
+thermo_style custom step temp pe etotal press vol density c_1[3]
 # NVT relaxation
 fix 1 all nvt temp 300 300 1
 
@@ -1421,26 +1423,26 @@ fix 2 all print 100 "${st} ${sigmazz}" append thermo.out screen no title "# step
 #dump 103 all xyz 100 si_min_relaxation.xyz
 
 run 50
-Per MPI rank memory allocation (min/avg/max) = 3.097 | 3.097 | 3.097 Mbytes
-Step Temp PotEng TotEng Press Volume Density c_1[1] c_1[2] c_1[3] c_1[4] c_1[5] c_1[6] 
-    1000 9.3742484e-21   -788.79671   -788.79671   -66151.052    3958.3922    2.2621095   -47555.853   -47555.853   -103341.45    -2314.859 2.7035624e-08 2.7475358e-08 
-    1010 9.3742484e-21   -788.79671   -788.79671   -66151.052    3958.3922    2.2621095   -47555.853   -47555.853   -103341.45    -2314.859 2.7035624e-08 2.7475358e-08 
-    1020 9.3742484e-21   -788.79671   -788.79671   -66151.052    3958.3922    2.2621095   -47555.853   -47555.853   -103341.45    -2314.859 2.7035624e-08 2.7475358e-08 
-    1030 9.3742484e-21   -788.79671   -788.79671   -66151.052    3958.3922    2.2621095   -47555.853   -47555.853   -103341.45    -2314.859 2.7035624e-08 2.7475358e-08 
-    1040 9.3742484e-21   -788.79671   -788.79671   -66151.052    3958.3922    2.2621095   -47555.853   -47555.853   -103341.45    -2314.859 2.7035624e-08 2.7475358e-08 
-    1050 9.3742484e-21   -788.79671   -788.79671   -66151.052    3958.3922    2.2621095   -47555.853   -47555.853   -103341.45    -2314.859 2.7035624e-08 2.7475358e-08 
-Loop time of 0.0349071 on 1 procs for 50 steps with 192 atoms
+Per MPI rank memory allocation (min/avg/max) = 4.114 | 4.114 | 4.114 Mbytes
+Step Temp PotEng TotEng Press Volume Density c_1[3] 
+    1000 9.3742484e-21   -788.79671   -788.79671   -66151.052    3958.3922    2.2621095   -103341.45 
+    1010 9.3742484e-21   -788.79671   -788.79671   -66151.052    3958.3922    2.2621095   -103341.45 
+    1020 9.3742484e-21   -788.79671   -788.79671   -66151.052    3958.3922    2.2621095   -103341.45 
+    1030 9.3742484e-21   -788.79671   -788.79671   -66151.052    3958.3922    2.2621095   -103341.45 
+    1040 9.3742484e-21   -788.79671   -788.79671   -66151.052    3958.3922    2.2621095   -103341.45 
+    1050 9.3742484e-21   -788.79671   -788.79671   -66151.052    3958.3922    2.2621095   -103341.45 
+Loop time of 0.0229392 on 1 procs for 50 steps with 192 atoms
 
-Performance: 12375.705 ns/day, 0.002 hours/ns, 1432.373 timesteps/s
-44.8% CPU use with 1 MPI tasks x 1 OpenMP threads
+Performance: 18832.387 ns/day, 0.001 hours/ns, 2179.674 timesteps/s
+68.1% CPU use with 1 MPI tasks x 1 OpenMP threads
 
 MPI task timing breakdown:
 Section |  min time  |  avg time  |  max time  |%varavg| %total
 ---------------------------------------------------------------
-Pair    | 0.0069861  | 0.0069861  | 0.0069861  |   0.0 | 20.01
+Pair    | 0.0069852  | 0.0069852  | 0.0069852  |   0.0 | 30.45
 Neigh   | 0          | 0          | 0          |   0.0 |  0.00
 Comm    | 0          | 0          | 0          |   0.0 |  0.00
-Output  | 0.027921   | 0.027921   | 0.027921   |   0.0 | 79.99
+Output  | 0.015954   | 0.015954   | 0.015954   |   0.0 | 69.55
 Modify  | 0          | 0          | 0          |   0.0 |  0.00
 Other   |            | 0          |            |       |  0.00
 
@@ -1471,7 +1473,7 @@ change_box all z delta 0 0.1 boundary p p s remap units box
 
 
 thermo 10
-thermo_style custom step temp pe etotal press vol density c_1[1] c_1[2] c_1[3] c_1[4] c_1[5] c_1[6]
+thermo_style custom step temp pe etotal press vol density c_1[3]
 # NVT relaxation
 fix 1 all nvt temp 300 300 1
 
@@ -1481,26 +1483,26 @@ fix 2 all print 100 "${st} ${sigmazz}" append thermo.out screen no title "# step
 #dump 103 all xyz 100 si_min_relaxation.xyz
 
 run 50
-Per MPI rank memory allocation (min/avg/max) = 3.097 | 3.097 | 3.097 Mbytes
-Step Temp PotEng TotEng Press Volume Density c_1[1] c_1[2] c_1[3] c_1[4] c_1[5] c_1[6] 
-    1050 9.3742484e-21   -787.91495   -787.91495   -68960.726    3971.7677    2.2544915   -49495.218   -49495.218   -107891.74   -2409.9733 2.6798778e-08 2.7176415e-08 
-    1060 9.3742484e-21   -787.91495   -787.91495   -68960.726    3971.7677    2.2544915   -49495.218   -49495.218   -107891.74   -2409.9733 2.6798778e-08 2.7176415e-08 
-    1070 9.3742484e-21   -787.91495   -787.91495   -68960.726    3971.7677    2.2544915   -49495.218   -49495.218   -107891.74   -2409.9733 2.6798778e-08 2.7176415e-08 
-    1080 9.3742484e-21   -787.91495   -787.91495   -68960.726    3971.7677    2.2544915   -49495.218   -49495.218   -107891.74   -2409.9733 2.6798778e-08 2.7176415e-08 
-    1090 9.3742484e-21   -787.91495   -787.91495   -68960.726    3971.7677    2.2544915   -49495.218   -49495.218   -107891.74   -2409.9733 2.6798778e-08 2.7176415e-08 
-    1100 9.3742484e-21   -787.91495   -787.91495   -68960.726    3971.7677    2.2544915   -49495.218   -49495.218   -107891.74   -2409.9733 2.6798778e-08 2.7176415e-08 
-Loop time of 0.0319121 on 1 procs for 50 steps with 192 atoms
+Per MPI rank memory allocation (min/avg/max) = 4.114 | 4.114 | 4.114 Mbytes
+Step Temp PotEng TotEng Press Volume Density c_1[3] 
+    1050 9.3742484e-21   -787.91495   -787.91495   -68960.726    3971.7677    2.2544915   -107891.74 
+    1060 9.3742484e-21   -787.91495   -787.91495   -68960.726    3971.7677    2.2544915   -107891.74 
+    1070 9.3742484e-21   -787.91495   -787.91495   -68960.726    3971.7677    2.2544915   -107891.74 
+    1080 9.3742484e-21   -787.91495   -787.91495   -68960.726    3971.7677    2.2544915   -107891.74 
+    1090 9.3742484e-21   -787.91495   -787.91495   -68960.726    3971.7677    2.2544915   -107891.74 
+    1100 9.3742484e-21   -787.91495   -787.91495   -68960.726    3971.7677    2.2544915   -107891.74 
+Loop time of 0.0219409 on 1 procs for 50 steps with 192 atoms
 
-Performance: 13537.190 ns/day, 0.002 hours/ns, 1566.804 timesteps/s
-49.0% CPU use with 1 MPI tasks x 1 OpenMP threads
+Performance: 19689.214 ns/day, 0.001 hours/ns, 2278.844 timesteps/s
+71.2% CPU use with 1 MPI tasks x 1 OpenMP threads
 
 MPI task timing breakdown:
 Section |  min time  |  avg time  |  max time  |%varavg| %total
 ---------------------------------------------------------------
-Pair    | 0.0069802  | 0.0069802  | 0.0069802  |   0.0 | 21.87
+Pair    | 0.0049884  | 0.0049884  | 0.0049884  |   0.0 | 22.74
 Neigh   | 0          | 0          | 0          |   0.0 |  0.00
-Comm    | 0          | 0          | 0          |   0.0 |  0.00
-Output  | 0.024932   | 0.024932   | 0.024932   |   0.0 | 78.13
+Comm    | 0.00099707 | 0.00099707 | 0.00099707 |   0.0 |  4.54
+Output  | 0.015955   | 0.015955   | 0.015955   |   0.0 | 72.72
 Modify  | 0          | 0          | 0          |   0.0 |  0.00
 Other   |            | 0          |            |       |  0.00
 
@@ -1531,7 +1533,7 @@ change_box all z delta 0 0.1 boundary p p s remap units box
 
 
 thermo 10
-thermo_style custom step temp pe etotal press vol density c_1[1] c_1[2] c_1[3] c_1[4] c_1[5] c_1[6]
+thermo_style custom step temp pe etotal press vol density c_1[3]
 # NVT relaxation
 fix 1 all nvt temp 300 300 1
 
@@ -1541,28 +1543,28 @@ fix 2 all print 100 "${st} ${sigmazz}" append thermo.out screen no title "# step
 #dump 103 all xyz 100 si_min_relaxation.xyz
 
 run 50
-Per MPI rank memory allocation (min/avg/max) = 3.097 | 3.097 | 3.097 Mbytes
-Step Temp PotEng TotEng Press Volume Density c_1[1] c_1[2] c_1[3] c_1[4] c_1[5] c_1[6] 
-    1100 9.3742484e-21   -786.99502   -786.99502   -71735.372    3985.1485    2.2469217   -51402.935   -51402.935   -112400.25   -2503.5945 2.6585699e-08 2.6938522e-08 
-    1110 9.3742484e-21   -786.99502   -786.99502   -71735.372    3985.1485    2.2469217   -51402.935   -51402.935   -112400.25   -2503.5945 2.6585699e-08 2.6938522e-08 
-    1120 9.3742484e-21   -786.99502   -786.99502   -71735.372    3985.1485    2.2469217   -51402.935   -51402.935   -112400.25   -2503.5945 2.6585699e-08 2.6938522e-08 
-    1130 9.3742484e-21   -786.99502   -786.99502   -71735.372    3985.1485    2.2469217   -51402.935   -51402.935   -112400.25   -2503.5945 2.6585699e-08 2.6938522e-08 
-    1140 9.3742484e-21   -786.99502   -786.99502   -71735.372    3985.1485    2.2469217   -51402.935   -51402.935   -112400.25   -2503.5945 2.6585699e-08 2.6938522e-08 
-    1150 9.3742484e-21   -786.99502   -786.99502   -71735.372    3985.1485    2.2469217   -51402.935   -51402.935   -112400.25   -2503.5945 2.6585699e-08 2.6938522e-08 
-Loop time of 0.035907 on 1 procs for 50 steps with 192 atoms
+Per MPI rank memory allocation (min/avg/max) = 4.114 | 4.114 | 4.114 Mbytes
+Step Temp PotEng TotEng Press Volume Density c_1[3] 
+    1100 9.3742484e-21   -786.99502   -786.99502   -71735.372    3985.1485    2.2469217   -112400.25 
+    1110 9.3742484e-21   -786.99502   -786.99502   -71735.372    3985.1485    2.2469217   -112400.25 
+    1120 9.3742484e-21   -786.99502   -786.99502   -71735.372    3985.1485    2.2469217   -112400.25 
+    1130 9.3742484e-21   -786.99502   -786.99502   -71735.372    3985.1485    2.2469217   -112400.25 
+    1140 9.3742484e-21   -786.99502   -786.99502   -71735.372    3985.1485    2.2469217   -112400.25 
+    1150 9.3742484e-21   -786.99502   -786.99502   -71735.372    3985.1485    2.2469217   -112400.25 
+Loop time of 0.023936 on 1 procs for 50 steps with 192 atoms
 
-Performance: 12031.070 ns/day, 0.002 hours/ns, 1392.485 timesteps/s
-0.0% CPU use with 1 MPI tasks x 1 OpenMP threads
+Performance: 18048.103 ns/day, 0.001 hours/ns, 2088.901 timesteps/s
+65.3% CPU use with 1 MPI tasks x 1 OpenMP threads
 
 MPI task timing breakdown:
 Section |  min time  |  avg time  |  max time  |%varavg| %total
 ---------------------------------------------------------------
-Pair    | 0.004988   | 0.004988   | 0.004988   |   0.0 | 13.89
+Pair    | 0.006984   | 0.006984   | 0.006984   |   0.0 | 29.18
 Neigh   | 0          | 0          | 0          |   0.0 |  0.00
 Comm    | 0          | 0          | 0          |   0.0 |  0.00
-Output  | 0.029921   | 0.029921   | 0.029921   |   0.0 | 83.33
+Output  | 0.016952   | 0.016952   | 0.016952   |   0.0 | 70.82
 Modify  | 0          | 0          | 0          |   0.0 |  0.00
-Other   |            | 0.000998   |            |       |  2.78
+Other   |            | 0          |            |       |  0.00
 
 Nlocal:    192 ave 192 max 192 min
 Histogram: 1 0 0 0 0 0 0 0 0 0
@@ -1591,7 +1593,7 @@ change_box all z delta 0 0.1 boundary p p s remap units box
 
 
 thermo 10
-thermo_style custom step temp pe etotal press vol density c_1[1] c_1[2] c_1[3] c_1[4] c_1[5] c_1[6]
+thermo_style custom step temp pe etotal press vol density c_1[3]
 # NVT relaxation
 fix 1 all nvt temp 300 300 1
 
@@ -1601,26 +1603,26 @@ fix 2 all print 100 "${st} ${sigmazz}" append thermo.out screen no title "# step
 #dump 103 all xyz 100 si_min_relaxation.xyz
 
 run 50
-Per MPI rank memory allocation (min/avg/max) = 3.097 | 3.097 | 3.097 Mbytes
-Step Temp PotEng TotEng Press Volume Density c_1[1] c_1[2] c_1[3] c_1[4] c_1[5] c_1[6] 
-    1150 9.3742484e-21   -786.03723   -786.03723   -74475.419    3998.5347    2.2393995   -53279.601   -53279.601   -116867.05    -2595.746 2.6304146e-08 2.6659424e-08 
-    1160 9.3742484e-21   -786.03723   -786.03723   -74475.419    3998.5347    2.2393995   -53279.601   -53279.601   -116867.05    -2595.746 2.6304146e-08 2.6659424e-08 
-    1170 9.3742484e-21   -786.03723   -786.03723   -74475.419    3998.5347    2.2393995   -53279.601   -53279.601   -116867.05    -2595.746 2.6304146e-08 2.6659424e-08 
-    1180 9.3742484e-21   -786.03723   -786.03723   -74475.419    3998.5347    2.2393995   -53279.601   -53279.601   -116867.05    -2595.746 2.6304146e-08 2.6659424e-08 
-    1190 9.3742484e-21   -786.03723   -786.03723   -74475.419    3998.5347    2.2393995   -53279.601   -53279.601   -116867.05    -2595.746 2.6304146e-08 2.6659424e-08 
-    1200 9.3742484e-21   -786.03723   -786.03723   -74475.419    3998.5347    2.2393995   -53279.601   -53279.601   -116867.05    -2595.746 2.6304146e-08 2.6659424e-08 
-Loop time of 0.036901 on 1 procs for 50 steps with 192 atoms
+Per MPI rank memory allocation (min/avg/max) = 4.114 | 4.114 | 4.114 Mbytes
+Step Temp PotEng TotEng Press Volume Density c_1[3] 
+    1150 9.3742484e-21   -786.03723   -786.03723   -74475.419    3998.5347    2.2393995   -116867.05 
+    1160 9.3742484e-21   -786.03723   -786.03723   -74475.419    3998.5347    2.2393995   -116867.05 
+    1170 9.3742484e-21   -786.03723   -786.03723   -74475.419    3998.5347    2.2393995   -116867.05 
+    1180 9.3742484e-21   -786.03723   -786.03723   -74475.419    3998.5347    2.2393995   -116867.05 
+    1190 9.3742484e-21   -786.03723   -786.03723   -74475.419    3998.5347    2.2393995   -116867.05 
+    1200 9.3742484e-21   -786.03723   -786.03723   -74475.419    3998.5347    2.2393995   -116867.05 
+Loop time of 0.023937 on 1 procs for 50 steps with 192 atoms
 
-Performance: 11707.001 ns/day, 0.002 hours/ns, 1354.977 timesteps/s
+Performance: 18047.384 ns/day, 0.001 hours/ns, 2088.818 timesteps/s
 0.0% CPU use with 1 MPI tasks x 1 OpenMP threads
 
 MPI task timing breakdown:
 Section |  min time  |  avg time  |  max time  |%varavg| %total
 ---------------------------------------------------------------
-Pair    | 0.0059817  | 0.0059817  | 0.0059817  |   0.0 | 16.21
+Pair    | 0.0079765  | 0.0079765  | 0.0079765  |   0.0 | 33.32
 Neigh   | 0          | 0          | 0          |   0.0 |  0.00
 Comm    | 0          | 0          | 0          |   0.0 |  0.00
-Output  | 0.030919   | 0.030919   | 0.030919   |   0.0 | 83.79
+Output  | 0.01596    | 0.01596    | 0.01596    |   0.0 | 66.68
 Modify  | 0          | 0          | 0          |   0.0 |  0.00
 Other   |            | 0          |            |       |  0.00
 
@@ -1651,7 +1653,7 @@ change_box all z delta 0 0.1 boundary p p s remap units box
 
 
 thermo 10
-thermo_style custom step temp pe etotal press vol density c_1[1] c_1[2] c_1[3] c_1[4] c_1[5] c_1[6]
+thermo_style custom step temp pe etotal press vol density c_1[3]
 # NVT relaxation
 fix 1 all nvt temp 300 300 1
 
@@ -1661,28 +1663,28 @@ fix 2 all print 100 "${st} ${sigmazz}" append thermo.out screen no title "# step
 #dump 103 all xyz 100 si_min_relaxation.xyz
 
 run 50
-Per MPI rank memory allocation (min/avg/max) = 3.097 | 3.097 | 3.097 Mbytes
-Step Temp PotEng TotEng Press Volume Density c_1[1] c_1[2] c_1[3] c_1[4] c_1[5] c_1[6] 
-    1200 9.3742484e-21   -785.04189   -785.04189   -77181.288    4011.9263    2.2319245   -55125.805   -55125.805   -121292.25    -2686.451 2.604702e-08 2.6460941e-08 
-    1210 9.3742484e-21   -785.04189   -785.04189   -77181.288    4011.9263    2.2319245   -55125.805   -55125.805   -121292.25    -2686.451 2.604702e-08 2.6460941e-08 
-    1220 9.3742484e-21   -785.04189   -785.04189   -77181.288    4011.9263    2.2319245   -55125.805   -55125.805   -121292.25    -2686.451 2.604702e-08 2.6460941e-08 
-    1230 9.3742484e-21   -785.04189   -785.04189   -77181.288    4011.9263    2.2319245   -55125.805   -55125.805   -121292.25    -2686.451 2.604702e-08 2.6460941e-08 
-    1240 9.3742484e-21   -785.04189   -785.04189   -77181.288    4011.9263    2.2319245   -55125.805   -55125.805   -121292.25    -2686.451 2.604702e-08 2.6460941e-08 
-    1250 9.3742484e-21   -785.04189   -785.04189   -77181.288    4011.9263    2.2319245   -55125.805   -55125.805   -121292.25    -2686.451 2.604702e-08 2.6460941e-08 
-Loop time of 0.0388968 on 1 procs for 50 steps with 192 atoms
+Per MPI rank memory allocation (min/avg/max) = 4.114 | 4.114 | 4.114 Mbytes
+Step Temp PotEng TotEng Press Volume Density c_1[3] 
+    1200 9.3742484e-21   -785.04189   -785.04189   -77181.288    4011.9263    2.2319245   -121292.25 
+    1210 9.3742484e-21   -785.04189   -785.04189   -77181.288    4011.9263    2.2319245   -121292.25 
+    1220 9.3742484e-21   -785.04189   -785.04189   -77181.288    4011.9263    2.2319245   -121292.25 
+    1230 9.3742484e-21   -785.04189   -785.04189   -77181.288    4011.9263    2.2319245   -121292.25 
+    1240 9.3742484e-21   -785.04189   -785.04189   -77181.288    4011.9263    2.2319245   -121292.25 
+    1250 9.3742484e-21   -785.04189   -785.04189   -77181.288    4011.9263    2.2319245   -121292.25 
+Loop time of 0.02194 on 1 procs for 50 steps with 192 atoms
 
-Performance: 11106.312 ns/day, 0.002 hours/ns, 1285.453 timesteps/s
-80.3% CPU use with 1 MPI tasks x 1 OpenMP threads
+Performance: 19690.070 ns/day, 0.001 hours/ns, 2278.943 timesteps/s
+0.0% CPU use with 1 MPI tasks x 1 OpenMP threads
 
 MPI task timing breakdown:
 Section |  min time  |  avg time  |  max time  |%varavg| %total
 ---------------------------------------------------------------
-Pair    | 0.0059836  | 0.0059836  | 0.0059836  |   0.0 | 15.38
+Pair    | 0.0049844  | 0.0049844  | 0.0049844  |   0.0 | 22.72
 Neigh   | 0          | 0          | 0          |   0.0 |  0.00
 Comm    | 0          | 0          | 0          |   0.0 |  0.00
-Output  | 0.032913   | 0.032913   | 0.032913   |   0.0 | 84.62
+Output  | 0.015959   | 0.015959   | 0.015959   |   0.0 | 72.74
 Modify  | 0          | 0          | 0          |   0.0 |  0.00
-Other   |            | 0          |            |       |  0.00
+Other   |            | 0.0009971  |            |       |  4.54
 
 Nlocal:    192 ave 192 max 192 min
 Histogram: 1 0 0 0 0 0 0 0 0 0
@@ -1711,7 +1713,7 @@ change_box all z delta 0 0.1 boundary p p s remap units box
 
 
 thermo 10
-thermo_style custom step temp pe etotal press vol density c_1[1] c_1[2] c_1[3] c_1[4] c_1[5] c_1[6]
+thermo_style custom step temp pe etotal press vol density c_1[3]
 # NVT relaxation
 fix 1 all nvt temp 300 300 1
 
@@ -1721,26 +1723,26 @@ fix 2 all print 100 "${st} ${sigmazz}" append thermo.out screen no title "# step
 #dump 103 all xyz 100 si_min_relaxation.xyz
 
 run 50
-Per MPI rank memory allocation (min/avg/max) = 3.097 | 3.097 | 3.097 Mbytes
-Step Temp PotEng TotEng Press Volume Density c_1[1] c_1[2] c_1[3] c_1[4] c_1[5] c_1[6] 
-    1250 9.3742484e-21   -784.00932   -784.00932   -79853.398    4025.3232    2.2244963   -56942.123   -56942.123   -125675.95   -2775.7323 2.5834248e-08 2.6147027e-08 
-    1260 9.3742484e-21   -784.00932   -784.00932   -79853.398    4025.3232    2.2244963   -56942.123   -56942.123   -125675.95   -2775.7323 2.5834248e-08 2.6147027e-08 
-    1270 9.3742484e-21   -784.00932   -784.00932   -79853.398    4025.3232    2.2244963   -56942.123   -56942.123   -125675.95   -2775.7323 2.5834248e-08 2.6147027e-08 
-    1280 9.3742484e-21   -784.00932   -784.00932   -79853.398    4025.3232    2.2244963   -56942.123   -56942.123   -125675.95   -2775.7323 2.5834248e-08 2.6147027e-08 
-    1290 9.3742484e-21   -784.00932   -784.00932   -79853.398    4025.3232    2.2244963   -56942.123   -56942.123   -125675.95   -2775.7323 2.5834248e-08 2.6147027e-08 
-    1300 9.3742484e-21   -784.00932   -784.00932   -79853.398    4025.3232    2.2244963   -56942.123   -56942.123   -125675.95   -2775.7323 2.5834248e-08 2.6147027e-08 
-Loop time of 0.0359051 on 1 procs for 50 steps with 192 atoms
+Per MPI rank memory allocation (min/avg/max) = 4.114 | 4.114 | 4.114 Mbytes
+Step Temp PotEng TotEng Press Volume Density c_1[3] 
+    1250 9.3742484e-21   -784.00932   -784.00932   -79853.398    4025.3232    2.2244963   -125675.95 
+    1260 9.3742484e-21   -784.00932   -784.00932   -79853.398    4025.3232    2.2244963   -125675.95 
+    1270 9.3742484e-21   -784.00932   -784.00932   -79853.398    4025.3232    2.2244963   -125675.95 
+    1280 9.3742484e-21   -784.00932   -784.00932   -79853.398    4025.3232    2.2244963   -125675.95 
+    1290 9.3742484e-21   -784.00932   -784.00932   -79853.398    4025.3232    2.2244963   -125675.95 
+    1300 9.3742484e-21   -784.00932   -784.00932   -79853.398    4025.3232    2.2244963   -125675.95 
+Loop time of 0.022939 on 1 procs for 50 steps with 192 atoms
 
-Performance: 12031.709 ns/day, 0.002 hours/ns, 1392.559 timesteps/s
+Performance: 18832.583 ns/day, 0.001 hours/ns, 2179.697 timesteps/s
 0.0% CPU use with 1 MPI tasks x 1 OpenMP threads
 
 MPI task timing breakdown:
 Section |  min time  |  avg time  |  max time  |%varavg| %total
 ---------------------------------------------------------------
-Pair    | 0.004987   | 0.004987   | 0.004987   |   0.0 | 13.89
+Pair    | 0.0069818  | 0.0069818  | 0.0069818  |   0.0 | 30.44
 Neigh   | 0          | 0          | 0          |   0.0 |  0.00
 Comm    | 0          | 0          | 0          |   0.0 |  0.00
-Output  | 0.030918   | 0.030918   | 0.030918   |   0.0 | 86.11
+Output  | 0.015957   | 0.015957   | 0.015957   |   0.0 | 69.56
 Modify  | 0          | 0          | 0          |   0.0 |  0.00
 Other   |            | 0          |            |       |  0.00
 
@@ -1771,7 +1773,7 @@ change_box all z delta 0 0.1 boundary p p s remap units box
 
 
 thermo 10
-thermo_style custom step temp pe etotal press vol density c_1[1] c_1[2] c_1[3] c_1[4] c_1[5] c_1[6]
+thermo_style custom step temp pe etotal press vol density c_1[3]
 # NVT relaxation
 fix 1 all nvt temp 300 300 1
 
@@ -1781,26 +1783,26 @@ fix 2 all print 100 "${st} ${sigmazz}" append thermo.out screen no title "# step
 #dump 103 all xyz 100 si_min_relaxation.xyz
 
 run 50
-Per MPI rank memory allocation (min/avg/max) = 3.097 | 3.097 | 3.097 Mbytes
-Step Temp PotEng TotEng Press Volume Density c_1[1] c_1[2] c_1[3] c_1[4] c_1[5] c_1[6] 
-    1300 9.3742484e-21   -782.93985   -782.93985   -82492.165    4038.7254    2.2171145   -58729.122   -58729.122   -130018.25   -2863.6121 2.5502875e-08 2.5884991e-08 
-    1310 9.3742484e-21   -782.93985   -782.93985   -82492.165    4038.7254    2.2171145   -58729.122   -58729.122   -130018.25   -2863.6121 2.5502875e-08 2.5884991e-08 
-    1320 9.3742484e-21   -782.93985   -782.93985   -82492.165    4038.7254    2.2171145   -58729.122   -58729.122   -130018.25   -2863.6121 2.5502875e-08 2.5884991e-08 
-    1330 9.3742484e-21   -782.93985   -782.93985   -82492.165    4038.7254    2.2171145   -58729.122   -58729.122   -130018.25   -2863.6121 2.5502875e-08 2.5884991e-08 
-    1340 9.3742484e-21   -782.93985   -782.93985   -82492.165    4038.7254    2.2171145   -58729.122   -58729.122   -130018.25   -2863.6121 2.5502875e-08 2.5884991e-08 
-    1350 9.3742484e-21   -782.93985   -782.93985   -82492.165    4038.7254    2.2171145   -58729.122   -58729.122   -130018.25   -2863.6121 2.5502875e-08 2.5884991e-08 
-Loop time of 0.034909 on 1 procs for 50 steps with 192 atoms
+Per MPI rank memory allocation (min/avg/max) = 4.114 | 4.114 | 4.114 Mbytes
+Step Temp PotEng TotEng Press Volume Density c_1[3] 
+    1300 9.3742484e-21   -782.93985   -782.93985   -82492.165    4038.7254    2.2171145   -130018.25 
+    1310 9.3742484e-21   -782.93985   -782.93985   -82492.165    4038.7254    2.2171145   -130018.25 
+    1320 9.3742484e-21   -782.93985   -782.93985   -82492.165    4038.7254    2.2171145   -130018.25 
+    1330 9.3742484e-21   -782.93985   -782.93985   -82492.165    4038.7254    2.2171145   -130018.25 
+    1340 9.3742484e-21   -782.93985   -782.93985   -82492.165    4038.7254    2.2171145   -130018.25 
+    1350 9.3742484e-21   -782.93985   -782.93985   -82492.165    4038.7254    2.2171145   -130018.25 
+Loop time of 0.021925 on 1 procs for 50 steps with 192 atoms
 
-Performance: 12375.029 ns/day, 0.002 hours/ns, 1432.295 timesteps/s
-44.8% CPU use with 1 MPI tasks x 1 OpenMP threads
+Performance: 19703.559 ns/day, 0.001 hours/ns, 2280.505 timesteps/s
+71.3% CPU use with 1 MPI tasks x 1 OpenMP threads
 
 MPI task timing breakdown:
 Section |  min time  |  avg time  |  max time  |%varavg| %total
 ---------------------------------------------------------------
-Pair    | 0.0059869  | 0.0059869  | 0.0059869  |   0.0 | 17.15
+Pair    | 0.0069647  | 0.0069647  | 0.0069647  |   0.0 | 31.77
 Neigh   | 0          | 0          | 0          |   0.0 |  0.00
 Comm    | 0          | 0          | 0          |   0.0 |  0.00
-Output  | 0.028922   | 0.028922   | 0.028922   |   0.0 | 82.85
+Output  | 0.01496    | 0.01496    | 0.01496    |   0.0 | 68.23
 Modify  | 0          | 0          | 0          |   0.0 |  0.00
 Other   |            | 0          |            |       |  0.00
 
@@ -1831,7 +1833,7 @@ change_box all z delta 0 0.1 boundary p p s remap units box
 
 
 thermo 10
-thermo_style custom step temp pe etotal press vol density c_1[1] c_1[2] c_1[3] c_1[4] c_1[5] c_1[6]
+thermo_style custom step temp pe etotal press vol density c_1[3]
 # NVT relaxation
 fix 1 all nvt temp 300 300 1
 
@@ -1841,26 +1843,26 @@ fix 2 all print 100 "${st} ${sigmazz}" append thermo.out screen no title "# step
 #dump 103 all xyz 100 si_min_relaxation.xyz
 
 run 50
-Per MPI rank memory allocation (min/avg/max) = 3.097 | 3.097 | 3.097 Mbytes
-Step Temp PotEng TotEng Press Volume Density c_1[1] c_1[2] c_1[3] c_1[4] c_1[5] c_1[6] 
-    1350 9.3742484e-21   -781.83378   -781.83378       -85098    4052.1331    2.2097785   -60487.358   -60487.358   -134319.28   -2950.1125 2.5303173e-08 2.5653539e-08 
-    1360 9.3742484e-21   -781.83378   -781.83378       -85098    4052.1331    2.2097785   -60487.358   -60487.358   -134319.28   -2950.1125 2.5303173e-08 2.5653539e-08 
-    1370 9.3742484e-21   -781.83378   -781.83378       -85098    4052.1331    2.2097785   -60487.358   -60487.358   -134319.28   -2950.1125 2.5303173e-08 2.5653539e-08 
-    1380 9.3742484e-21   -781.83378   -781.83378       -85098    4052.1331    2.2097785   -60487.358   -60487.358   -134319.28   -2950.1125 2.5303173e-08 2.5653539e-08 
-    1390 9.3742484e-21   -781.83378   -781.83378       -85098    4052.1331    2.2097785   -60487.358   -60487.358   -134319.28   -2950.1125 2.5303173e-08 2.5653539e-08 
-    1400 9.3742484e-21   -781.83378   -781.83378       -85098    4052.1331    2.2097785   -60487.358   -60487.358   -134319.28   -2950.1125 2.5303173e-08 2.5653539e-08 
-Loop time of 0.0339081 on 1 procs for 50 steps with 192 atoms
+Per MPI rank memory allocation (min/avg/max) = 4.114 | 4.114 | 4.114 Mbytes
+Step Temp PotEng TotEng Press Volume Density c_1[3] 
+    1350 9.3742484e-21   -781.83378   -781.83378       -85098    4052.1331    2.2097785   -134319.28 
+    1360 9.3742484e-21   -781.83378   -781.83378       -85098    4052.1331    2.2097785   -134319.28 
+    1370 9.3742484e-21   -781.83378   -781.83378       -85098    4052.1331    2.2097785   -134319.28 
+    1380 9.3742484e-21   -781.83378   -781.83378       -85098    4052.1331    2.2097785   -134319.28 
+    1390 9.3742484e-21   -781.83378   -781.83378       -85098    4052.1331    2.2097785   -134319.28 
+    1400 9.3742484e-21   -781.83378   -781.83378       -85098    4052.1331    2.2097785   -134319.28 
+Loop time of 0.0229392 on 1 procs for 50 steps with 192 atoms
 
-Performance: 12740.308 ns/day, 0.002 hours/ns, 1474.573 timesteps/s
-0.0% CPU use with 1 MPI tasks x 1 OpenMP threads
+Performance: 18832.387 ns/day, 0.001 hours/ns, 2179.674 timesteps/s
+68.1% CPU use with 1 MPI tasks x 1 OpenMP threads
 
 MPI task timing breakdown:
 Section |  min time  |  avg time  |  max time  |%varavg| %total
 ---------------------------------------------------------------
-Pair    | 0.0059831  | 0.0059831  | 0.0059831  |   0.0 | 17.65
+Pair    | 0.0079789  | 0.0079789  | 0.0079789  |   0.0 | 34.78
 Neigh   | 0          | 0          | 0          |   0.0 |  0.00
 Comm    | 0          | 0          | 0          |   0.0 |  0.00
-Output  | 0.027925   | 0.027925   | 0.027925   |   0.0 | 82.35
+Output  | 0.01496    | 0.01496    | 0.01496    |   0.0 | 65.22
 Modify  | 0          | 0          | 0          |   0.0 |  0.00
 Other   |            | 0          |            |       |  0.00
 
@@ -1891,7 +1893,7 @@ change_box all z delta 0 0.1 boundary p p s remap units box
 
 
 thermo 10
-thermo_style custom step temp pe etotal press vol density c_1[1] c_1[2] c_1[3] c_1[4] c_1[5] c_1[6]
+thermo_style custom step temp pe etotal press vol density c_1[3]
 # NVT relaxation
 fix 1 all nvt temp 300 300 1
 
@@ -1901,26 +1903,26 @@ fix 2 all print 100 "${st} ${sigmazz}" append thermo.out screen no title "# step
 #dump 103 all xyz 100 si_min_relaxation.xyz
 
 run 50
-Per MPI rank memory allocation (min/avg/max) = 3.097 | 3.097 | 3.097 Mbytes
-Step Temp PotEng TotEng Press Volume Density c_1[1] c_1[2] c_1[3] c_1[4] c_1[5] c_1[6] 
-    1400 9.3742484e-21   -780.69143   -780.69143    -87671.31     4065.546    2.2024881   -62217.379   -62217.379   -138579.17   -3035.2552 2.5119544e-08 2.542073e-08 
-    1410 9.3742484e-21   -780.69143   -780.69143    -87671.31     4065.546    2.2024881   -62217.379   -62217.379   -138579.17   -3035.2552 2.5119544e-08 2.542073e-08 
-    1420 9.3742484e-21   -780.69143   -780.69143    -87671.31     4065.546    2.2024881   -62217.379   -62217.379   -138579.17   -3035.2552 2.5119544e-08 2.542073e-08 
-    1430 9.3742484e-21   -780.69143   -780.69143    -87671.31     4065.546    2.2024881   -62217.379   -62217.379   -138579.17   -3035.2552 2.5119544e-08 2.542073e-08 
-    1440 9.3742484e-21   -780.69143   -780.69143    -87671.31     4065.546    2.2024881   -62217.379   -62217.379   -138579.17   -3035.2552 2.5119544e-08 2.542073e-08 
-    1450 9.3742484e-21   -780.69143   -780.69143    -87671.31     4065.546    2.2024881   -62217.379   -62217.379   -138579.17   -3035.2552 2.5119544e-08 2.542073e-08 
-Loop time of 0.0349059 on 1 procs for 50 steps with 192 atoms
+Per MPI rank memory allocation (min/avg/max) = 4.114 | 4.114 | 4.114 Mbytes
+Step Temp PotEng TotEng Press Volume Density c_1[3] 
+    1400 9.3742484e-21   -780.69143   -780.69143    -87671.31     4065.546    2.2024881   -138579.17 
+    1410 9.3742484e-21   -780.69143   -780.69143    -87671.31     4065.546    2.2024881   -138579.17 
+    1420 9.3742484e-21   -780.69143   -780.69143    -87671.31     4065.546    2.2024881   -138579.17 
+    1430 9.3742484e-21   -780.69143   -780.69143    -87671.31     4065.546    2.2024881   -138579.17 
+    1440 9.3742484e-21   -780.69143   -780.69143    -87671.31     4065.546    2.2024881   -138579.17 
+    1450 9.3742484e-21   -780.69143   -780.69143    -87671.31     4065.546    2.2024881   -138579.17 
+Loop time of 0.024935 on 1 procs for 50 steps with 192 atoms
 
-Performance: 12376.128 ns/day, 0.002 hours/ns, 1432.422 timesteps/s
+Performance: 17325.040 ns/day, 0.001 hours/ns, 2005.213 timesteps/s
 0.0% CPU use with 1 MPI tasks x 1 OpenMP threads
 
 MPI task timing breakdown:
 Section |  min time  |  avg time  |  max time  |%varavg| %total
 ---------------------------------------------------------------
-Pair    | 0.004987   | 0.004987   | 0.004987   |   0.0 | 14.29
+Pair    | 0.006984   | 0.006984   | 0.006984   |   0.0 | 28.01
 Neigh   | 0          | 0          | 0          |   0.0 |  0.00
 Comm    | 0          | 0          | 0          |   0.0 |  0.00
-Output  | 0.029919   | 0.029919   | 0.029919   |   0.0 | 85.71
+Output  | 0.017951   | 0.017951   | 0.017951   |   0.0 | 71.99
 Modify  | 0          | 0          | 0          |   0.0 |  0.00
 Other   |            | 0          |            |       |  0.00
 
@@ -1951,7 +1953,7 @@ change_box all z delta 0 0.1 boundary p p s remap units box
 
 
 thermo 10
-thermo_style custom step temp pe etotal press vol density c_1[1] c_1[2] c_1[3] c_1[4] c_1[5] c_1[6]
+thermo_style custom step temp pe etotal press vol density c_1[3]
 # NVT relaxation
 fix 1 all nvt temp 300 300 1
 
@@ -1961,26 +1963,26 @@ fix 2 all print 100 "${st} ${sigmazz}" append thermo.out screen no title "# step
 #dump 103 all xyz 100 si_min_relaxation.xyz
 
 run 50
-Per MPI rank memory allocation (min/avg/max) = 3.097 | 3.097 | 3.097 Mbytes
-Step Temp PotEng TotEng Press Volume Density c_1[1] c_1[2] c_1[3] c_1[4] c_1[5] c_1[6] 
-    1450 9.3742484e-21   -779.51312   -779.51312   -90212.501    4078.9644    2.1952427    -63919.72    -63919.72   -142798.06   -3119.0614 2.4823092e-08 2.5183816e-08 
-    1460 9.3742484e-21   -779.51312   -779.51312   -90212.501    4078.9644    2.1952427    -63919.72    -63919.72   -142798.06   -3119.0614 2.4823092e-08 2.5183816e-08 
-    1470 9.3742484e-21   -779.51312   -779.51312   -90212.501    4078.9644    2.1952427    -63919.72    -63919.72   -142798.06   -3119.0614 2.4823092e-08 2.5183816e-08 
-    1480 9.3742484e-21   -779.51312   -779.51312   -90212.501    4078.9644    2.1952427    -63919.72    -63919.72   -142798.06   -3119.0614 2.4823092e-08 2.5183816e-08 
-    1490 9.3742484e-21   -779.51312   -779.51312   -90212.501    4078.9644    2.1952427    -63919.72    -63919.72   -142798.06   -3119.0614 2.4823092e-08 2.5183816e-08 
-    1500 9.3742484e-21   -779.51312   -779.51312   -90212.501    4078.9644    2.1952427    -63919.72    -63919.72   -142798.06   -3119.0614 2.4823092e-08 2.5183816e-08 
-Loop time of 0.0339091 on 1 procs for 50 steps with 192 atoms
+Per MPI rank memory allocation (min/avg/max) = 4.114 | 4.114 | 4.114 Mbytes
+Step Temp PotEng TotEng Press Volume Density c_1[3] 
+    1450 9.3742484e-21   -779.51312   -779.51312   -90212.501    4078.9644    2.1952427   -142798.06 
+    1460 9.3742484e-21   -779.51312   -779.51312   -90212.501    4078.9644    2.1952427   -142798.06 
+    1470 9.3742484e-21   -779.51312   -779.51312   -90212.501    4078.9644    2.1952427   -142798.06 
+    1480 9.3742484e-21   -779.51312   -779.51312   -90212.501    4078.9644    2.1952427   -142798.06 
+    1490 9.3742484e-21   -779.51312   -779.51312   -90212.501    4078.9644    2.1952427   -142798.06 
+    1500 9.3742484e-21   -779.51312   -779.51312   -90212.501    4078.9644    2.1952427   -142798.06 
+Loop time of 0.0209429 on 1 procs for 50 steps with 192 atoms
 
-Performance: 12739.950 ns/day, 0.002 hours/ns, 1474.531 timesteps/s
-0.0% CPU use with 1 MPI tasks x 1 OpenMP threads
+Performance: 20627.490 ns/day, 0.001 hours/ns, 2387.441 timesteps/s
+74.6% CPU use with 1 MPI tasks x 1 OpenMP threads
 
 MPI task timing breakdown:
 Section |  min time  |  avg time  |  max time  |%varavg| %total
 ---------------------------------------------------------------
-Pair    | 0.0059872  | 0.0059872  | 0.0059872  |   0.0 | 17.66
+Pair    | 0.0049863  | 0.0049863  | 0.0049863  |   0.0 | 23.81
 Neigh   | 0          | 0          | 0          |   0.0 |  0.00
-Comm    | 0.00099802 | 0.00099802 | 0.00099802 |   0.0 |  2.94
-Output  | 0.026924   | 0.026924   | 0.026924   |   0.0 | 79.40
+Comm    | 0.00099707 | 0.00099707 | 0.00099707 |   0.0 |  4.76
+Output  | 0.01496    | 0.01496    | 0.01496    |   0.0 | 71.43
 Modify  | 0          | 0          | 0          |   0.0 |  0.00
 Other   |            | 0          |            |       |  0.00
 
@@ -2011,7 +2013,7 @@ change_box all z delta 0 0.1 boundary p p s remap units box
 
 
 thermo 10
-thermo_style custom step temp pe etotal press vol density c_1[1] c_1[2] c_1[3] c_1[4] c_1[5] c_1[6]
+thermo_style custom step temp pe etotal press vol density c_1[3]
 # NVT relaxation
 fix 1 all nvt temp 300 300 1
 
@@ -2021,26 +2023,26 @@ fix 2 all print 100 "${st} ${sigmazz}" append thermo.out screen no title "# step
 #dump 103 all xyz 100 si_min_relaxation.xyz
 
 run 50
-Per MPI rank memory allocation (min/avg/max) = 3.097 | 3.097 | 3.097 Mbytes
-Step Temp PotEng TotEng Press Volume Density c_1[1] c_1[2] c_1[3] c_1[4] c_1[5] c_1[6] 
-    1500 9.3742484e-21   -778.29917   -778.29917   -92721.972    4092.3881    2.1880419   -65594.909   -65594.909    -146976.1    -3201.552 2.4653162e-08 2.4911553e-08 
-    1510 9.3742484e-21   -778.29917   -778.29917   -92721.972    4092.3881    2.1880419   -65594.909   -65594.909    -146976.1    -3201.552 2.4653162e-08 2.4911553e-08 
-    1520 9.3742484e-21   -778.29917   -778.29917   -92721.972    4092.3881    2.1880419   -65594.909   -65594.909    -146976.1    -3201.552 2.4653162e-08 2.4911553e-08 
-    1530 9.3742484e-21   -778.29917   -778.29917   -92721.972    4092.3881    2.1880419   -65594.909   -65594.909    -146976.1    -3201.552 2.4653162e-08 2.4911553e-08 
-    1540 9.3742484e-21   -778.29917   -778.29917   -92721.972    4092.3881    2.1880419   -65594.909   -65594.909    -146976.1    -3201.552 2.4653162e-08 2.4911553e-08 
-    1550 9.3742484e-21   -778.29917   -778.29917   -92721.972    4092.3881    2.1880419   -65594.909   -65594.909    -146976.1    -3201.552 2.4653162e-08 2.4911553e-08 
-Loop time of 0.032912 on 1 procs for 50 steps with 192 atoms
+Per MPI rank memory allocation (min/avg/max) = 4.114 | 4.114 | 4.114 Mbytes
+Step Temp PotEng TotEng Press Volume Density c_1[3] 
+    1500 9.3742484e-21   -778.29917   -778.29917   -92721.972    4092.3881    2.1880419    -146976.1 
+    1510 9.3742484e-21   -778.29917   -778.29917   -92721.972    4092.3881    2.1880419    -146976.1 
+    1520 9.3742484e-21   -778.29917   -778.29917   -92721.972    4092.3881    2.1880419    -146976.1 
+    1530 9.3742484e-21   -778.29917   -778.29917   -92721.972    4092.3881    2.1880419    -146976.1 
+    1540 9.3742484e-21   -778.29917   -778.29917   -92721.972    4092.3881    2.1880419    -146976.1 
+    1550 9.3742484e-21   -778.29917   -778.29917   -92721.972    4092.3881    2.1880419    -146976.1 
+Loop time of 0.023936 on 1 procs for 50 steps with 192 atoms
 
-Performance: 13125.905 ns/day, 0.002 hours/ns, 1519.202 timesteps/s
-95.0% CPU use with 1 MPI tasks x 1 OpenMP threads
+Performance: 18048.103 ns/day, 0.001 hours/ns, 2088.901 timesteps/s
+0.0% CPU use with 1 MPI tasks x 1 OpenMP threads
 
 MPI task timing breakdown:
 Section |  min time  |  avg time  |  max time  |%varavg| %total
 ---------------------------------------------------------------
-Pair    | 0.004987   | 0.004987   | 0.004987   |   0.0 | 15.15
+Pair    | 0.0059841  | 0.0059841  | 0.0059841  |   0.0 | 25.00
 Neigh   | 0          | 0          | 0          |   0.0 |  0.00
 Comm    | 0          | 0          | 0          |   0.0 |  0.00
-Output  | 0.027925   | 0.027925   | 0.027925   |   0.0 | 84.85
+Output  | 0.017952   | 0.017952   | 0.017952   |   0.0 | 75.00
 Modify  | 0          | 0          | 0          |   0.0 |  0.00
 Other   |            | 0          |            |       |  0.00
 
@@ -2071,7 +2073,7 @@ change_box all z delta 0 0.1 boundary p p s remap units box
 
 
 thermo 10
-thermo_style custom step temp pe etotal press vol density c_1[1] c_1[2] c_1[3] c_1[4] c_1[5] c_1[6]
+thermo_style custom step temp pe etotal press vol density c_1[3]
 # NVT relaxation
 fix 1 all nvt temp 300 300 1
 
@@ -2081,26 +2083,26 @@ fix 2 all print 100 "${st} ${sigmazz}" append thermo.out screen no title "# step
 #dump 103 all xyz 100 si_min_relaxation.xyz
 
 run 50
-Per MPI rank memory allocation (min/avg/max) = 3.097 | 3.097 | 3.097 Mbytes
-Step Temp PotEng TotEng Press Volume Density c_1[1] c_1[2] c_1[3] c_1[4] c_1[5] c_1[6] 
-    1550 9.3742484e-21   -777.04988   -777.04988    -95200.12    4105.8172    2.1808854   -67243.463   -67243.463   -151113.43   -3282.7477 2.430153e-08 2.4656835e-08 
-    1560 9.3742484e-21   -777.04988   -777.04988    -95200.12    4105.8172    2.1808854   -67243.463   -67243.463   -151113.43   -3282.7477 2.430153e-08 2.4656835e-08 
-    1570 9.3742484e-21   -777.04988   -777.04988    -95200.12    4105.8172    2.1808854   -67243.463   -67243.463   -151113.43   -3282.7477 2.430153e-08 2.4656835e-08 
-    1580 9.3742484e-21   -777.04988   -777.04988    -95200.12    4105.8172    2.1808854   -67243.463   -67243.463   -151113.43   -3282.7477 2.430153e-08 2.4656835e-08 
-    1590 9.3742484e-21   -777.04988   -777.04988    -95200.12    4105.8172    2.1808854   -67243.463   -67243.463   -151113.43   -3282.7477 2.430153e-08 2.4656835e-08 
-    1600 9.3742484e-21   -777.04988   -777.04988    -95200.12    4105.8172    2.1808854   -67243.463   -67243.463   -151113.43   -3282.7477 2.430153e-08 2.4656835e-08 
-Loop time of 0.032913 on 1 procs for 50 steps with 192 atoms
+Per MPI rank memory allocation (min/avg/max) = 4.114 | 4.114 | 4.114 Mbytes
+Step Temp PotEng TotEng Press Volume Density c_1[3] 
+    1550 9.3742484e-21   -777.04988   -777.04988    -95200.12    4105.8172    2.1808854   -151113.43 
+    1560 9.3742484e-21   -777.04988   -777.04988    -95200.12    4105.8172    2.1808854   -151113.43 
+    1570 9.3742484e-21   -777.04988   -777.04988    -95200.12    4105.8172    2.1808854   -151113.43 
+    1580 9.3742484e-21   -777.04988   -777.04988    -95200.12    4105.8172    2.1808854   -151113.43 
+    1590 9.3742484e-21   -777.04988   -777.04988    -95200.12    4105.8172    2.1808854   -151113.43 
+    1600 9.3742484e-21   -777.04988   -777.04988    -95200.12    4105.8172    2.1808854   -151113.43 
+Loop time of 0.02194 on 1 procs for 50 steps with 192 atoms
 
-Performance: 13125.525 ns/day, 0.002 hours/ns, 1519.158 timesteps/s
-47.5% CPU use with 1 MPI tasks x 1 OpenMP threads
+Performance: 19690.070 ns/day, 0.001 hours/ns, 2278.943 timesteps/s
+71.2% CPU use with 1 MPI tasks x 1 OpenMP threads
 
 MPI task timing breakdown:
 Section |  min time  |  avg time  |  max time  |%varavg| %total
 ---------------------------------------------------------------
-Pair    | 0.0049858  | 0.0049858  | 0.0049858  |   0.0 | 15.15
+Pair    | 0.0059843  | 0.0059843  | 0.0059843  |   0.0 | 27.28
 Neigh   | 0          | 0          | 0          |   0.0 |  0.00
 Comm    | 0          | 0          | 0          |   0.0 |  0.00
-Output  | 0.027927   | 0.027927   | 0.027927   |   0.0 | 84.85
+Output  | 0.015956   | 0.015956   | 0.015956   |   0.0 | 72.72
 Modify  | 0          | 0          | 0          |   0.0 |  0.00
 Other   |            | 0          |            |       |  0.00
 
@@ -2131,7 +2133,7 @@ change_box all z delta 0 0.1 boundary p p s remap units box
 
 
 thermo 10
-thermo_style custom step temp pe etotal press vol density c_1[1] c_1[2] c_1[3] c_1[4] c_1[5] c_1[6]
+thermo_style custom step temp pe etotal press vol density c_1[3]
 # NVT relaxation
 fix 1 all nvt temp 300 300 1
 
@@ -2141,26 +2143,26 @@ fix 2 all print 100 "${st} ${sigmazz}" append thermo.out screen no title "# step
 #dump 103 all xyz 100 si_min_relaxation.xyz
 
 run 50
-Per MPI rank memory allocation (min/avg/max) = 3.097 | 3.097 | 3.097 Mbytes
-Step Temp PotEng TotEng Press Volume Density c_1[1] c_1[2] c_1[3] c_1[4] c_1[5] c_1[6] 
-    1600 9.3742484e-21   -775.76557   -775.76557   -97647.338    4119.2517    2.1737727   -68865.887   -68865.887   -155210.24   -3362.6686 2.403739e-08 2.4477327e-08 
-    1610 9.3742484e-21   -775.76557   -775.76557   -97647.338    4119.2517    2.1737727   -68865.887   -68865.887   -155210.24   -3362.6686 2.403739e-08 2.4477327e-08 
-    1620 9.3742484e-21   -775.76557   -775.76557   -97647.338    4119.2517    2.1737727   -68865.887   -68865.887   -155210.24   -3362.6686 2.403739e-08 2.4477327e-08 
-    1630 9.3742484e-21   -775.76557   -775.76557   -97647.338    4119.2517    2.1737727   -68865.887   -68865.887   -155210.24   -3362.6686 2.403739e-08 2.4477327e-08 
-    1640 9.3742484e-21   -775.76557   -775.76557   -97647.338    4119.2517    2.1737727   -68865.887   -68865.887   -155210.24   -3362.6686 2.403739e-08 2.4477327e-08 
-    1650 9.3742484e-21   -775.76557   -775.76557   -97647.338    4119.2517    2.1737727   -68865.887   -68865.887   -155210.24   -3362.6686 2.403739e-08 2.4477327e-08 
-Loop time of 0.0349061 on 1 procs for 50 steps with 192 atoms
+Per MPI rank memory allocation (min/avg/max) = 4.114 | 4.114 | 4.114 Mbytes
+Step Temp PotEng TotEng Press Volume Density c_1[3] 
+    1600 9.3742484e-21   -775.76557   -775.76557   -97647.338    4119.2517    2.1737727   -155210.24 
+    1610 9.3742484e-21   -775.76557   -775.76557   -97647.338    4119.2517    2.1737727   -155210.24 
+    1620 9.3742484e-21   -775.76557   -775.76557   -97647.338    4119.2517    2.1737727   -155210.24 
+    1630 9.3742484e-21   -775.76557   -775.76557   -97647.338    4119.2517    2.1737727   -155210.24 
+    1640 9.3742484e-21   -775.76557   -775.76557   -97647.338    4119.2517    2.1737727   -155210.24 
+    1650 9.3742484e-21   -775.76557   -775.76557   -97647.338    4119.2517    2.1737727   -155210.24 
+Loop time of 0.0259318 on 1 procs for 50 steps with 192 atoms
 
-Performance: 12376.043 ns/day, 0.002 hours/ns, 1432.412 timesteps/s
+Performance: 16659.060 ns/day, 0.001 hours/ns, 1928.132 timesteps/s
 0.0% CPU use with 1 MPI tasks x 1 OpenMP threads
 
 MPI task timing breakdown:
 Section |  min time  |  avg time  |  max time  |%varavg| %total
 ---------------------------------------------------------------
-Pair    | 0.0069821  | 0.0069821  | 0.0069821  |   0.0 | 20.00
+Pair    | 0.0039911  | 0.0039911  | 0.0039911  |   0.0 | 15.39
 Neigh   | 0          | 0          | 0          |   0.0 |  0.00
-Comm    | 0          | 0          | 0          |   0.0 |  0.00
-Output  | 0.027924   | 0.027924   | 0.027924   |   0.0 | 80.00
+Comm    | 0.00099802 | 0.00099802 | 0.00099802 |   0.0 |  3.85
+Output  | 0.020943   | 0.020943   | 0.020943   |   0.0 | 80.76
 Modify  | 0          | 0          | 0          |   0.0 |  0.00
 Other   |            | 0          |            |       |  0.00
 
@@ -2191,7 +2193,7 @@ change_box all z delta 0 0.1 boundary p p s remap units box
 
 
 thermo 10
-thermo_style custom step temp pe etotal press vol density c_1[1] c_1[2] c_1[3] c_1[4] c_1[5] c_1[6]
+thermo_style custom step temp pe etotal press vol density c_1[3]
 # NVT relaxation
 fix 1 all nvt temp 300 300 1
 
@@ -2201,27 +2203,27 @@ fix 2 all print 100 "${st} ${sigmazz}" append thermo.out screen no title "# step
 #dump 103 all xyz 100 si_min_relaxation.xyz
 
 run 50
-Per MPI rank memory allocation (min/avg/max) = 3.097 | 3.097 | 3.097 Mbytes
-Step Temp PotEng TotEng Press Volume Density c_1[1] c_1[2] c_1[3] c_1[4] c_1[5] c_1[6] 
-    1650 9.3742484e-21   -774.44654   -774.44654   -100064.02    4132.6915    2.1667034   -70462.682   -70462.682   -159266.68   -3441.3346 2.3834694e-08 2.4204463e-08 
-    1660 9.3742484e-21   -774.44654   -774.44654   -100064.02    4132.6915    2.1667034   -70462.682   -70462.682   -159266.68   -3441.3346 2.3834694e-08 2.4204463e-08 
-    1670 9.3742484e-21   -774.44654   -774.44654   -100064.02    4132.6915    2.1667034   -70462.682   -70462.682   -159266.68   -3441.3346 2.3834694e-08 2.4204463e-08 
-    1680 9.3742484e-21   -774.44654   -774.44654   -100064.02    4132.6915    2.1667034   -70462.682   -70462.682   -159266.68   -3441.3346 2.3834694e-08 2.4204463e-08 
-    1690 9.3742484e-21   -774.44654   -774.44654   -100064.02    4132.6915    2.1667034   -70462.682   -70462.682   -159266.68   -3441.3346 2.3834694e-08 2.4204463e-08 
-    1700 9.3742484e-21   -774.44654   -774.44654   -100064.02    4132.6915    2.1667034   -70462.682   -70462.682   -159266.68   -3441.3346 2.3834694e-08 2.4204463e-08 
-Loop time of 0.0339091 on 1 procs for 50 steps with 192 atoms
+Per MPI rank memory allocation (min/avg/max) = 4.114 | 4.114 | 4.114 Mbytes
+Step Temp PotEng TotEng Press Volume Density c_1[3] 
+    1650 9.3742484e-21   -774.44654   -774.44654   -100064.02    4132.6915    2.1667034   -159266.68 
+    1660 9.3742484e-21   -774.44654   -774.44654   -100064.02    4132.6915    2.1667034   -159266.68 
+    1670 9.3742484e-21   -774.44654   -774.44654   -100064.02    4132.6915    2.1667034   -159266.68 
+    1680 9.3742484e-21   -774.44654   -774.44654   -100064.02    4132.6915    2.1667034   -159266.68 
+    1690 9.3742484e-21   -774.44654   -774.44654   -100064.02    4132.6915    2.1667034   -159266.68 
+    1700 9.3742484e-21   -774.44654   -774.44654   -100064.02    4132.6915    2.1667034   -159266.68 
+Loop time of 0.0219409 on 1 procs for 50 steps with 192 atoms
 
-Performance: 12739.950 ns/day, 0.002 hours/ns, 1474.531 timesteps/s
+Performance: 19689.214 ns/day, 0.001 hours/ns, 2278.844 timesteps/s
 0.0% CPU use with 1 MPI tasks x 1 OpenMP threads
 
 MPI task timing breakdown:
 Section |  min time  |  avg time  |  max time  |%varavg| %total
 ---------------------------------------------------------------
-Pair    | 0.005985   | 0.005985   | 0.005985   |   0.0 | 17.65
+Pair    | 0.0059826  | 0.0059826  | 0.0059826  |   0.0 | 27.27
 Neigh   | 0          | 0          | 0          |   0.0 |  0.00
 Comm    | 0          | 0          | 0          |   0.0 |  0.00
-Output  | 0.026925   | 0.026925   | 0.026925   |   0.0 | 79.40
-Modify  | 0.00099897 | 0.00099897 | 0.00099897 |   0.0 |  2.95
+Output  | 0.015958   | 0.015958   | 0.015958   |   0.0 | 72.73
+Modify  | 0          | 0          | 0          |   0.0 |  0.00
 Other   |            | 0          |            |       |  0.00
 
 Nlocal:    192 ave 192 max 192 min
@@ -2251,7 +2253,7 @@ change_box all z delta 0 0.1 boundary p p s remap units box
 
 
 thermo 10
-thermo_style custom step temp pe etotal press vol density c_1[1] c_1[2] c_1[3] c_1[4] c_1[5] c_1[6]
+thermo_style custom step temp pe etotal press vol density c_1[3]
 # NVT relaxation
 fix 1 all nvt temp 300 300 1
 
@@ -2261,26 +2263,26 @@ fix 2 all print 100 "${st} ${sigmazz}" append thermo.out screen no title "# step
 #dump 103 all xyz 100 si_min_relaxation.xyz
 
 run 50
-Per MPI rank memory allocation (min/avg/max) = 3.097 | 3.097 | 3.097 Mbytes
-Step Temp PotEng TotEng Press Volume Density c_1[1] c_1[2] c_1[3] c_1[4] c_1[5] c_1[6] 
-    1700 9.3742484e-21   -773.09312   -773.09312   -102450.54    4146.1367    2.1596771   -72034.334   -72034.334   -163282.95   -3518.7654 2.3618303e-08 2.3935027e-08 
-    1710 9.3742484e-21   -773.09312   -773.09312   -102450.54    4146.1367    2.1596771   -72034.334   -72034.334   -163282.95   -3518.7654 2.3618303e-08 2.3935027e-08 
-    1720 9.3742484e-21   -773.09312   -773.09312   -102450.54    4146.1367    2.1596771   -72034.334   -72034.334   -163282.95   -3518.7654 2.3618303e-08 2.3935027e-08 
-    1730 9.3742484e-21   -773.09312   -773.09312   -102450.54    4146.1367    2.1596771   -72034.334   -72034.334   -163282.95   -3518.7654 2.3618303e-08 2.3935027e-08 
-    1740 9.3742484e-21   -773.09312   -773.09312   -102450.54    4146.1367    2.1596771   -72034.334   -72034.334   -163282.95   -3518.7654 2.3618303e-08 2.3935027e-08 
-    1750 9.3742484e-21   -773.09312   -773.09312   -102450.54    4146.1367    2.1596771   -72034.334   -72034.334   -163282.95   -3518.7654 2.3618303e-08 2.3935027e-08 
-Loop time of 0.0348501 on 1 procs for 50 steps with 192 atoms
+Per MPI rank memory allocation (min/avg/max) = 4.114 | 4.114 | 4.114 Mbytes
+Step Temp PotEng TotEng Press Volume Density c_1[3] 
+    1700 9.3742484e-21   -773.09312   -773.09312   -102450.54    4146.1367    2.1596771   -163282.95 
+    1710 9.3742484e-21   -773.09312   -773.09312   -102450.54    4146.1367    2.1596771   -163282.95 
+    1720 9.3742484e-21   -773.09312   -773.09312   -102450.54    4146.1367    2.1596771   -163282.95 
+    1730 9.3742484e-21   -773.09312   -773.09312   -102450.54    4146.1367    2.1596771   -163282.95 
+    1740 9.3742484e-21   -773.09312   -773.09312   -102450.54    4146.1367    2.1596771   -163282.95 
+    1750 9.3742484e-21   -773.09312   -773.09312   -102450.54    4146.1367    2.1596771   -163282.95 
+Loop time of 0.0219421 on 1 procs for 50 steps with 192 atoms
 
-Performance: 12395.940 ns/day, 0.002 hours/ns, 1434.715 timesteps/s
-0.0% CPU use with 1 MPI tasks x 1 OpenMP threads
+Performance: 19688.145 ns/day, 0.001 hours/ns, 2278.720 timesteps/s
+71.2% CPU use with 1 MPI tasks x 1 OpenMP threads
 
 MPI task timing breakdown:
 Section |  min time  |  avg time  |  max time  |%varavg| %total
 ---------------------------------------------------------------
-Pair    | 0.0069804  | 0.0069804  | 0.0069804  |   0.0 | 20.03
+Pair    | 0.0059848  | 0.0059848  | 0.0059848  |   0.0 | 27.28
 Neigh   | 0          | 0          | 0          |   0.0 |  0.00
 Comm    | 0          | 0          | 0          |   0.0 |  0.00
-Output  | 0.02787    | 0.02787    | 0.02787    |   0.0 | 79.97
+Output  | 0.015957   | 0.015957   | 0.015957   |   0.0 | 72.72
 Modify  | 0          | 0          | 0          |   0.0 |  0.00
 Other   |            | 0          |            |       |  0.00
 
@@ -2311,7 +2313,7 @@ change_box all z delta 0 0.1 boundary p p s remap units box
 
 
 thermo 10
-thermo_style custom step temp pe etotal press vol density c_1[1] c_1[2] c_1[3] c_1[4] c_1[5] c_1[6]
+thermo_style custom step temp pe etotal press vol density c_1[3]
 # NVT relaxation
 fix 1 all nvt temp 300 300 1
 
@@ -2321,26 +2323,26 @@ fix 2 all print 100 "${st} ${sigmazz}" append thermo.out screen no title "# step
 #dump 103 all xyz 100 si_min_relaxation.xyz
 
 run 50
-Per MPI rank memory allocation (min/avg/max) = 3.097 | 3.097 | 3.097 Mbytes
-Step Temp PotEng TotEng Press Volume Density c_1[1] c_1[2] c_1[3] c_1[4] c_1[5] c_1[6] 
-    1750 9.3742484e-21   -771.70561   -771.70561   -104807.29    4159.5873    2.1526935   -73581.322   -73581.322   -167259.22   -3594.9801 2.3385887e-08 2.3712721e-08 
-    1760 9.3742484e-21   -771.70561   -771.70561   -104807.29    4159.5873    2.1526935   -73581.322   -73581.322   -167259.22   -3594.9801 2.3385887e-08 2.3712721e-08 
-    1770 9.3742484e-21   -771.70561   -771.70561   -104807.29    4159.5873    2.1526935   -73581.322   -73581.322   -167259.22   -3594.9801 2.3385887e-08 2.3712721e-08 
-    1780 9.3742484e-21   -771.70561   -771.70561   -104807.29    4159.5873    2.1526935   -73581.322   -73581.322   -167259.22   -3594.9801 2.3385887e-08 2.3712721e-08 
-    1790 9.3742484e-21   -771.70561   -771.70561   -104807.29    4159.5873    2.1526935   -73581.322   -73581.322   -167259.22   -3594.9801 2.3385887e-08 2.3712721e-08 
-    1800 9.3742484e-21   -771.70561   -771.70561   -104807.29    4159.5873    2.1526935   -73581.322   -73581.322   -167259.22   -3594.9801 2.3385887e-08 2.3712721e-08 
-Loop time of 0.0384722 on 1 procs for 50 steps with 192 atoms
+Per MPI rank memory allocation (min/avg/max) = 4.114 | 4.114 | 4.114 Mbytes
+Step Temp PotEng TotEng Press Volume Density c_1[3] 
+    1750 9.3742484e-21   -771.70561   -771.70561   -104807.29    4159.5873    2.1526935   -167259.22 
+    1760 9.3742484e-21   -771.70561   -771.70561   -104807.29    4159.5873    2.1526935   -167259.22 
+    1770 9.3742484e-21   -771.70561   -771.70561   -104807.29    4159.5873    2.1526935   -167259.22 
+    1780 9.3742484e-21   -771.70561   -771.70561   -104807.29    4159.5873    2.1526935   -167259.22 
+    1790 9.3742484e-21   -771.70561   -771.70561   -104807.29    4159.5873    2.1526935   -167259.22 
+    1800 9.3742484e-21   -771.70561   -771.70561   -104807.29    4159.5873    2.1526935   -167259.22 
+Loop time of 0.023936 on 1 procs for 50 steps with 192 atoms
 
-Performance: 11228.894 ns/day, 0.002 hours/ns, 1299.641 timesteps/s
-81.2% CPU use with 1 MPI tasks x 1 OpenMP threads
+Performance: 18048.103 ns/day, 0.001 hours/ns, 2088.901 timesteps/s
+0.0% CPU use with 1 MPI tasks x 1 OpenMP threads
 
 MPI task timing breakdown:
 Section |  min time  |  avg time  |  max time  |%varavg| %total
 ---------------------------------------------------------------
-Pair    | 0.0059843  | 0.0059843  | 0.0059843  |   0.0 | 15.55
+Pair    | 0.0059872  | 0.0059872  | 0.0059872  |   0.0 | 25.01
 Neigh   | 0          | 0          | 0          |   0.0 |  0.00
 Comm    | 0          | 0          | 0          |   0.0 |  0.00
-Output  | 0.032488   | 0.032488   | 0.032488   |   0.0 | 84.45
+Output  | 0.017949   | 0.017949   | 0.017949   |   0.0 | 74.99
 Modify  | 0          | 0          | 0          |   0.0 |  0.00
 Other   |            | 0          |            |       |  0.00
 
@@ -2371,7 +2373,7 @@ change_box all z delta 0 0.1 boundary p p s remap units box
 
 
 thermo 10
-thermo_style custom step temp pe etotal press vol density c_1[1] c_1[2] c_1[3] c_1[4] c_1[5] c_1[6]
+thermo_style custom step temp pe etotal press vol density c_1[3]
 # NVT relaxation
 fix 1 all nvt temp 300 300 1
 
@@ -2381,26 +2383,26 @@ fix 2 all print 100 "${st} ${sigmazz}" append thermo.out screen no title "# step
 #dump 103 all xyz 100 si_min_relaxation.xyz
 
 run 50
-Per MPI rank memory allocation (min/avg/max) = 3.097 | 3.097 | 3.097 Mbytes
-Step Temp PotEng TotEng Press Volume Density c_1[1] c_1[2] c_1[3] c_1[4] c_1[5] c_1[6] 
-    1800 9.3742484e-21   -770.28431   -770.28431   -107134.64    4173.0433    2.1457522   -75104.117   -75104.117   -171195.69   -3669.9976 2.3121052e-08 2.3450013e-08 
-    1810 9.3742484e-21   -770.28431   -770.28431   -107134.64    4173.0433    2.1457522   -75104.117   -75104.117   -171195.69   -3669.9976 2.3121052e-08 2.3450013e-08 
-    1820 9.3742484e-21   -770.28431   -770.28431   -107134.64    4173.0433    2.1457522   -75104.117   -75104.117   -171195.69   -3669.9976 2.3121052e-08 2.3450013e-08 
-    1830 9.3742484e-21   -770.28431   -770.28431   -107134.64    4173.0433    2.1457522   -75104.117   -75104.117   -171195.69   -3669.9976 2.3121052e-08 2.3450013e-08 
-    1840 9.3742484e-21   -770.28431   -770.28431   -107134.64    4173.0433    2.1457522   -75104.117   -75104.117   -171195.69   -3669.9976 2.3121052e-08 2.3450013e-08 
-    1850 9.3742484e-21   -770.28431   -770.28431   -107134.64    4173.0433    2.1457522   -75104.117   -75104.117   -171195.69   -3669.9976 2.3121052e-08 2.3450013e-08 
-Loop time of 0.0309191 on 1 procs for 50 steps with 192 atoms
+Per MPI rank memory allocation (min/avg/max) = 4.114 | 4.114 | 4.114 Mbytes
+Step Temp PotEng TotEng Press Volume Density c_1[3] 
+    1800 9.3742484e-21   -770.28431   -770.28431   -107134.64    4173.0433    2.1457522   -171195.69 
+    1810 9.3742484e-21   -770.28431   -770.28431   -107134.64    4173.0433    2.1457522   -171195.69 
+    1820 9.3742484e-21   -770.28431   -770.28431   -107134.64    4173.0433    2.1457522   -171195.69 
+    1830 9.3742484e-21   -770.28431   -770.28431   -107134.64    4173.0433    2.1457522   -171195.69 
+    1840 9.3742484e-21   -770.28431   -770.28431   -107134.64    4173.0433    2.1457522   -171195.69 
+    1850 9.3742484e-21   -770.28431   -770.28431   -107134.64    4173.0433    2.1457522   -171195.69 
+Loop time of 0.0219412 on 1 procs for 50 steps with 192 atoms
 
-Performance: 13971.957 ns/day, 0.002 hours/ns, 1617.125 timesteps/s
-50.5% CPU use with 1 MPI tasks x 1 OpenMP threads
+Performance: 19689.000 ns/day, 0.001 hours/ns, 2278.819 timesteps/s
+71.2% CPU use with 1 MPI tasks x 1 OpenMP threads
 
 MPI task timing breakdown:
 Section |  min time  |  avg time  |  max time  |%varavg| %total
 ---------------------------------------------------------------
-Pair    | 0.004988   | 0.004988   | 0.004988   |   0.0 | 16.13
+Pair    | 0.0059814  | 0.0059814  | 0.0059814  |   0.0 | 27.26
 Neigh   | 0          | 0          | 0          |   0.0 |  0.00
 Comm    | 0          | 0          | 0          |   0.0 |  0.00
-Output  | 0.025931   | 0.025931   | 0.025931   |   0.0 | 83.87
+Output  | 0.01596    | 0.01596    | 0.01596    |   0.0 | 72.74
 Modify  | 0          | 0          | 0          |   0.0 |  0.00
 Other   |            | 0          |            |       |  0.00
 
@@ -2431,7 +2433,7 @@ change_box all z delta 0 0.1 boundary p p s remap units box
 
 
 thermo 10
-thermo_style custom step temp pe etotal press vol density c_1[1] c_1[2] c_1[3] c_1[4] c_1[5] c_1[6]
+thermo_style custom step temp pe etotal press vol density c_1[3]
 # NVT relaxation
 fix 1 all nvt temp 300 300 1
 
@@ -2441,26 +2443,26 @@ fix 2 all print 100 "${st} ${sigmazz}" append thermo.out screen no title "# step
 #dump 103 all xyz 100 si_min_relaxation.xyz
 
 run 50
-Per MPI rank memory allocation (min/avg/max) = 3.097 | 3.097 | 3.097 Mbytes
-Step Temp PotEng TotEng Press Volume Density c_1[1] c_1[2] c_1[3] c_1[4] c_1[5] c_1[6] 
-    1850 9.3742484e-21   -768.82954   -768.82954   -109432.98    4186.5046    2.1388527   -76603.178   -76603.178   -175092.58   -3743.8365 2.2968891e-08 2.3204839e-08 
-    1860 9.3742484e-21   -768.82954   -768.82954   -109432.98    4186.5046    2.1388527   -76603.178   -76603.178   -175092.58   -3743.8365 2.2968891e-08 2.3204839e-08 
-    1870 9.3742484e-21   -768.82954   -768.82954   -109432.98    4186.5046    2.1388527   -76603.178   -76603.178   -175092.58   -3743.8365 2.2968891e-08 2.3204839e-08 
-    1880 9.3742484e-21   -768.82954   -768.82954   -109432.98    4186.5046    2.1388527   -76603.178   -76603.178   -175092.58   -3743.8365 2.2968891e-08 2.3204839e-08 
-    1890 9.3742484e-21   -768.82954   -768.82954   -109432.98    4186.5046    2.1388527   -76603.178   -76603.178   -175092.58   -3743.8365 2.2968891e-08 2.3204839e-08 
-    1900 9.3742484e-21   -768.82954   -768.82954   -109432.98    4186.5046    2.1388527   -76603.178   -76603.178   -175092.58   -3743.8365 2.2968891e-08 2.3204839e-08 
-Loop time of 0.0319149 on 1 procs for 50 steps with 192 atoms
+Per MPI rank memory allocation (min/avg/max) = 4.114 | 4.114 | 4.114 Mbytes
+Step Temp PotEng TotEng Press Volume Density c_1[3] 
+    1850 9.3742484e-21   -768.82954   -768.82954   -109432.98    4186.5046    2.1388527   -175092.58 
+    1860 9.3742484e-21   -768.82954   -768.82954   -109432.98    4186.5046    2.1388527   -175092.58 
+    1870 9.3742484e-21   -768.82954   -768.82954   -109432.98    4186.5046    2.1388527   -175092.58 
+    1880 9.3742484e-21   -768.82954   -768.82954   -109432.98    4186.5046    2.1388527   -175092.58 
+    1890 9.3742484e-21   -768.82954   -768.82954   -109432.98    4186.5046    2.1388527   -175092.58 
+    1900 9.3742484e-21   -768.82954   -768.82954   -109432.98    4186.5046    2.1388527   -175092.58 
+Loop time of 0.0219419 on 1 procs for 50 steps with 192 atoms
 
-Performance: 13535.976 ns/day, 0.002 hours/ns, 1566.664 timesteps/s
-0.0% CPU use with 1 MPI tasks x 1 OpenMP threads
+Performance: 19688.359 ns/day, 0.001 hours/ns, 2278.745 timesteps/s
+71.2% CPU use with 1 MPI tasks x 1 OpenMP threads
 
 MPI task timing breakdown:
 Section |  min time  |  avg time  |  max time  |%varavg| %total
 ---------------------------------------------------------------
-Pair    | 0.0079746  | 0.0079746  | 0.0079746  |   0.0 | 24.99
+Pair    | 0.0049851  | 0.0049851  | 0.0049851  |   0.0 | 22.72
 Neigh   | 0          | 0          | 0          |   0.0 |  0.00
 Comm    | 0          | 0          | 0          |   0.0 |  0.00
-Output  | 0.02394    | 0.02394    | 0.02394    |   0.0 | 75.01
+Output  | 0.016957   | 0.016957   | 0.016957   |   0.0 | 77.28
 Modify  | 0          | 0          | 0          |   0.0 |  0.00
 Other   |            | 0          |            |       |  0.00
 
@@ -2491,7 +2493,7 @@ change_box all z delta 0 0.1 boundary p p s remap units box
 
 
 thermo 10
-thermo_style custom step temp pe etotal press vol density c_1[1] c_1[2] c_1[3] c_1[4] c_1[5] c_1[6]
+thermo_style custom step temp pe etotal press vol density c_1[3]
 # NVT relaxation
 fix 1 all nvt temp 300 300 1
 
@@ -2501,26 +2503,26 @@ fix 2 all print 100 "${st} ${sigmazz}" append thermo.out screen no title "# step
 #dump 103 all xyz 100 si_min_relaxation.xyz
 
 run 50
-Per MPI rank memory allocation (min/avg/max) = 3.097 | 3.097 | 3.097 Mbytes
-Step Temp PotEng TotEng Press Volume Density c_1[1] c_1[2] c_1[3] c_1[4] c_1[5] c_1[6] 
-    1900 9.3742484e-21    -767.3416    -767.3416   -111702.67    4199.9714    2.1319947   -78078.957   -78078.957   -178950.08   -3816.5149 2.272735e-08 2.3053852e-08 
-    1910 9.3742484e-21    -767.3416    -767.3416   -111702.67    4199.9714    2.1319947   -78078.957   -78078.957   -178950.08   -3816.5149 2.272735e-08 2.3053852e-08 
-    1920 9.3742484e-21    -767.3416    -767.3416   -111702.67    4199.9714    2.1319947   -78078.957   -78078.957   -178950.08   -3816.5149 2.272735e-08 2.3053852e-08 
-    1930 9.3742484e-21    -767.3416    -767.3416   -111702.67    4199.9714    2.1319947   -78078.957   -78078.957   -178950.08   -3816.5149 2.272735e-08 2.3053852e-08 
-    1940 9.3742484e-21    -767.3416    -767.3416   -111702.67    4199.9714    2.1319947   -78078.957   -78078.957   -178950.08   -3816.5149 2.272735e-08 2.3053852e-08 
-    1950 9.3742484e-21    -767.3416    -767.3416   -111702.67    4199.9714    2.1319947   -78078.957   -78078.957   -178950.08   -3816.5149 2.272735e-08 2.3053852e-08 
-Loop time of 0.0339079 on 1 procs for 50 steps with 192 atoms
+Per MPI rank memory allocation (min/avg/max) = 4.114 | 4.114 | 4.114 Mbytes
+Step Temp PotEng TotEng Press Volume Density c_1[3] 
+    1900 9.3742484e-21    -767.3416    -767.3416   -111702.67    4199.9714    2.1319947   -178950.08 
+    1910 9.3742484e-21    -767.3416    -767.3416   -111702.67    4199.9714    2.1319947   -178950.08 
+    1920 9.3742484e-21    -767.3416    -767.3416   -111702.67    4199.9714    2.1319947   -178950.08 
+    1930 9.3742484e-21    -767.3416    -767.3416   -111702.67    4199.9714    2.1319947   -178950.08 
+    1940 9.3742484e-21    -767.3416    -767.3416   -111702.67    4199.9714    2.1319947   -178950.08 
+    1950 9.3742484e-21    -767.3416    -767.3416   -111702.67    4199.9714    2.1319947   -178950.08 
+Loop time of 0.0209439 on 1 procs for 50 steps with 192 atoms
 
-Performance: 12740.397 ns/day, 0.002 hours/ns, 1474.583 timesteps/s
-46.1% CPU use with 1 MPI tasks x 1 OpenMP threads
+Performance: 20626.550 ns/day, 0.001 hours/ns, 2387.332 timesteps/s
+0.0% CPU use with 1 MPI tasks x 1 OpenMP threads
 
 MPI task timing breakdown:
 Section |  min time  |  avg time  |  max time  |%varavg| %total
 ---------------------------------------------------------------
-Pair    | 0.004986   | 0.004986   | 0.004986   |   0.0 | 14.70
+Pair    | 0.005986   | 0.005986   | 0.005986   |   0.0 | 28.58
 Neigh   | 0          | 0          | 0          |   0.0 |  0.00
 Comm    | 0          | 0          | 0          |   0.0 |  0.00
-Output  | 0.028922   | 0.028922   | 0.028922   |   0.0 | 85.30
+Output  | 0.014958   | 0.014958   | 0.014958   |   0.0 | 71.42
 Modify  | 0          | 0          | 0          |   0.0 |  0.00
 Other   |            | 0          |            |       |  0.00
 
@@ -2551,7 +2553,7 @@ change_box all z delta 0 0.1 boundary p p s remap units box
 
 
 thermo 10
-thermo_style custom step temp pe etotal press vol density c_1[1] c_1[2] c_1[3] c_1[4] c_1[5] c_1[6]
+thermo_style custom step temp pe etotal press vol density c_1[3]
 # NVT relaxation
 fix 1 all nvt temp 300 300 1
 
@@ -2561,26 +2563,26 @@ fix 2 all print 100 "${st} ${sigmazz}" append thermo.out screen no title "# step
 #dump 103 all xyz 100 si_min_relaxation.xyz
 
 run 50
-Per MPI rank memory allocation (min/avg/max) = 3.097 | 3.097 | 3.097 Mbytes
-Step Temp PotEng TotEng Press Volume Density c_1[1] c_1[2] c_1[3] c_1[4] c_1[5] c_1[6] 
-    1950 9.3742484e-21   -765.82079   -765.82079   -113944.07    4213.4435    2.1251778   -79531.896   -79531.896   -182768.42   -3888.0508 2.2443398e-08 2.278455e-08 
-    1960 9.3742484e-21   -765.82079   -765.82079   -113944.07    4213.4435    2.1251778   -79531.896   -79531.896   -182768.42   -3888.0508 2.2443398e-08 2.278455e-08 
-    1970 9.3742484e-21   -765.82079   -765.82079   -113944.07    4213.4435    2.1251778   -79531.896   -79531.896   -182768.42   -3888.0508 2.2443398e-08 2.278455e-08 
-    1980 9.3742484e-21   -765.82079   -765.82079   -113944.07    4213.4435    2.1251778   -79531.896   -79531.896   -182768.42   -3888.0508 2.2443398e-08 2.278455e-08 
-    1990 9.3742484e-21   -765.82079   -765.82079   -113944.07    4213.4435    2.1251778   -79531.896   -79531.896   -182768.42   -3888.0508 2.2443398e-08 2.278455e-08 
-    2000 9.3742484e-21   -765.82079   -765.82079   -113944.07    4213.4435    2.1251778   -79531.896   -79531.896   -182768.42   -3888.0508 2.2443398e-08 2.278455e-08 
-Loop time of 0.036901 on 1 procs for 50 steps with 192 atoms
+Per MPI rank memory allocation (min/avg/max) = 4.114 | 4.114 | 4.114 Mbytes
+Step Temp PotEng TotEng Press Volume Density c_1[3] 
+    1950 9.3742484e-21   -765.82079   -765.82079   -113944.07    4213.4435    2.1251778   -182768.42 
+    1960 9.3742484e-21   -765.82079   -765.82079   -113944.07    4213.4435    2.1251778   -182768.42 
+    1970 9.3742484e-21   -765.82079   -765.82079   -113944.07    4213.4435    2.1251778   -182768.42 
+    1980 9.3742484e-21   -765.82079   -765.82079   -113944.07    4213.4435    2.1251778   -182768.42 
+    1990 9.3742484e-21   -765.82079   -765.82079   -113944.07    4213.4435    2.1251778   -182768.42 
+    2000 9.3742484e-21   -765.82079   -765.82079   -113944.07    4213.4435    2.1251778   -182768.42 
+Loop time of 0.0239382 on 1 procs for 50 steps with 192 atoms
 
-Performance: 11707.001 ns/day, 0.002 hours/ns, 1354.977 timesteps/s
-84.7% CPU use with 1 MPI tasks x 1 OpenMP threads
+Performance: 18046.485 ns/day, 0.001 hours/ns, 2088.714 timesteps/s
+0.0% CPU use with 1 MPI tasks x 1 OpenMP threads
 
 MPI task timing breakdown:
 Section |  min time  |  avg time  |  max time  |%varavg| %total
 ---------------------------------------------------------------
-Pair    | 0.004987   | 0.004987   | 0.004987   |   0.0 | 13.51
+Pair    | 0.0069807  | 0.0069807  | 0.0069807  |   0.0 | 29.16
 Neigh   | 0          | 0          | 0          |   0.0 |  0.00
 Comm    | 0          | 0          | 0          |   0.0 |  0.00
-Output  | 0.031914   | 0.031914   | 0.031914   |   0.0 | 86.49
+Output  | 0.016958   | 0.016958   | 0.016958   |   0.0 | 70.84
 Modify  | 0          | 0          | 0          |   0.0 |  0.00
 Other   |            | 0          |            |       |  0.00
 
@@ -2611,7 +2613,7 @@ change_box all z delta 0 0.1 boundary p p s remap units box
 
 
 thermo 10
-thermo_style custom step temp pe etotal press vol density c_1[1] c_1[2] c_1[3] c_1[4] c_1[5] c_1[6]
+thermo_style custom step temp pe etotal press vol density c_1[3]
 # NVT relaxation
 fix 1 all nvt temp 300 300 1
 
@@ -2621,26 +2623,26 @@ fix 2 all print 100 "${st} ${sigmazz}" append thermo.out screen no title "# step
 #dump 103 all xyz 100 si_min_relaxation.xyz
 
 run 50
-Per MPI rank memory allocation (min/avg/max) = 3.097 | 3.097 | 3.097 Mbytes
-Step Temp PotEng TotEng Press Volume Density c_1[1] c_1[2] c_1[3] c_1[4] c_1[5] c_1[6] 
-    2000 9.3742484e-21   -764.26742   -764.26742   -116157.56     4226.921    2.1184017   -80962.428   -80962.428   -186547.82   -3958.4617 2.2191494e-08 2.2484133e-08 
-    2010 9.3742484e-21   -764.26742   -764.26742   -116157.56     4226.921    2.1184017   -80962.428   -80962.428   -186547.82   -3958.4617 2.2191494e-08 2.2484133e-08 
-    2020 9.3742484e-21   -764.26742   -764.26742   -116157.56     4226.921    2.1184017   -80962.428   -80962.428   -186547.82   -3958.4617 2.2191494e-08 2.2484133e-08 
-    2030 9.3742484e-21   -764.26742   -764.26742   -116157.56     4226.921    2.1184017   -80962.428   -80962.428   -186547.82   -3958.4617 2.2191494e-08 2.2484133e-08 
-    2040 9.3742484e-21   -764.26742   -764.26742   -116157.56     4226.921    2.1184017   -80962.428   -80962.428   -186547.82   -3958.4617 2.2191494e-08 2.2484133e-08 
-    2050 9.3742484e-21   -764.26742   -764.26742   -116157.56     4226.921    2.1184017   -80962.428   -80962.428   -186547.82   -3958.4617 2.2191494e-08 2.2484133e-08 
-Loop time of 0.0319159 on 1 procs for 50 steps with 192 atoms
+Per MPI rank memory allocation (min/avg/max) = 4.114 | 4.114 | 4.114 Mbytes
+Step Temp PotEng TotEng Press Volume Density c_1[3] 
+    2000 9.3742484e-21   -764.26742   -764.26742   -116157.56     4226.921    2.1184017   -186547.82 
+    2010 9.3742484e-21   -764.26742   -764.26742   -116157.56     4226.921    2.1184017   -186547.82 
+    2020 9.3742484e-21   -764.26742   -764.26742   -116157.56     4226.921    2.1184017   -186547.82 
+    2030 9.3742484e-21   -764.26742   -764.26742   -116157.56     4226.921    2.1184017   -186547.82 
+    2040 9.3742484e-21   -764.26742   -764.26742   -116157.56     4226.921    2.1184017   -186547.82 
+    2050 9.3742484e-21   -764.26742   -764.26742   -116157.56     4226.921    2.1184017   -186547.82 
+Loop time of 0.022938 on 1 procs for 50 steps with 192 atoms
 
-Performance: 13535.572 ns/day, 0.002 hours/ns, 1566.617 timesteps/s
-49.0% CPU use with 1 MPI tasks x 1 OpenMP threads
+Performance: 18833.366 ns/day, 0.001 hours/ns, 2179.788 timesteps/s
+68.1% CPU use with 1 MPI tasks x 1 OpenMP threads
 
 MPI task timing breakdown:
 Section |  min time  |  avg time  |  max time  |%varavg| %total
 ---------------------------------------------------------------
-Pair    | 0.0069864  | 0.0069864  | 0.0069864  |   0.0 | 21.89
+Pair    | 0.0049891  | 0.0049891  | 0.0049891  |   0.0 | 21.75
 Neigh   | 0          | 0          | 0          |   0.0 |  0.00
 Comm    | 0          | 0          | 0          |   0.0 |  0.00
-Output  | 0.02493    | 0.02493    | 0.02493    |   0.0 | 78.11
+Output  | 0.017949   | 0.017949   | 0.017949   |   0.0 | 78.25
 Modify  | 0          | 0          | 0          |   0.0 |  0.00
 Other   |            | 0          |            |       |  0.00
 
@@ -2671,7 +2673,7 @@ change_box all z delta 0 0.1 boundary p p s remap units box
 
 
 thermo 10
-thermo_style custom step temp pe etotal press vol density c_1[1] c_1[2] c_1[3] c_1[4] c_1[5] c_1[6]
+thermo_style custom step temp pe etotal press vol density c_1[3]
 # NVT relaxation
 fix 1 all nvt temp 300 300 1
 
@@ -2681,28 +2683,28 @@ fix 2 all print 100 "${st} ${sigmazz}" append thermo.out screen no title "# step
 #dump 103 all xyz 100 si_min_relaxation.xyz
 
 run 50
-Per MPI rank memory allocation (min/avg/max) = 3.097 | 3.097 | 3.097 Mbytes
-Step Temp PotEng TotEng Press Volume Density c_1[1] c_1[2] c_1[3] c_1[4] c_1[5] c_1[6] 
-    2050 9.3742484e-21   -762.68178   -762.68178   -118343.49    4240.4039     2.111666   -82370.978   -82370.978   -190288.52   -4027.7649 2.2117945e-08 2.2321111e-08 
-    2060 9.3742484e-21   -762.68178   -762.68178   -118343.49    4240.4039     2.111666   -82370.978   -82370.978   -190288.52   -4027.7649 2.2117945e-08 2.2321111e-08 
-    2070 9.3742484e-21   -762.68178   -762.68178   -118343.49    4240.4039     2.111666   -82370.978   -82370.978   -190288.52   -4027.7649 2.2117945e-08 2.2321111e-08 
-    2080 9.3742484e-21   -762.68178   -762.68178   -118343.49    4240.4039     2.111666   -82370.978   -82370.978   -190288.52   -4027.7649 2.2117945e-08 2.2321111e-08 
-    2090 9.3742484e-21   -762.68178   -762.68178   -118343.49    4240.4039     2.111666   -82370.978   -82370.978   -190288.52   -4027.7649 2.2117945e-08 2.2321111e-08 
-    2100 9.3742484e-21   -762.68178   -762.68178   -118343.49    4240.4039     2.111666   -82370.978   -82370.978   -190288.52   -4027.7649 2.2117945e-08 2.2321111e-08 
-Loop time of 0.0359049 on 1 procs for 50 steps with 192 atoms
+Per MPI rank memory allocation (min/avg/max) = 4.114 | 4.114 | 4.114 Mbytes
+Step Temp PotEng TotEng Press Volume Density c_1[3] 
+    2050 9.3742484e-21   -762.68178   -762.68178   -118343.49    4240.4039     2.111666   -190288.52 
+    2060 9.3742484e-21   -762.68178   -762.68178   -118343.49    4240.4039     2.111666   -190288.52 
+    2070 9.3742484e-21   -762.68178   -762.68178   -118343.49    4240.4039     2.111666   -190288.52 
+    2080 9.3742484e-21   -762.68178   -762.68178   -118343.49    4240.4039     2.111666   -190288.52 
+    2090 9.3742484e-21   -762.68178   -762.68178   -118343.49    4240.4039     2.111666   -190288.52 
+    2100 9.3742484e-21   -762.68178   -762.68178   -118343.49    4240.4039     2.111666   -190288.52 
+Loop time of 0.0229402 on 1 procs for 50 steps with 192 atoms
 
-Performance: 12031.789 ns/day, 0.002 hours/ns, 1392.568 timesteps/s
-0.0% CPU use with 1 MPI tasks x 1 OpenMP threads
+Performance: 18831.605 ns/day, 0.001 hours/ns, 2179.584 timesteps/s
+68.1% CPU use with 1 MPI tasks x 1 OpenMP threads
 
 MPI task timing breakdown:
 Section |  min time  |  avg time  |  max time  |%varavg| %total
 ---------------------------------------------------------------
-Pair    | 0.0079799  | 0.0079799  | 0.0079799  |   0.0 | 22.23
+Pair    | 0.005985   | 0.005985   | 0.005985   |   0.0 | 26.09
 Neigh   | 0          | 0          | 0          |   0.0 |  0.00
 Comm    | 0          | 0          | 0          |   0.0 |  0.00
-Output  | 0.026929   | 0.026929   | 0.026929   |   0.0 | 75.00
-Modify  | 0.00099587 | 0.00099587 | 0.00099587 |   0.0 |  2.77
-Other   |            | 0          |            |       |  0.00
+Output  | 0.015957   | 0.015957   | 0.015957   |   0.0 | 69.56
+Modify  | 0          | 0          | 0          |   0.0 |  0.00
+Other   |            | 0.000998   |            |       |  4.35
 
 Nlocal:    192 ave 192 max 192 min
 Histogram: 1 0 0 0 0 0 0 0 0 0
@@ -2731,7 +2733,7 @@ change_box all z delta 0 0.1 boundary p p s remap units box
 
 
 thermo 10
-thermo_style custom step temp pe etotal press vol density c_1[1] c_1[2] c_1[3] c_1[4] c_1[5] c_1[6]
+thermo_style custom step temp pe etotal press vol density c_1[3]
 # NVT relaxation
 fix 1 all nvt temp 300 300 1
 
@@ -2741,26 +2743,26 @@ fix 2 all print 100 "${st} ${sigmazz}" append thermo.out screen no title "# step
 #dump 103 all xyz 100 si_min_relaxation.xyz
 
 run 50
-Per MPI rank memory allocation (min/avg/max) = 3.097 | 3.097 | 3.097 Mbytes
-Step Temp PotEng TotEng Press Volume Density c_1[1] c_1[2] c_1[3] c_1[4] c_1[5] c_1[6] 
-    2100 9.3742484e-21   -761.06418   -761.06418   -120502.22    4253.8923    2.1049703   -83757.962   -83757.962   -193990.74   -4095.9774 2.1820495e-08 2.2148995e-08 
-    2110 9.3742484e-21   -761.06418   -761.06418   -120502.22    4253.8923    2.1049703   -83757.962   -83757.962   -193990.74   -4095.9774 2.1820495e-08 2.2148995e-08 
-    2120 9.3742484e-21   -761.06418   -761.06418   -120502.22    4253.8923    2.1049703   -83757.962   -83757.962   -193990.74   -4095.9774 2.1820495e-08 2.2148995e-08 
-    2130 9.3742484e-21   -761.06418   -761.06418   -120502.22    4253.8923    2.1049703   -83757.962   -83757.962   -193990.74   -4095.9774 2.1820495e-08 2.2148995e-08 
-    2140 9.3742484e-21   -761.06418   -761.06418   -120502.22    4253.8923    2.1049703   -83757.962   -83757.962   -193990.74   -4095.9774 2.1820495e-08 2.2148995e-08 
-    2150 9.3742484e-21   -761.06418   -761.06418   -120502.22    4253.8923    2.1049703   -83757.962   -83757.962   -193990.74   -4095.9774 2.1820495e-08 2.2148995e-08 
-Loop time of 0.0329111 on 1 procs for 50 steps with 192 atoms
+Per MPI rank memory allocation (min/avg/max) = 4.114 | 4.114 | 4.114 Mbytes
+Step Temp PotEng TotEng Press Volume Density c_1[3] 
+    2100 9.3742484e-21   -761.06418   -761.06418   -120502.22    4253.8923    2.1049703   -193990.74 
+    2110 9.3742484e-21   -761.06418   -761.06418   -120502.22    4253.8923    2.1049703   -193990.74 
+    2120 9.3742484e-21   -761.06418   -761.06418   -120502.22    4253.8923    2.1049703   -193990.74 
+    2130 9.3742484e-21   -761.06418   -761.06418   -120502.22    4253.8923    2.1049703   -193990.74 
+    2140 9.3742484e-21   -761.06418   -761.06418   -120502.22    4253.8923    2.1049703   -193990.74 
+    2150 9.3742484e-21   -761.06418   -761.06418   -120502.22    4253.8923    2.1049703   -193990.74 
+Loop time of 0.0269279 on 1 procs for 50 steps with 192 atoms
 
-Performance: 13126.286 ns/day, 0.002 hours/ns, 1519.246 timesteps/s
-0.0% CPU use with 1 MPI tasks x 1 OpenMP threads
+Performance: 16042.812 ns/day, 0.001 hours/ns, 1856.807 timesteps/s
+116.1% CPU use with 1 MPI tasks x 1 OpenMP threads
 
 MPI task timing breakdown:
 Section |  min time  |  avg time  |  max time  |%varavg| %total
 ---------------------------------------------------------------
-Pair    | 0.0069821  | 0.0069821  | 0.0069821  |   0.0 | 21.22
+Pair    | 0.0079811  | 0.0079811  | 0.0079811  |   0.0 | 29.64
 Neigh   | 0          | 0          | 0          |   0.0 |  0.00
 Comm    | 0          | 0          | 0          |   0.0 |  0.00
-Output  | 0.025929   | 0.025929   | 0.025929   |   0.0 | 78.78
+Output  | 0.018947   | 0.018947   | 0.018947   |   0.0 | 70.36
 Modify  | 0          | 0          | 0          |   0.0 |  0.00
 Other   |            | 0          |            |       |  0.00
 
@@ -2791,7 +2793,7 @@ change_box all z delta 0 0.1 boundary p p s remap units box
 
 
 thermo 10
-thermo_style custom step temp pe etotal press vol density c_1[1] c_1[2] c_1[3] c_1[4] c_1[5] c_1[6]
+thermo_style custom step temp pe etotal press vol density c_1[3]
 # NVT relaxation
 fix 1 all nvt temp 300 300 1
 
@@ -2801,28 +2803,28 @@ fix 2 all print 100 "${st} ${sigmazz}" append thermo.out screen no title "# step
 #dump 103 all xyz 100 si_min_relaxation.xyz
 
 run 50
-Per MPI rank memory allocation (min/avg/max) = 3.097 | 3.097 | 3.097 Mbytes
-Step Temp PotEng TotEng Press Volume Density c_1[1] c_1[2] c_1[3] c_1[4] c_1[5] c_1[6] 
-    2150 9.3742484e-21   -759.41491   -759.41491    -122634.1     4267.386    2.0983142   -85123.787   -85123.787   -197654.74   -4163.1158 2.1547105e-08 2.1821056e-08 
-    2160 9.3742484e-21   -759.41491   -759.41491    -122634.1     4267.386    2.0983142   -85123.787   -85123.787   -197654.74   -4163.1158 2.1547105e-08 2.1821056e-08 
-    2170 9.3742484e-21   -759.41491   -759.41491    -122634.1     4267.386    2.0983142   -85123.787   -85123.787   -197654.74   -4163.1158 2.1547105e-08 2.1821056e-08 
-    2180 9.3742484e-21   -759.41491   -759.41491    -122634.1     4267.386    2.0983142   -85123.787   -85123.787   -197654.74   -4163.1158 2.1547105e-08 2.1821056e-08 
-    2190 9.3742484e-21   -759.41491   -759.41491    -122634.1     4267.386    2.0983142   -85123.787   -85123.787   -197654.74   -4163.1158 2.1547105e-08 2.1821056e-08 
-    2200 9.3742484e-21   -759.41491   -759.41491    -122634.1     4267.386    2.0983142   -85123.787   -85123.787   -197654.74   -4163.1158 2.1547105e-08 2.1821056e-08 
-Loop time of 0.0309169 on 1 procs for 50 steps with 192 atoms
+Per MPI rank memory allocation (min/avg/max) = 4.114 | 4.114 | 4.114 Mbytes
+Step Temp PotEng TotEng Press Volume Density c_1[3] 
+    2150 9.3742484e-21   -759.41491   -759.41491    -122634.1     4267.386    2.0983142   -197654.74 
+    2160 9.3742484e-21   -759.41491   -759.41491    -122634.1     4267.386    2.0983142   -197654.74 
+    2170 9.3742484e-21   -759.41491   -759.41491    -122634.1     4267.386    2.0983142   -197654.74 
+    2180 9.3742484e-21   -759.41491   -759.41491    -122634.1     4267.386    2.0983142   -197654.74 
+    2190 9.3742484e-21   -759.41491   -759.41491    -122634.1     4267.386    2.0983142   -197654.74 
+    2200 9.3742484e-21   -759.41491   -759.41491    -122634.1     4267.386    2.0983142   -197654.74 
+Loop time of 0.022939 on 1 procs for 50 steps with 192 atoms
 
-Performance: 13972.927 ns/day, 0.002 hours/ns, 1617.237 timesteps/s
-50.5% CPU use with 1 MPI tasks x 1 OpenMP threads
+Performance: 18832.583 ns/day, 0.001 hours/ns, 2179.697 timesteps/s
+68.1% CPU use with 1 MPI tasks x 1 OpenMP threads
 
 MPI task timing breakdown:
 Section |  min time  |  avg time  |  max time  |%varavg| %total
 ---------------------------------------------------------------
-Pair    | 0.0039871  | 0.0039871  | 0.0039871  |   0.0 | 12.90
+Pair    | 0.0069816  | 0.0069816  | 0.0069816  |   0.0 | 30.44
 Neigh   | 0          | 0          | 0          |   0.0 |  0.00
 Comm    | 0          | 0          | 0          |   0.0 |  0.00
-Output  | 0.025932   | 0.025932   | 0.025932   |   0.0 | 83.88
+Output  | 0.015957   | 0.015957   | 0.015957   |   0.0 | 69.56
 Modify  | 0          | 0          | 0          |   0.0 |  0.00
-Other   |            | 0.000998   |            |       |  3.23
+Other   |            | 0          |            |       |  0.00
 
 Nlocal:    192 ave 192 max 192 min
 Histogram: 1 0 0 0 0 0 0 0 0 0
@@ -2851,7 +2853,7 @@ change_box all z delta 0 0.1 boundary p p s remap units box
 
 
 thermo 10
-thermo_style custom step temp pe etotal press vol density c_1[1] c_1[2] c_1[3] c_1[4] c_1[5] c_1[6]
+thermo_style custom step temp pe etotal press vol density c_1[3]
 # NVT relaxation
 fix 1 all nvt temp 300 300 1
 
@@ -2861,26 +2863,26 @@ fix 2 all print 100 "${st} ${sigmazz}" append thermo.out screen no title "# step
 #dump 103 all xyz 100 si_min_relaxation.xyz
 
 run 50
-Per MPI rank memory allocation (min/avg/max) = 3.097 | 3.097 | 3.097 Mbytes
-Step Temp PotEng TotEng Press Volume Density c_1[1] c_1[2] c_1[3] c_1[4] c_1[5] c_1[6] 
-    2200 9.3742484e-21   -757.73427   -757.73427   -124739.49     4280.885    2.0916975   -86468.852   -86468.852   -201280.76   -4229.1964 2.1376746e-08 2.165698e-08 
-    2210 9.3742484e-21   -757.73427   -757.73427   -124739.49     4280.885    2.0916975   -86468.852   -86468.852   -201280.76   -4229.1964 2.1376746e-08 2.165698e-08 
-    2220 9.3742484e-21   -757.73427   -757.73427   -124739.49     4280.885    2.0916975   -86468.852   -86468.852   -201280.76   -4229.1964 2.1376746e-08 2.165698e-08 
-    2230 9.3742484e-21   -757.73427   -757.73427   -124739.49     4280.885    2.0916975   -86468.852   -86468.852   -201280.76   -4229.1964 2.1376746e-08 2.165698e-08 
-    2240 9.3742484e-21   -757.73427   -757.73427   -124739.49     4280.885    2.0916975   -86468.852   -86468.852   -201280.76   -4229.1964 2.1376746e-08 2.165698e-08 
-    2250 9.3742484e-21   -757.73427   -757.73427   -124739.49     4280.885    2.0916975   -86468.852   -86468.852   -201280.76   -4229.1964 2.1376746e-08 2.165698e-08 
-Loop time of 0.0359039 on 1 procs for 50 steps with 192 atoms
+Per MPI rank memory allocation (min/avg/max) = 4.114 | 4.114 | 4.114 Mbytes
+Step Temp PotEng TotEng Press Volume Density c_1[3] 
+    2200 9.3742484e-21   -757.73427   -757.73427   -124739.49     4280.885    2.0916975   -201280.76 
+    2210 9.3742484e-21   -757.73427   -757.73427   -124739.49     4280.885    2.0916975   -201280.76 
+    2220 9.3742484e-21   -757.73427   -757.73427   -124739.49     4280.885    2.0916975   -201280.76 
+    2230 9.3742484e-21   -757.73427   -757.73427   -124739.49     4280.885    2.0916975   -201280.76 
+    2240 9.3742484e-21   -757.73427   -757.73427   -124739.49     4280.885    2.0916975   -201280.76 
+    2250 9.3742484e-21   -757.73427   -757.73427   -124739.49     4280.885    2.0916975   -201280.76 
+Loop time of 0.02494 on 1 procs for 50 steps with 192 atoms
 
-Performance: 12032.109 ns/day, 0.002 hours/ns, 1392.605 timesteps/s
-0.0% CPU use with 1 MPI tasks x 1 OpenMP threads
+Performance: 17321.562 ns/day, 0.001 hours/ns, 2004.810 timesteps/s
+62.7% CPU use with 1 MPI tasks x 1 OpenMP threads
 
 MPI task timing breakdown:
 Section |  min time  |  avg time  |  max time  |%varavg| %total
 ---------------------------------------------------------------
-Pair    | 0.0059841  | 0.0059841  | 0.0059841  |   0.0 | 16.67
+Pair    | 0.0080211  | 0.0080211  | 0.0080211  |   0.0 | 32.16
 Neigh   | 0          | 0          | 0          |   0.0 |  0.00
 Comm    | 0          | 0          | 0          |   0.0 |  0.00
-Output  | 0.02992    | 0.02992    | 0.02992    |   0.0 | 83.33
+Output  | 0.016919   | 0.016919   | 0.016919   |   0.0 | 67.84
 Modify  | 0          | 0          | 0          |   0.0 |  0.00
 Other   |            | 0          |            |       |  0.00
 
@@ -2911,7 +2913,7 @@ change_box all z delta 0 0.1 boundary p p s remap units box
 
 
 thermo 10
-thermo_style custom step temp pe etotal press vol density c_1[1] c_1[2] c_1[3] c_1[4] c_1[5] c_1[6]
+thermo_style custom step temp pe etotal press vol density c_1[3]
 # NVT relaxation
 fix 1 all nvt temp 300 300 1
 
@@ -2921,26 +2923,26 @@ fix 2 all print 100 "${st} ${sigmazz}" append thermo.out screen no title "# step
 #dump 103 all xyz 100 si_min_relaxation.xyz
 
 run 50
-Per MPI rank memory allocation (min/avg/max) = 3.097 | 3.097 | 3.097 Mbytes
-Step Temp PotEng TotEng Press Volume Density c_1[1] c_1[2] c_1[3] c_1[4] c_1[5] c_1[6] 
-    2250 9.3742484e-21   -756.02256   -756.02256   -126818.72    4294.3895    2.0851198   -87793.546   -87793.546   -204869.06   -4294.2352 2.1120995e-08 2.1401218e-08 
-    2260 9.3742484e-21   -756.02256   -756.02256   -126818.72    4294.3895    2.0851198   -87793.546   -87793.546   -204869.06   -4294.2352 2.1120995e-08 2.1401218e-08 
-    2270 9.3742484e-21   -756.02256   -756.02256   -126818.72    4294.3895    2.0851198   -87793.546   -87793.546   -204869.06   -4294.2352 2.1120995e-08 2.1401218e-08 
-    2280 9.3742484e-21   -756.02256   -756.02256   -126818.72    4294.3895    2.0851198   -87793.546   -87793.546   -204869.06   -4294.2352 2.1120995e-08 2.1401218e-08 
-    2290 9.3742484e-21   -756.02256   -756.02256   -126818.72    4294.3895    2.0851198   -87793.546   -87793.546   -204869.06   -4294.2352 2.1120995e-08 2.1401218e-08 
-    2300 9.3742484e-21   -756.02256   -756.02256   -126818.72    4294.3895    2.0851198   -87793.546   -87793.546   -204869.06   -4294.2352 2.1120995e-08 2.1401218e-08 
-Loop time of 0.0359039 on 1 procs for 50 steps with 192 atoms
+Per MPI rank memory allocation (min/avg/max) = 4.114 | 4.114 | 4.114 Mbytes
+Step Temp PotEng TotEng Press Volume Density c_1[3] 
+    2250 9.3742484e-21   -756.02256   -756.02256   -126818.72    4294.3895    2.0851198   -204869.06 
+    2260 9.3742484e-21   -756.02256   -756.02256   -126818.72    4294.3895    2.0851198   -204869.06 
+    2270 9.3742484e-21   -756.02256   -756.02256   -126818.72    4294.3895    2.0851198   -204869.06 
+    2280 9.3742484e-21   -756.02256   -756.02256   -126818.72    4294.3895    2.0851198   -204869.06 
+    2290 9.3742484e-21   -756.02256   -756.02256   -126818.72    4294.3895    2.0851198   -204869.06 
+    2300 9.3742484e-21   -756.02256   -756.02256   -126818.72    4294.3895    2.0851198   -204869.06 
+Loop time of 0.0219409 on 1 procs for 50 steps with 192 atoms
 
-Performance: 12032.109 ns/day, 0.002 hours/ns, 1392.605 timesteps/s
-43.5% CPU use with 1 MPI tasks x 1 OpenMP threads
+Performance: 19689.214 ns/day, 0.001 hours/ns, 2278.844 timesteps/s
+0.0% CPU use with 1 MPI tasks x 1 OpenMP threads
 
 MPI task timing breakdown:
 Section |  min time  |  avg time  |  max time  |%varavg| %total
 ---------------------------------------------------------------
-Pair    | 0.0069799  | 0.0069799  | 0.0069799  |   0.0 | 19.44
+Pair    | 0.0059831  | 0.0059831  | 0.0059831  |   0.0 | 27.27
 Neigh   | 0          | 0          | 0          |   0.0 |  0.00
 Comm    | 0          | 0          | 0          |   0.0 |  0.00
-Output  | 0.028924   | 0.028924   | 0.028924   |   0.0 | 80.56
+Output  | 0.015958   | 0.015958   | 0.015958   |   0.0 | 72.73
 Modify  | 0          | 0          | 0          |   0.0 |  0.00
 Other   |            | 0          |            |       |  0.00
 
@@ -2971,7 +2973,7 @@ change_box all z delta 0 0.1 boundary p p s remap units box
 
 
 thermo 10
-thermo_style custom step temp pe etotal press vol density c_1[1] c_1[2] c_1[3] c_1[4] c_1[5] c_1[6]
+thermo_style custom step temp pe etotal press vol density c_1[3]
 # NVT relaxation
 fix 1 all nvt temp 300 300 1
 
@@ -2981,26 +2983,26 @@ fix 2 all print 100 "${st} ${sigmazz}" append thermo.out screen no title "# step
 #dump 103 all xyz 100 si_min_relaxation.xyz
 
 run 50
-Per MPI rank memory allocation (min/avg/max) = 3.097 | 3.097 | 3.097 Mbytes
-Step Temp PotEng TotEng Press Volume Density c_1[1] c_1[2] c_1[3] c_1[4] c_1[5] c_1[6] 
-    2300 9.3742484e-21   -754.28006   -754.28006   -128872.13    4307.8994    2.0785807   -89098.252   -89098.252    -208419.9    -4358.248 2.0867143e-08 2.1124674e-08 
-    2310 9.3742484e-21   -754.28006   -754.28006   -128872.13    4307.8994    2.0785807   -89098.252   -89098.252    -208419.9    -4358.248 2.0867143e-08 2.1124674e-08 
-    2320 9.3742484e-21   -754.28006   -754.28006   -128872.13    4307.8994    2.0785807   -89098.252   -89098.252    -208419.9    -4358.248 2.0867143e-08 2.1124674e-08 
-    2330 9.3742484e-21   -754.28006   -754.28006   -128872.13    4307.8994    2.0785807   -89098.252   -89098.252    -208419.9    -4358.248 2.0867143e-08 2.1124674e-08 
-    2340 9.3742484e-21   -754.28006   -754.28006   -128872.13    4307.8994    2.0785807   -89098.252   -89098.252    -208419.9    -4358.248 2.0867143e-08 2.1124674e-08 
-    2350 9.3742484e-21   -754.28006   -754.28006   -128872.13    4307.8994    2.0785807   -89098.252   -89098.252    -208419.9    -4358.248 2.0867143e-08 2.1124674e-08 
-Loop time of 0.033911 on 1 procs for 50 steps with 192 atoms
+Per MPI rank memory allocation (min/avg/max) = 4.114 | 4.114 | 4.114 Mbytes
+Step Temp PotEng TotEng Press Volume Density c_1[3] 
+    2300 9.3742484e-21   -754.28006   -754.28006   -128872.13    4307.8994    2.0785807    -208419.9 
+    2310 9.3742484e-21   -754.28006   -754.28006   -128872.13    4307.8994    2.0785807    -208419.9 
+    2320 9.3742484e-21   -754.28006   -754.28006   -128872.13    4307.8994    2.0785807    -208419.9 
+    2330 9.3742484e-21   -754.28006   -754.28006   -128872.13    4307.8994    2.0785807    -208419.9 
+    2340 9.3742484e-21   -754.28006   -754.28006   -128872.13    4307.8994    2.0785807    -208419.9 
+    2350 9.3742484e-21   -754.28006   -754.28006   -128872.13    4307.8994    2.0785807    -208419.9 
+Loop time of 0.0249341 on 1 procs for 50 steps with 192 atoms
 
-Performance: 12739.233 ns/day, 0.002 hours/ns, 1474.448 timesteps/s
-46.1% CPU use with 1 MPI tasks x 1 OpenMP threads
+Performance: 17325.703 ns/day, 0.001 hours/ns, 2005.290 timesteps/s
+0.0% CPU use with 1 MPI tasks x 1 OpenMP threads
 
 MPI task timing breakdown:
 Section |  min time  |  avg time  |  max time  |%varavg| %total
 ---------------------------------------------------------------
-Pair    | 0.005985   | 0.005985   | 0.005985   |   0.0 | 17.65
+Pair    | 0.0069833  | 0.0069833  | 0.0069833  |   0.0 | 28.01
 Neigh   | 0          | 0          | 0          |   0.0 |  0.00
 Comm    | 0          | 0          | 0          |   0.0 |  0.00
-Output  | 0.027926   | 0.027926   | 0.027926   |   0.0 | 82.35
+Output  | 0.017951   | 0.017951   | 0.017951   |   0.0 | 71.99
 Modify  | 0          | 0          | 0          |   0.0 |  0.00
 Other   |            | 0          |            |       |  0.00
 
@@ -3031,7 +3033,7 @@ change_box all z delta 0 0.1 boundary p p s remap units box
 
 
 thermo 10
-thermo_style custom step temp pe etotal press vol density c_1[1] c_1[2] c_1[3] c_1[4] c_1[5] c_1[6]
+thermo_style custom step temp pe etotal press vol density c_1[3]
 # NVT relaxation
 fix 1 all nvt temp 300 300 1
 
@@ -3041,26 +3043,26 @@ fix 2 all print 100 "${st} ${sigmazz}" append thermo.out screen no title "# step
 #dump 103 all xyz 100 si_min_relaxation.xyz
 
 run 50
-Per MPI rank memory allocation (min/avg/max) = 3.097 | 3.097 | 3.097 Mbytes
-Step Temp PotEng TotEng Press Volume Density c_1[1] c_1[2] c_1[3] c_1[4] c_1[5] c_1[6] 
-    2350 9.3742484e-21   -752.50707   -752.50707   -130900.08    4321.4148    2.0720799   -90383.343   -90383.343   -211933.55   -4421.2502 2.0661879e-08 2.1004931e-08 
-    2360 9.3742484e-21   -752.50707   -752.50707   -130900.08    4321.4148    2.0720799   -90383.343   -90383.343   -211933.55   -4421.2502 2.0661879e-08 2.1004931e-08 
-    2370 9.3742484e-21   -752.50707   -752.50707   -130900.08    4321.4148    2.0720799   -90383.343   -90383.343   -211933.55   -4421.2502 2.0661879e-08 2.1004931e-08 
-    2380 9.3742484e-21   -752.50707   -752.50707   -130900.08    4321.4148    2.0720799   -90383.343   -90383.343   -211933.55   -4421.2502 2.0661879e-08 2.1004931e-08 
-    2390 9.3742484e-21   -752.50707   -752.50707   -130900.08    4321.4148    2.0720799   -90383.343   -90383.343   -211933.55   -4421.2502 2.0661879e-08 2.1004931e-08 
-    2400 9.3742484e-21   -752.50707   -752.50707   -130900.08    4321.4148    2.0720799   -90383.343   -90383.343   -211933.55   -4421.2502 2.0661879e-08 2.1004931e-08 
-Loop time of 0.030916 on 1 procs for 50 steps with 192 atoms
+Per MPI rank memory allocation (min/avg/max) = 4.114 | 4.114 | 4.114 Mbytes
+Step Temp PotEng TotEng Press Volume Density c_1[3] 
+    2350 9.3742484e-21   -752.50707   -752.50707   -130900.08    4321.4148    2.0720799   -211933.55 
+    2360 9.3742484e-21   -752.50707   -752.50707   -130900.08    4321.4148    2.0720799   -211933.55 
+    2370 9.3742484e-21   -752.50707   -752.50707   -130900.08    4321.4148    2.0720799   -211933.55 
+    2380 9.3742484e-21   -752.50707   -752.50707   -130900.08    4321.4148    2.0720799   -211933.55 
+    2390 9.3742484e-21   -752.50707   -752.50707   -130900.08    4321.4148    2.0720799   -211933.55 
+    2400 9.3742484e-21   -752.50707   -752.50707   -130900.08    4321.4148    2.0720799   -211933.55 
+Loop time of 0.025929 on 1 procs for 50 steps with 192 atoms
 
-Performance: 13973.358 ns/day, 0.002 hours/ns, 1617.287 timesteps/s
-50.5% CPU use with 1 MPI tasks x 1 OpenMP threads
+Performance: 16660.898 ns/day, 0.001 hours/ns, 1928.345 timesteps/s
+0.0% CPU use with 1 MPI tasks x 1 OpenMP threads
 
 MPI task timing breakdown:
 Section |  min time  |  avg time  |  max time  |%varavg| %total
 ---------------------------------------------------------------
-Pair    | 0.007978   | 0.007978   | 0.007978   |   0.0 | 25.81
+Pair    | 0.0059838  | 0.0059838  | 0.0059838  |   0.0 | 23.08
 Neigh   | 0          | 0          | 0          |   0.0 |  0.00
 Comm    | 0          | 0          | 0          |   0.0 |  0.00
-Output  | 0.022938   | 0.022938   | 0.022938   |   0.0 | 74.19
+Output  | 0.019945   | 0.019945   | 0.019945   |   0.0 | 76.92
 Modify  | 0          | 0          | 0          |   0.0 |  0.00
 Other   |            | 0          |            |       |  0.00
 
@@ -3091,7 +3093,7 @@ change_box all z delta 0 0.1 boundary p p s remap units box
 
 
 thermo 10
-thermo_style custom step temp pe etotal press vol density c_1[1] c_1[2] c_1[3] c_1[4] c_1[5] c_1[6]
+thermo_style custom step temp pe etotal press vol density c_1[3]
 # NVT relaxation
 fix 1 all nvt temp 300 300 1
 
@@ -3101,26 +3103,26 @@ fix 2 all print 100 "${st} ${sigmazz}" append thermo.out screen no title "# step
 #dump 103 all xyz 100 si_min_relaxation.xyz
 
 run 50
-Per MPI rank memory allocation (min/avg/max) = 3.097 | 3.097 | 3.097 Mbytes
-Step Temp PotEng TotEng Press Volume Density c_1[1] c_1[2] c_1[3] c_1[4] c_1[5] c_1[6] 
-    2400 9.3742484e-21   -750.70387   -750.70387   -132902.88    4334.9355    2.0656171   -91649.185   -91649.185   -215410.28   -4483.2569 2.0449406e-08 2.086053e-08 
-    2410 9.3742484e-21   -750.70387   -750.70387   -132902.88    4334.9355    2.0656171   -91649.185   -91649.185   -215410.28   -4483.2569 2.0449406e-08 2.086053e-08 
-    2420 9.3742484e-21   -750.70387   -750.70387   -132902.88    4334.9355    2.0656171   -91649.185   -91649.185   -215410.28   -4483.2569 2.0449406e-08 2.086053e-08 
-    2430 9.3742484e-21   -750.70387   -750.70387   -132902.88    4334.9355    2.0656171   -91649.185   -91649.185   -215410.28   -4483.2569 2.0449406e-08 2.086053e-08 
-    2440 9.3742484e-21   -750.70387   -750.70387   -132902.88    4334.9355    2.0656171   -91649.185   -91649.185   -215410.28   -4483.2569 2.0449406e-08 2.086053e-08 
-    2450 9.3742484e-21   -750.70387   -750.70387   -132902.88    4334.9355    2.0656171   -91649.185   -91649.185   -215410.28   -4483.2569 2.0449406e-08 2.086053e-08 
-Loop time of 0.0349059 on 1 procs for 50 steps with 192 atoms
+Per MPI rank memory allocation (min/avg/max) = 4.114 | 4.114 | 4.114 Mbytes
+Step Temp PotEng TotEng Press Volume Density c_1[3] 
+    2400 9.3742484e-21   -750.70387   -750.70387   -132902.88    4334.9355    2.0656171   -215410.28 
+    2410 9.3742484e-21   -750.70387   -750.70387   -132902.88    4334.9355    2.0656171   -215410.28 
+    2420 9.3742484e-21   -750.70387   -750.70387   -132902.88    4334.9355    2.0656171   -215410.28 
+    2430 9.3742484e-21   -750.70387   -750.70387   -132902.88    4334.9355    2.0656171   -215410.28 
+    2440 9.3742484e-21   -750.70387   -750.70387   -132902.88    4334.9355    2.0656171   -215410.28 
+    2450 9.3742484e-21   -750.70387   -750.70387   -132902.88    4334.9355    2.0656171   -215410.28 
+Loop time of 0.0249341 on 1 procs for 50 steps with 192 atoms
 
-Performance: 12376.128 ns/day, 0.002 hours/ns, 1432.422 timesteps/s
-0.0% CPU use with 1 MPI tasks x 1 OpenMP threads
+Performance: 17325.703 ns/day, 0.001 hours/ns, 2005.290 timesteps/s
+125.3% CPU use with 1 MPI tasks x 1 OpenMP threads
 
 MPI task timing breakdown:
 Section |  min time  |  avg time  |  max time  |%varavg| %total
 ---------------------------------------------------------------
-Pair    | 0.0069849  | 0.0069849  | 0.0069849  |   0.0 | 20.01
+Pair    | 0.006978   | 0.006978   | 0.006978   |   0.0 | 27.99
 Neigh   | 0          | 0          | 0          |   0.0 |  0.00
-Comm    | 0.00099492 | 0.00099492 | 0.00099492 |   0.0 |  2.85
-Output  | 0.026926   | 0.026926   | 0.026926   |   0.0 | 77.14
+Comm    | 0          | 0          | 0          |   0.0 |  0.00
+Output  | 0.017956   | 0.017956   | 0.017956   |   0.0 | 72.01
 Modify  | 0          | 0          | 0          |   0.0 |  0.00
 Other   |            | 0          |            |       |  0.00
 
@@ -3151,7 +3153,7 @@ change_box all z delta 0 0.1 boundary p p s remap units box
 
 
 thermo 10
-thermo_style custom step temp pe etotal press vol density c_1[1] c_1[2] c_1[3] c_1[4] c_1[5] c_1[6]
+thermo_style custom step temp pe etotal press vol density c_1[3]
 # NVT relaxation
 fix 1 all nvt temp 300 300 1
 
@@ -3161,28 +3163,28 @@ fix 2 all print 100 "${st} ${sigmazz}" append thermo.out screen no title "# step
 #dump 103 all xyz 100 si_min_relaxation.xyz
 
 run 50
-Per MPI rank memory allocation (min/avg/max) = 3.097 | 3.097 | 3.097 Mbytes
-Step Temp PotEng TotEng Press Volume Density c_1[1] c_1[2] c_1[3] c_1[4] c_1[5] c_1[6] 
-    2450 9.3742484e-21   -748.87076   -748.87076   -134880.88    4348.4616    2.0591918   -92896.134   -92896.134   -218850.37   -4544.2828 2.0250317e-08 2.0495598e-08 
-    2460 9.3742484e-21   -748.87076   -748.87076   -134880.88    4348.4616    2.0591918   -92896.134   -92896.134   -218850.37   -4544.2828 2.0250317e-08 2.0495598e-08 
-    2470 9.3742484e-21   -748.87076   -748.87076   -134880.88    4348.4616    2.0591918   -92896.134   -92896.134   -218850.37   -4544.2828 2.0250317e-08 2.0495598e-08 
-    2480 9.3742484e-21   -748.87076   -748.87076   -134880.88    4348.4616    2.0591918   -92896.134   -92896.134   -218850.37   -4544.2828 2.0250317e-08 2.0495598e-08 
-    2490 9.3742484e-21   -748.87076   -748.87076   -134880.88    4348.4616    2.0591918   -92896.134   -92896.134   -218850.37   -4544.2828 2.0250317e-08 2.0495598e-08 
-    2500 9.3742484e-21   -748.87076   -748.87076   -134880.88    4348.4616    2.0591918   -92896.134   -92896.134   -218850.37   -4544.2828 2.0250317e-08 2.0495598e-08 
-Loop time of 0.0339088 on 1 procs for 50 steps with 192 atoms
+Per MPI rank memory allocation (min/avg/max) = 4.114 | 4.114 | 4.114 Mbytes
+Step Temp PotEng TotEng Press Volume Density c_1[3] 
+    2450 9.3742484e-21   -748.87076   -748.87076   -134880.88    4348.4616    2.0591918   -218850.37 
+    2460 9.3742484e-21   -748.87076   -748.87076   -134880.88    4348.4616    2.0591918   -218850.37 
+    2470 9.3742484e-21   -748.87076   -748.87076   -134880.88    4348.4616    2.0591918   -218850.37 
+    2480 9.3742484e-21   -748.87076   -748.87076   -134880.88    4348.4616    2.0591918   -218850.37 
+    2490 9.3742484e-21   -748.87076   -748.87076   -134880.88    4348.4616    2.0591918   -218850.37 
+    2500 9.3742484e-21   -748.87076   -748.87076   -134880.88    4348.4616    2.0591918   -218850.37 
+Loop time of 0.022938 on 1 procs for 50 steps with 192 atoms
 
-Performance: 12740.039 ns/day, 0.002 hours/ns, 1474.542 timesteps/s
+Performance: 18833.366 ns/day, 0.001 hours/ns, 2179.788 timesteps/s
 0.0% CPU use with 1 MPI tasks x 1 OpenMP threads
 
 MPI task timing breakdown:
 Section |  min time  |  avg time  |  max time  |%varavg| %total
 ---------------------------------------------------------------
-Pair    | 0.0059788  | 0.0059788  | 0.0059788  |   0.0 | 17.63
+Pair    | 0.0059841  | 0.0059841  | 0.0059841  |   0.0 | 26.09
 Neigh   | 0          | 0          | 0          |   0.0 |  0.00
 Comm    | 0          | 0          | 0          |   0.0 |  0.00
-Output  | 0.026929   | 0.026929   | 0.026929   |   0.0 | 79.42
+Output  | 0.016954   | 0.016954   | 0.016954   |   0.0 | 73.91
 Modify  | 0          | 0          | 0          |   0.0 |  0.00
-Other   |            | 0.001001   |            |       |  2.95
+Other   |            | 0          |            |       |  0.00
 
 Nlocal:    192 ave 192 max 192 min
 Histogram: 1 0 0 0 0 0 0 0 0 0
@@ -3200,4 +3202,4 @@ Dangerous builds = 0
 
 jump            in.lj.for loop
 #loop ends
-Total wall time: 0:00:16
+Total wall time: 0:00:15
