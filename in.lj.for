@@ -1,5 +1,5 @@
 dimension    3
-boundary    p p s
+boundary    p p p
 units metal
 
 atom_style    atomic
@@ -54,8 +54,11 @@ reset_timestep 0
 compute test all temp 
 compute 1 all pressure test
 
+
+
 #variable      sigmazz equal c_ID[i]
-variable      sigmazz equal c_1
+#variable      sigmazz equal c_ID[3]
+variable        sigmazz equal c_1[1]
 variable        st equal step
 variable        index loop 50
 
@@ -67,7 +70,7 @@ next            index
 
 #change_box all xy final -0.1 z final 0.0 0.5 boundary p p f remap units box \
 #change_box all xy scale -0.1 z boundary p p f remap units box 
-change_box all z final 0 0.1 boundary p p s remap units box
+change_box all z delta 0 0.1 boundary p p s remap units box
 #change_box all xy final -0.1 z boundary p p f remap units box
 #run 0
 
@@ -80,8 +83,8 @@ fix 1 all nvt temp 300 300 1
 
 unfix 1 
 
-#fix 2 all print 100 "${st} ${sigmazz}" append thermo.out screen no title "# step stress "
-dump 103 all xyz 100 si_min_relaxation.xyz
+fix 2 all print 100 "${st} ${sigmazz}" append thermo.out screen no title "# step stress "
+#dump 103 all xyz 100 si_min_relaxation.xyz
 
 run 5000
 
