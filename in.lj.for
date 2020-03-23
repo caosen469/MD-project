@@ -77,7 +77,7 @@ change_box all z delta 0 0.1 boundary p p s remap units box
 
 
 thermo 10
-thermo_style custom step temp pe etotal press vol density
+thermo_style custom step temp pe etotal press vol density c_1[1] c_1[2] c_1[3] c_1[4] c_1[5] c_1[6]
 # NVT relaxation
 fix 1 all nvt temp 300 300 1 
 
@@ -86,7 +86,7 @@ unfix 1
 fix 2 all print 100 "${st} ${sigmazz}" append thermo.out screen no title "# step stress "
 #dump 103 all xyz 100 si_min_relaxation.xyz
 
-run 5000
+run 50
 
 jump            in.lj.for loop
 #loop ends
