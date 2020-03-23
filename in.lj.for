@@ -54,6 +54,8 @@ variable      sigmazz equal c_1
 variable        st equal step
 variable        index loop 50
 
+timestep 0.1
+
 #loop starts
 label loop
 next            index
@@ -65,10 +67,11 @@ change_box all z final 0 0.1 boundary p p f remap units box
 #run 0
 
 
+
 thermo 10
 thermo_style custom step temp pe etotal press vol density
 # NVT relaxation
-fix 1 all nvt temp 300 300  0.01 
+fix 1 all nvt temp 300 300 1 
 
 unfix 1 
 

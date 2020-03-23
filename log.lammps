@@ -21,7 +21,7 @@ Created orthogonal box = (0 0 0) to (8 8 24)
   1 by 1 by 1 MPI processor grid
 create_atoms    1 box
 Created 192 atoms
-  create_atoms CPU = 0.000999928 secs
+  create_atoms CPU = 0.000996828 secs
 
 mass        1 28.0855
 
@@ -92,9 +92,9 @@ Step Temp PotEng TotEng Press Volume Density
     3400            0   -830.71009   -830.71009    42393.038    3695.7757    2.4228517 
     3500            0    -832.2676    -832.2676    17831.226     3779.136    2.3694084 
     3571            0   -832.62478   -832.62478    1431.7956    3839.0765    2.3324142 
-Loop time of 23.4905 on 1 procs for 3571 steps with 192 atoms
+Loop time of 11.6213 on 1 procs for 3571 steps with 192 atoms
 
-96.3% CPU use with 1 MPI tasks x 1 OpenMP threads
+98.4% CPU use with 1 MPI tasks x 1 OpenMP threads
 
 Minimization stats:
   Stopping criterion = energy tolerance
@@ -108,12 +108,12 @@ Minimization stats:
 MPI task timing breakdown:
 Section |  min time  |  avg time  |  max time  |%varavg| %total
 ---------------------------------------------------------------
-Pair    | 22.406     | 22.406     | 22.406     |   0.0 | 95.39
-Neigh   | 0.0030239  | 0.0030239  | 0.0030239  |   0.0 |  0.01
-Comm    | 0.017733   | 0.017733   | 0.017733   |   0.0 |  0.08
-Output  | 0.75696    | 0.75696    | 0.75696    |   0.0 |  3.22
+Pair    | 11.228     | 11.228     | 11.228     |   0.0 | 96.62
+Neigh   | 0.00099707 | 0.00099707 | 0.00099707 |   0.0 |  0.01
+Comm    | 0.012961   | 0.012961   | 0.012961   |   0.0 |  0.11
+Output  | 0.17256    | 0.17256    | 0.17256    |   0.0 |  1.48
 Modify  | 0          | 0          | 0          |   0.0 |  0.00
-Other   |            | 0.3063     |            |       |  1.30
+Other   |            | 0.2068     |            |       |  1.78
 
 Nlocal:    192 ave 192 max 192 min
 Histogram: 1 0 0 0 0 0 0 0 0 0
@@ -146,19 +146,19 @@ Step Temp PotEng TotEng Press Volume Density
       30 3.1681566e-21   -832.62651   -832.62651    767.06471    3841.5855    2.3308909 
       40 4.2134521e-21   -832.62484   -832.62484    -1410.543    3849.8502     2.325887 
       50 9.3742484e-21   -832.62489   -832.62489     1399.842     3839.197     2.332341 
-Loop time of 0.102009 on 1 procs for 50 steps with 192 atoms
+Loop time of 0.0309179 on 1 procs for 50 steps with 192 atoms
 
-Performance: 423.492 ns/day, 0.057 hours/ns, 490.153 timesteps/s
-46.0% CPU use with 1 MPI tasks x 1 OpenMP threads
+Performance: 1397.250 ns/day, 0.017 hours/ns, 1617.187 timesteps/s
+50.5% CPU use with 1 MPI tasks x 1 OpenMP threads
 
 MPI task timing breakdown:
 Section |  min time  |  avg time  |  max time  |%varavg| %total
 ---------------------------------------------------------------
-Pair    | 0.01455    | 0.01455    | 0.01455    |   0.0 | 14.26
+Pair    | 0.0089753  | 0.0089753  | 0.0089753  |   0.0 | 29.03
 Neigh   | 0          | 0          | 0          |   0.0 |  0.00
-Comm    | 0.00098395 | 0.00098395 | 0.00098395 |   0.0 |  0.96
-Output  | 0.076396   | 0.076396   | 0.076396   |   0.0 | 74.89
-Modify  | 0.010079   | 0.010079   | 0.010079   |   0.0 |  9.88
+Comm    | 0          | 0          | 0          |   0.0 |  0.00
+Output  | 0.020946   | 0.020946   | 0.020946   |   0.0 | 67.75
+Modify  | 0.00099683 | 0.00099683 | 0.00099683 |   0.0 |  3.22
 Other   |            | 0          |            |       |  0.00
 
 Nlocal:    192 ave 192 max 192 min
@@ -202,7 +202,7 @@ change_box all z final 0 0.1 boundary p p f remap units box
 thermo 10
 thermo_style custom step temp pe etotal press vol density
 # NVT relaxation
-fix 1 all nvt temp 300 300  0.01
+fix 1 all nvt temp 300 300 1
 
 unfix 1
 
@@ -322,7 +322,3 @@ Step Temp PotEng TotEng Press Volume Density
     1060 9.3742484e-21 2.2293636e+11 2.2293636e+11 4.0430068e+16    11.787257    759.66075 
     1070 9.3742484e-21 2.2293636e+11 2.2293636e+11 4.0430068e+16    11.787257    759.66075 
     1080 9.3742484e-21 2.2293636e+11 2.2293636e+11 4.0430068e+16    11.787257    759.66075 
-    1090 9.3742484e-21 2.2293636e+11 2.2293636e+11 4.0430068e+16    11.787257    759.66075 
-    1100 9.3742484e-21 2.2293636e+11 2.2293636e+11 4.0430068e+16    11.787257    759.66075 
-    1110 9.3742484e-21 2.2293636e+11 2.2293636e+11 4.0430068e+16    11.787257    759.66075 
-    1120 9.3742484e-21 2.2293636e+11 2.2293636e+11 4.0430068e+16    11.787257    759.66075 
