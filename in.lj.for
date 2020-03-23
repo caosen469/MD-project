@@ -1,5 +1,5 @@
 dimension    3
-boundary    p p p
+boundary    p p s
 units metal
 
 atom_style    atomic
@@ -35,6 +35,8 @@ minimize 1.0e-6 1.0e-8 1000000 10000000
 unfix 1 
 undump 101
 
+#---------------------------------NPT-----------------------------------------
+dump 102 all xyz 10 npt.xyz
 reset_timestep 0
 
 thermo 10
@@ -42,6 +44,9 @@ thermo 10
 fix 1 all npt temp 300 300 0.1 iso 0 0 1
 run 50
 unfix 1
+undump 102
+
+#----------------------------NVT-----------------------------------------
 
 reset_timestep 0
 # Calculate potential energy at different distances
@@ -62,7 +67,7 @@ next            index
 
 #change_box all xy final -0.1 z final 0.0 0.5 boundary p p f remap units box \
 #change_box all xy scale -0.1 z boundary p p f remap units box 
-change_box all z final 0 0.1 boundary p p f remap units box
+change_box all z final 0 0.1 boundary p p s remap units box
 #change_box all xy final -0.1 z boundary p p f remap units box
 #run 0
 
@@ -75,8 +80,8 @@ fix 1 all nvt temp 300 300 1
 
 unfix 1 
 
-fix 2 all print 100 "${st} ${sigmazz}" append thermo.out screen no title "# step stress "
-dump 102 all xyz 100 si_min_relaxation.xyz
+#fix 2 all print 100 "${st} ${sigmazz}" append thermo.out screen no title "# step stress "
+dump 103 all xyz 100 si_min_relaxation.xyz
 
 run 5000
 
