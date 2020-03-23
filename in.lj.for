@@ -43,6 +43,7 @@ fix 1 all npt temp 300 300 0.1 iso 0 0 1
 run 50
 unfix 1
 
+reset_timestep 0
 # Calculate potential energy at different distances
 #compute 1 all pressure c_ID
 compute test all temp 
